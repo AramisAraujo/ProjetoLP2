@@ -1,12 +1,13 @@
 package farmacia;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
+import comparator.NomeComparator;
 import categorias.CategoriasDeMedicamentos;
-
 import medicamentos.Medicamento;
-
 import exceptions.MedicamentoInexistenteException;
 import exceptions.MedicamentoJaCadastradoException;
 import exceptions.StringException;
@@ -15,11 +16,12 @@ import factory.FactoryDeMedicamentos;
 public class Farmacia {
 
 	private FactoryDeMedicamentos factoryDeMedicamentos;
-	private ArrayList<Medicamento> medicamentos;
+	private List<Medicamento> medicamentos;
+	private NomeComparator comparator;
 
 	public Farmacia() {
 		this.factoryDeMedicamentos = new FactoryDeMedicamentos();
-		this.medicamentos = new ArrayList<>();
+		this.medicamentos = new ArrayList<Medicamento>();
 	}
 
 	public boolean criaMedicamento(String nome, double preco, int quantidade,
@@ -51,6 +53,7 @@ public class Farmacia {
 				medicamentos.add(medicamento);
 			}
 		}
+		Collections.sort(medicamentos);
 		return medicamentos;
 	}
 
@@ -63,7 +66,13 @@ public class Farmacia {
 		throw new MedicamentoInexistenteException();
 	}
 	
-	public ArrayList<Medicamento> getMedicamentos(){
+	public List<Medicamento> getMedicamentosPreco(){
+		Collections.sort(this.medicamentos);
+		return this.medicamentos;
+	}
+	
+	public List<Medicamento> getMedicamentosNome(){
+		Collections.sort(this.medicamentos, comparator);
 		return this.medicamentos;
 	}
 }

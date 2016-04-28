@@ -1,15 +1,16 @@
 package medicamentos;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import categorias.CategoriasDeMedicamentos;
 
-public class Medicamento {
+public class Medicamento implements Comparable<Medicamento> {
 
 	private String nome;
 	private double preco;
 	private int quantidade;
-	private HashSet<CategoriasDeMedicamentos> categorias;
+	private Set<CategoriasDeMedicamentos> categorias;
 
 	public Medicamento(String nome, double preco, int quantidade,
 			HashSet<CategoriasDeMedicamentos> categorias) {
@@ -43,7 +44,7 @@ public class Medicamento {
 		this.quantidade = quantidade;
 	}
 
-	public HashSet<CategoriasDeMedicamentos> getCategorias() {
+	public Set<CategoriasDeMedicamentos> getCategorias() {
 		return categorias;
 	}
 
@@ -93,5 +94,19 @@ public class Medicamento {
 			formatacao += "   - " + categoria + "\n";
 		}
 		return formatacao;
+	}
+
+	@Override
+	public int compareTo(Medicamento outroMedicamento) {
+		if (this.preco > outroMedicamento.getPreco()){
+			return 1;
+		}
+		else if (this.preco < outroMedicamento.getPreco()){
+			return -1;
+		}
+		else {
+			return 0;
+		}
+		
 	}
 }
