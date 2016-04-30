@@ -1,12 +1,12 @@
-package factory;
+package factories;
  
 import java.util.HashSet;
  
-import categorias.CategoriasDeMedicamentos;
+import farmacia.CategoriasDeMedicamentos;
 import exceptions.StringException;
  
-import medicamentos.Medicamento;
-import medicamentos.MedicamentoGenerico;
+import farmacia.Medicamento;
+import farmacia.MedicamentoGenerico;
  
 /**
  * Classe responsavel por criar todos os medicamentos.

@@ -1,8 +1,8 @@
-package comparator;
+package comparators;
  
 import java.util.Comparator;
  
-import medicamentos.Medicamento;
+import farmacia.Medicamento;
  
 /**
  * Classe utilizada para comparar os medicamentos de acordo com o nome em ordem

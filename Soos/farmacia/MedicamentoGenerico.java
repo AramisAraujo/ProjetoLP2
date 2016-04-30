@@ -1,8 +1,8 @@
-package medicamentos;
+package farmacia;
  
 import java.util.HashSet;
  
-import categorias.CategoriasDeMedicamentos;
+import farmacia.CategoriasDeMedicamentos;
  
 /**
  * Classe responsavel por criar medicamentos genericos.

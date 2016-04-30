@@ -5,13 +5,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
  
-import comparator.NomeComparator;
-import categorias.CategoriasDeMedicamentos;
-import medicamentos.Medicamento;
+import comparators.NomeComparator;
+import farmacia.CategoriasDeMedicamentos;
+import farmacia.Medicamento;
 import exceptions.MedicamentoInexistenteException;
 import exceptions.MedicamentoJaCadastradoException;
 import exceptions.StringException;
-import factory.FactoryDeMedicamentos;
+import factories.FactoryDeMedicamentos;
  
 /**
  * Classe responsavel por gerenciar todos os medicamentos.

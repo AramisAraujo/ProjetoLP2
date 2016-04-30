@@ -1,4 +1,4 @@
-package categorias;
+package farmacia;
  
 /**
  * Enum implementado para diferenciar as diferentes categorias de medicamentos.
