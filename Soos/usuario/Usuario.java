@@ -1,12 +1,14 @@
 package usuario;
 
+import java.util.Date;
+
 public abstract class Usuario {
 	private String nome;
-	private int dataNascimento;
+	private Date dataNascimento;
 	private int senha;
 	private int matricula;
 	
-	public Usuario(String nome, int dataNascimento, int senha, int matricula) {
+	public Usuario(String nome, Date dataNascimento, int senha, int matricula) {
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.senha = senha;
@@ -14,33 +16,36 @@ public abstract class Usuario {
 	}
 
 	public String getNome() {
-		return nome;
+		return this.nome;
 	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	public int getDataNascimento() {
-		return dataNascimento;
+	public Date getDataNascimento() {
+		return this.dataNascimento;
 	}
 
-	public void setDataNascimento(int dataNascimento) {
+	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
 
 	public abstract TipoCargo getCargo();
 
 	public int getSenha() {
-		return senha;
+		return this.senha;
 	}
 
-	public void setSenha(int senha) {
-		this.senha = senha;
+	public void setSenha(int senhaAntiga, int senhaNova) {
+		
+		if (this.senha == senhaAntiga){
+			this.senha = senhaNova;
+		}
 	}
 
 	public int getMatricula() {
-		return matricula;
+		return this.matricula;
 	}
 	
 }

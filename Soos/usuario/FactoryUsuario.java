@@ -1,7 +1,10 @@
 package usuario;
 
+import java.util.Date;
+
 public class FactoryUsuario {
-	public Usuario criarUsuario(String nome, int dataNascimento, int senha, int matricula, TipoCargo cargo) throws Exception {
+	
+	public Usuario criarUsuario(String nome, Date dataNascimento, int senha, int matricula, TipoCargo cargo) throws Exception {
 		switch (cargo) {
 			case DIRETOR:
 				return new Diretor(nome, dataNascimento, senha, matricula);
