@@ -6,7 +6,7 @@ import exceptions.VerificaExcecao;
  * A classe Paciente possui atributos e comportamentos necessarios para o cadastro de pacientes
  * e manipulacao de seus dados.
  * 
- * @author dantaselton
+ * @author Elton Dantas
  */
 public class Paciente implements Comparable <Paciente> {
 	
