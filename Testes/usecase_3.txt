@@ -1,0 +1,94 @@
+#################
+# Caso de Uso 3 #
+#################
+
+#iniciaSistema e fechaSistema serao usados para carregar/armazenar os dados do sistema nos arquivos de dados.
+iniciaSistema
+login matricula="32016004" senha="paralembrar"
+
+###########################
+#   Cadastro de Paciente  #
+###########################
+
+id1=cadastraPaciente Nome="Plutarco" Data="19/01/1979" Peso=85.00 Sexo="masculino" Genero="masculino" tipoSanguineo="O-" 
+id2=cadastraPaciente Nome="Mitridates" Data="05/12/1987" Peso=72.00 Sexo="feminino" Genero="masculino" tipoSanguineo="AB+" 
+id3=cadastraPaciente Nome="Safo" Data="19/07/1990" Peso=63.00 Sexo="feminino" Genero="feminino" tipoSanguineo="A+" 
+id4=cadastraPaciente Nome="Hedwig" Data="02/01/1985" Peso=60.00 Sexo="masculino" Genero="feminino" tipoSanguineo="B-" 
+
+expectError "Nao foi possivel cadastrar o paciente. Nome do paciente nao pode ser vazio." cadastraPaciente Nome="" Data="11/15/1968" Peso=96.00 Sexo="masculino" Genero="masculino" tipoSanguine="O-" 
+expectError "Nao foi possivel cadastrar o paciente. Nome do paciente nao pode ser vazio." cadastraPaciente Nome=" " Data="09/19/1999"  Peso=53.00 Sexo="masculino" Genero="masculino" tipoSanguineo="O+"
+expectError "Nao foi possivel cadastrar o paciente. Tipo sanguineo invalido." cadastraPaciente Nome="Horatius" Data="12/12/1960" Peso=79.40 Sexo="masculino"  Genero="masculino" tipoSanguineo="H+"
+expectError "Nao foi possivel cadastrar o paciente. Peso do paciente nao pode ser negativo." cadastraPaciente Nome="Horatius" Data="12/12/1960" Peso=-79.40 Sexo="masculino"  Genero="masculino" tipoSanguineo="H+"
+expectError "Nao foi possivel cadastrar o paciente. Data invalida." cadastraPaciente Nome="Pantelisseia" Data="11/28/2000" Peso=61.20 Sexo="masculino" Genero="feminino" tipoSanguineo="B+" 
+expectError "Nao foi possivel cadastrar o paciente. Paciente ja cadastrado." cadastraPaciente Nome="Safo" Data="08/01/1990" Peso=74.31 Sexo="masculino" Genero="feminino" tipoSanguineo="A+" 
+
+expect "Plutarco" getInfoPaciente paciente=${id1} atributo="Nome" 
+expect "1979-01-19" getInfoPaciente paciente=${id1} atributo="Data" 
+expect "masculino" getInfoPaciente paciente=${id1} atributo="Sexo" 
+expect "masculino" getInfoPaciente paciente=${id1} atributo="Genero" 
+expect "O-" getInfoPaciente paciente=${id1} atributo="TipoSanguineo" 
+expect 85.0 getInfoPaciente paciente=${id1} atributo="Peso"
+
+expect "Mitridates" getInfoPaciente paciente=${id2} atributo="Nome" 
+expect "1987-12-05"  getInfoPaciente paciente=${id2} atributo="Data" 
+expect "feminino" getInfoPaciente paciente=${id2} atributo="Sexo" 
+expect "masculino" getInfoPaciente paciente=${id2} atributo="Genero" 
+expect "AB+" getInfoPaciente paciente=${id2} atributo="TipoSanguineo" 
+expect 72.0 getInfoPaciente paciente=${id2} atributo="Peso"  
+
+expect "Safo" getInfoPaciente paciente=${id3} atributo="Nome" 
+expect "1990-07-19" getInfoPaciente paciente=${id3} atributo="Data" 
+expect "feminino" getInfoPaciente paciente=${id3} atributo="Sexo" 
+expect "feminino" getInfoPaciente paciente=${id3} atributo="Genero" 
+expect "A+" getInfoPaciente paciente=${id3} atributo="TipoSanguineo" 
+expect 63.0 getInfoPaciente paciente=${id3} atributo="Peso" 
+
+expect "Hedwig" getInfoPaciente paciente=${id4} atributo="Nome" 
+expect "1985-01-02" getInfoPaciente paciente=${id4} atributo="Data" 
+expect "masculino" getInfoPaciente paciente=${id4} atributo="Sexo" 
+expect "feminino" getInfoPaciente paciente=${id4} atributo="Genero" 
+expect "B-" getInfoPaciente paciente=${id4} atributo="TipoSanguineo" 
+expect 60.0 getInfoPaciente paciente=${id4}  atributo="Peso"  
+
+expect 37 getInfoPaciente paciente=${id1}  atributo="Idade"
+expect 28 getInfoPaciente paciente=${id2}  atributo="Idade"
+expect 25 getInfoPaciente paciente=${id3}  atributo="Idade"
+expect 31 getInfoPaciente paciente=${id4}  atributo="Idade"
+
+id5=getProntuario posicao=0
+expect "Hedwig" getInfoPaciente paciente=${id5} atributo="Nome" 
+expect "1985-01-02" getInfoPaciente paciente=${id5} atributo="Data" 
+expect "masculino" getInfoPaciente paciente=${id5} atributo="Sexo" 
+expect "feminino" getInfoPaciente paciente=${id5} atributo="Genero" 
+expect "B-" getInfoPaciente paciente=${id5} atributo="TipoSanguineo" 
+expect 60.0 getInfoPaciente paciente=${id5} atributo="Peso"  
+
+expectError "Erro ao consultar prontuario. Indice do prontuario nao pode ser negativo." id6=getProntuario posicao=-3
+expectError "Erro ao consultar prontuario. Nao ha prontuarios suficientes (max = 4)." id6=getProntuario posicao=7
+
+id6=getProntuario posicao=3
+expect "Safo" getInfoPaciente paciente=${id6} atributo="Nome" 
+expect "1990-07-19"  getInfoPaciente paciente=${id6} atributo="Data"  
+expect "feminino" getInfoPaciente paciente=${id6} atributo="Sexo"  
+expect "feminino" getInfoPaciente paciente=${id6} atributo="Genero"  
+expect "A+" getInfoPaciente paciente=${id6} atributo="TipoSanguineo"  
+expect 63.0 getInfoPaciente paciente=${id6} atributo="Peso"  
+
+id7=cadastraPaciente Nome="Tereza Brant" Data="20/08/1994" Peso=76.50 Sexo="feminino" Genero="masculino" tipoSanguineo="O-" 
+
+id8=getProntuario posicao=4
+expect "Tereza Brant" getInfoPaciente paciente=${id8} atributo="Nome"  
+expect "1994-08-20"  getInfoPaciente paciente=${id8} atributo="Data"  
+expect "feminino" getInfoPaciente paciente=${id8} atributo="Sexo"  
+expect "masculino" getInfoPaciente paciente=${id8}  atributo="Genero"
+expect "O-" getInfoPaciente paciente=${id8} atributo="TipoSanguineo"
+expect 76.5 getInfoPaciente paciente=${id8} atributo="Peso"
+
+logout
+
+login matricula="22016002" senha="corvo1989"
+expectError "Nao foi possivel cadastrar o paciente. O funcionario Edgar A. Poe nao tem permissao para cadastrar pacientes." id9=cadastraPaciente Nome="Tereza Brant" Data="20/08/1994" Peso=76.50 Sexo="feminino" Genero="masculino" tipoSanguineo="O-" 
+logout
+
+
+fechaSistema

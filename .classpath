@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="Diagramas"/>
 	<classpathentry kind="src" path="Soos"/>
+	<classpathentry kind="src" path="Testes"/>
+	<classpathentry kind="src" path="Diagramas"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/EasyAccept"/>
 	<classpathentry kind="output" path="bin"/>
