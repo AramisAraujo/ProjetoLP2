@@ -1,5 +1,7 @@
 package paciente;
 
+import exceptions.VerificaExcecao;
+
 /**
  * A classe Paciente possui atributos e comportamentos necessarios para o cadastro de pacientes
  * e manipulacao de seus dados.
@@ -17,7 +19,12 @@ public class Paciente implements Comparable <Paciente> {
 	private TipoSanguineo tipoSanguineo;
 	
 	public Paciente(String nome, int dataNascimento, int peso, String sexoBiologico,
-					String genero, TipoSanguineo tipoSanguineo, int ID) {
+					String genero, TipoSanguineo tipoSanguineo, int ID) throws Exception {
+		
+		VerificaExcecao.checarString(nome);
+		VerificaExcecao.checarString(sexoBiologico);
+		VerificaExcecao.checarString(genero);
+		
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.peso = peso;

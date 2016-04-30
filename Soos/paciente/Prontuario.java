@@ -3,6 +3,8 @@ package paciente;
 import java.util.ArrayList;
 import java.util.List;
 
+import exceptions.VerificaExcecao;
+
 /**
  * A classe Prontuario é composta de um objeto paciente e um conjunto de procedimentos.
  * 
@@ -14,7 +16,12 @@ public class Prontuario implements Comparable<Prontuario> {
 	private List<Procedimento> procedimentos;
 	
 	public Prontuario(String nome, int dataNascimento, int peso, String sexoBiologico,
-						String genero, TipoSanguineo tipoSanguineo, int ID) {
+						String genero, TipoSanguineo tipoSanguineo, int ID) throws Exception {
+		
+		VerificaExcecao.checarString(nome);
+		VerificaExcecao.checarString(sexoBiologico);
+		VerificaExcecao.checarString(genero);
+		
 		this.paciente = new Paciente(nome, dataNascimento, peso, sexoBiologico, genero, tipoSanguineo, ID);
 		this.procedimentos = new ArrayList<Procedimento>();
 	}
