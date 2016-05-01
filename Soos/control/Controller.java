@@ -33,6 +33,7 @@ public class Controller {
 			//throw exception chave errada
 		}
 		//cadastrar diretor
+		
 		this.sistemaBloqueado = false;
 		
 		return false;
