@@ -2,7 +2,10 @@ package farmacia;
  
 import java.util.HashSet;
 import java.util.Set;
- 
+
+import exceptions.EntradaException;
+import exceptions.StringException;
+import exceptions.ValorException;
 import farmacia.CategoriasDeMedicamentos;
  
 /**
@@ -21,13 +24,47 @@ public class Medicamento implements Comparable<Medicamento> {
     private Set<CategoriasDeMedicamentos> categorias;
  
     public Medicamento(String nome, double preco, int quantidade,
-            HashSet<CategoriasDeMedicamentos> categorias) {
+            Set<CategoriasDeMedicamentos> categorias) throws EntradaException {
+    	verificaString(nome);
+    	verificaPreco(preco);
+    	verificaQuantidade(quantidade);
+    	verificaCategorias(categorias);
         this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
         this.categorias = categorias;
     }
  
+    public void verificaString(String string) throws StringException{
+    	if (string == null){
+    		throw new StringException("O nome do medicamento nao pode ser nulo.");
+    	}
+    	else if (string.equals("".trim())){
+    		throw new StringException("O nome do medicamento nao pode ser vazio.");
+    	}
+    }
+    
+    public void verificaPreco(double preco) throws ValorException{
+    	if (preco < 0){
+    		throw new ValorException("O preco do medicamento nao pode ser negativo.");
+    	}
+    }
+    
+    public void verificaQuantidade(int quantidade) throws ValorException{
+    	if (quantidade == 0){
+    		throw new ValorException("A quantidade do medicamento nao pode ser zero.");
+    	}
+    	else if (quantidade < 0){
+    		throw new ValorException("A quantidade do medicamento nao pode ser negativa.");
+    	}
+    }
+    
+    public void verificaCategorias(Set categorias) throws ValorException{
+    	if (categorias == null){
+    		throw new ValorException("A categoria do medicamento nao pode ser nula.");
+    	}
+    }
+    
     public String getNome() {
         return nome;
     }

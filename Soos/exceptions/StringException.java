@@ -9,22 +9,15 @@ package exceptions;
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
+@SuppressWarnings("serial")
 public class StringException extends EntradaException {
- 
-    private static final long serialVersionUID = 1L;
  
     public StringException(String mensagem) {
         super(mensagem);
     }
-<<<<<<< HEAD
-     
-    public StringException(){
-        super("String invalida.");
-=======
  
     public StringException() {
         super("String inválida");
->>>>>>> master
     }
  
 }

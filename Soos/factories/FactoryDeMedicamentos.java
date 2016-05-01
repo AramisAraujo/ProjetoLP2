@@ -1,8 +1,10 @@
 package factories;
  
 import java.util.HashSet;
- 
+import java.util.Set;
+
 import farmacia.CategoriasDeMedicamentos;
+import exceptions.EntradaException;
 import exceptions.StringException;
  
 import farmacia.Medicamento;
@@ -30,9 +32,10 @@ public class FactoryDeMedicamentos {
      * @param categorias
      *            - categorias as quais o medicamento que sera criado pertence
      * @return - o medicamento criado
+     * @throws StringException 
      */
     private Medicamento criaMedicamentoDeReferencia(String nome, double preco,
-            int quantidade, HashSet<CategoriasDeMedicamentos> categorias) {
+            int quantidade, Set<CategoriasDeMedicamentos> categorias) throws EntradaException {
         Medicamento medicamento = new Medicamento(nome, preco, quantidade,
                 categorias);
         return medicamento;
@@ -50,9 +53,10 @@ public class FactoryDeMedicamentos {
      * @param categorias
      *            - categorias as quais o medicamento que sera criado pertence
      * @return - o medicamento criado
+     * @throws EntradaException 
      */
     private Medicamento criaMedicamentoGenerico(String nome, double preco,
-            int quantidade, HashSet<CategoriasDeMedicamentos> categorias) {
+            int quantidade, Set<CategoriasDeMedicamentos> categorias) throws EntradaException {
         Medicamento medicamento = new MedicamentoGenerico(nome, preco,
                 quantidade, categorias);
         return medicamento;
@@ -74,13 +78,11 @@ public class FactoryDeMedicamentos {
      *            - tipo do medicamento que sera criado (medicamento generico ou
      *            medicamento de refenrencia)
      * @return - medicamento criado
-     * @throws StringException
-     *             - excecao lancada caso o tipo de medicamento informado nao
-     *             exista
+     * @throws EntradaException 
      */
     public Medicamento criaMedicamento(String nome, double preco,
-            int quantidade, HashSet<CategoriasDeMedicamentos> categorias,
-            String tipo) throws StringException {
+            int quantidade, Set categorias,
+            String tipo) throws EntradaException {
         if (tipo.equalsIgnoreCase("medicamento generico")) {
             return criaMedicamentoGenerico(nome, preco, quantidade, categorias);
         } else if (tipo.equalsIgnoreCase("medicamento de referencia")) {

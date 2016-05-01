@@ -1,7 +1,10 @@
 package farmacia;
  
 import java.util.HashSet;
- 
+import java.util.Set;
+
+import exceptions.EntradaException;
+import exceptions.StringException;
 import farmacia.CategoriasDeMedicamentos;
  
 /**
@@ -15,7 +18,7 @@ import farmacia.CategoriasDeMedicamentos;
 public class MedicamentoGenerico extends Medicamento {
  
     public MedicamentoGenerico(String nome, double preco, int quantidade,
-            HashSet<CategoriasDeMedicamentos> categorias) {
+            Set<CategoriasDeMedicamentos> categorias) throws EntradaException {
         super(nome, preco, quantidade, categorias);
     }
  
