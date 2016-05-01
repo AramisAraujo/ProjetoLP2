@@ -33,7 +33,8 @@ public class Controller {
 			//throw exception chave errada
 		}
 		//cadastrar diretor
-		
+		this.cadstraFuncionario(nome, usuario.TipoCargo.DIRETOR,
+				dataNascimento);
 		this.sistemaBloqueado = false;
 		
 		return false;
