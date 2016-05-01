@@ -3,6 +3,7 @@ package paciente;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
 /**
  * A classe Prontuario é composta de um objeto paciente e um conjunto de procedimentos.
  * 
@@ -15,6 +16,47 @@ public class Prontuario implements Comparable<Prontuario> {
 	
 	public Prontuario(String nome, int dataNascimento, int peso, String sexoBiologico,
 						String genero, TipoSanguineo tipoSanguineo, int ID) {
+=======
+<<<<<<< HEAD
+/**
+ * A classe Prontuario é composta de um objeto paciente e um conjunto de procedimentos.
+ * 
+ * @author Elton Dantas
+ */
+public class Prontuario implements Comparable<Prontuario> {
+	
+	private Paciente paciente;
+	private List<Procedimento> procedimentos;
+	
+	public Prontuario(String nome, int dataNascimento, int peso, String sexoBiologico,
+						String genero, TipoSanguineo tipoSanguineo, int ID) {
+=======
+import exceptions.VerificaExcecao;
+
+/**
+ * A classe Prontuario é composta de um objeto paciente e um conjunto de procedimentos.
+ * 
+ * @author Elton Dantas
+ */
+public class Prontuario implements Comparable<Prontuario> {
+	
+	private Paciente paciente;
+	private List<Procedimento> procedimentos;
+	
+	public Prontuario(String nome, int dataNascimento, int peso, String sexoBiologico,
+						String genero, String tipoSanguineo, int ID) throws Exception {
+		
+		VerificaExcecao.checharParametroNull(nome,"Nome");
+		VerificaExcecao.checharParametroNull(sexoBiologico, "Sexo biologico");
+		VerificaExcecao.checharParametroNull(genero, "Genero");
+		VerificaExcecao.checharParametroNull(tipoSanguineo, "Tipo sanguineo");
+		
+		VerificaExcecao.checarNomePaciente(nome);
+		VerificaExcecao.checarDataNascimento(dataNascimento);
+		VerificaExcecao.checarPeso(peso);
+		VerificaExcecao.checarSexoBiologico(sexoBiologico);
+		VerificaExcecao.checarTipoSanguineo(tipoSanguineo);
+		
 		this.paciente = new Paciente(nome, dataNascimento, peso, sexoBiologico, genero, tipoSanguineo, ID);
 		this.procedimentos = new ArrayList<Procedimento>();
 	}
@@ -55,8 +97,5 @@ public class Prontuario implements Comparable<Prontuario> {
 			return false;
 		return true;
 	}
-	
-	
-	
 	
 }

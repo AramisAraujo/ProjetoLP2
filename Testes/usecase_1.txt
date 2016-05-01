@@ -1,0 +1,91 @@
+#################
+# Caso de Uso 1 #
+#################
+
+#iniciaSistema e fechaSistema serao usados para carregar/armazenar os dados do sistema
+#nos arquivos de dados.
+
+iniciaSistema
+###############################
+#  Cadastro do Diretor Geral  #
+###############################
+
+
+expectError "Erro ao liberar o sistema. Chave invalida." liberaSistema chave="chaveErrada" nome="Marrie Curie" dataNascimento="07/11/1967"
+
+id1=liberaSistema chave="c041ebf8" nome="Marie Curie" dataNascimento="07/11/1967"
+
+expectError "Erro ao liberar o sistema. Sistema liberado anteriormente." liberaSistema chave="c041ebf8" nome="Marie Curie" dataNascimento="07/11/1967"
+expectError "Erro ao liberar o sistema. Sistema liberado anteriormente." liberaSistema chave="chaveErrada" nome="Marie Curie" dataNascimento="07/11/1967"
+
+################################
+#    Login do Diretor Geral    #
+################################
+
+expectError "Nao foi possivel realizar o login. Senha incorreta." login matricula="12016001" senha="senhaerrada123"
+
+expectError "Nao foi possivel realizar o login. Funcionario nao cadastrado." login matricula="0214587" senha="qlqrsenha123"
+
+login matricula=${id1} senha="19671201" 
+expect "Marie Curie" getInfoFuncionario matricula=${id1} atributo="Nome"
+expect "Diretor Geral" getInfoFuncionario matricula=${id1} atributo="Cargo"
+expect "1967-11-07" getInfoFuncionario matricula=${id1} atributo="Data"
+
+##################################
+#    Cadastro de Funcionarios    #
+##################################
+
+id2=cadastraFuncionario nome="Edgar Allan Poe" cargo="Medico" dataNascimento="19/01/1989"
+
+id3=cadastraFuncionario nome="Erasmo de Rotterdam" cargo="Tecnico Administrativo" dataNascimento="28/10/1966"
+id4=cadastraFuncionario nome="Mary Shelley" cargo="Tecnico Administrativo" dataNascimento="25/07/1988"
+
+id5=cadastraFuncionario nome="Ada Lovelace" cargo="Medico" dataNascimento="10/12/1975"
+
+expectError "Erro no cadastro de funcionario. Nome do funcionario nao pode ser vazio." cadastraFuncionario nome="" cargo="medico" dataNascimento="28/03/1986"
+expectError "Erro no cadastro de funcionario. Data invalida." cadastraFuncionario nome="Fulano da Silva" cargo="medico" dataNascimento="28/75/1986"
+expectError "Erro no cadastro de funcionario. Nome do cargo nao pode ser vazio." cadastraFuncionario nome="Ninguem" cargo="" dataNascimento="11/10/19958"
+expectError "Erro no cadastro de funcionario. Cargo invalido." cadastraFuncionario nome="Cargo Inexistente" cargo="faz nada" dataNascimento="11/11/1811"
+
+
+expectError "Erro no cadastro de funcionario. Nao eh possivel criar mais de um Diretor Geral." cadastraFuncionario nome="Gugu Liberato" cargo="Diretor Geral" data="07/05/1962"
+
+expect "Edgar Allan Poe" getInfoFuncionario matricula=${id2} atributo="Nome"
+expect "1989-01-19" getInfoFuncionario matricula=${id2} atributo="Data"
+expect "Medico" getInfoFuncionario matricula=${id2} atributo="Cargo"
+expectError "Erro na consulta de funcionario. A senha do funcionario eh protegida." getInfoFuncionario matricula=${id2} atributo="Senha"
+
+expect "Erasmo de Rotterdam" getInfoFuncionario matricula=${id3} atributo="Nome"
+expect "1966-10-28" getInfoFuncionario matricula=${id3} atributo="Data"
+expect "Tecnico Administrativo" getInfoFuncionario matricula=${id3} atributo="Cargo"
+expectError "Erro na consulta de funcionario. A senha do funcionario eh protegida." getInfoFuncionario matricula=${id3} atributo="Senha"
+
+expect "Mary Shelley" getInfoFuncionario matricula=${id4} atributo="Nome"
+expect "1988-07-25" getInfoFuncionario matricula=${id4} atributo="Data"
+expect "Tecnico Administrativo" getInfoFuncionario matricula=${id4} atributo="Cargo"
+expectError "Erro na consulta de funcionario. A senha do funcionario eh protegida." getInfoFuncionario matricula=${id4} atributo="Senha"
+
+expect "Ada Lovelace" getInfoFuncionario matricula=${id5} atributo="Nome"
+expect "1975-12-10" getInfoFuncionario matricula=${id5} atributo="Data"
+expect "Medico" getInfoFuncionario matricula=${id5} atributo="Cargo"
+expectError "Erro na consulta de funcionario. A senha do funcionario eh protegida." getInfoFuncionario matricula=${id5} atributo="Senha"
+
+#########################################################################
+#                       Login de Funcionarios                           #
+#########################################################################
+
+expectError "Nao foi possivel fechar o sistema. Um funcionario ainda esta logado: Marie Curie." fechaSistema
+expectError "Nao foi possivel realizar o login. Um funcionario ainda esta logado: Marie Curie." login matricula="22016002" senha="19892201"
+
+logout
+
+expectError "Nao foi possivel realizar o logout. Nao ha um funcionario logado." logout
+expectError "Nao foi possivel realizar o login. Senha incorreta." login matricula="22016002" senha="15893654"
+
+expectError "Nao foi possivel realizar o login. Funcionario nao cadastrado." login matricula="52086321" senha="19892201"
+
+login matricula="22016002" senha="19892201"
+expectError "Erro no cadastro de funcionario. O funcionario Edgar Allan Poe nao tem permissao para cadastrar funcionarios." cadastraFuncionario nome="Amaterasu" cargo="Tecnico" data="15/03/1963"
+
+logout
+fechaSistema
