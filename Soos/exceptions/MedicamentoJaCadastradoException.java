@@ -10,6 +10,18 @@ package exceptions;
  * @author Mainara Cavalcanti de Farias
  */
 public class MedicamentoJaCadastradoException extends LogicaException {
+<<<<<<< HEAD
+
+	 private static final long serialVersionUID = 1L;
+     
+	    public MedicamentoJaCadastradoException() {
+	        super("Esse medicamento ja foi cadastrado.");
+	    }
+	      
+	    public MedicamentoJaCadastradoException(String mensagem) {
+	        super(mensagem);
+	    }
+=======
  
     private static final long serialVersionUID = 1L;
  
@@ -20,4 +32,5 @@ public class MedicamentoJaCadastradoException extends LogicaException {
     public MedicamentoJaCadastradoException(String mensagem) {
         super(mensagem);
     }
+>>>>>>> master
 }

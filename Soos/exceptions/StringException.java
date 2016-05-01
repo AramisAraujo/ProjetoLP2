@@ -16,9 +16,15 @@ public class StringException extends EntradaException {
     public StringException(String mensagem) {
         super(mensagem);
     }
+<<<<<<< HEAD
+     
+    public StringException(){
+        super("String invalida.");
+=======
  
     public StringException() {
         super("String inválida");
+>>>>>>> master
     }
  
 }

@@ -10,6 +10,18 @@ package exceptions;
  * @author Mainara Cavalcanti de Farias
  */
 public class LogicaException extends Exception {
+<<<<<<< HEAD
+
+	private static final long serialVersionUID = 1L;
+	
+	public LogicaException() {
+	    super("Logica incorreta.");
+	}
+	
+	public LogicaException(String mensagem) {
+	    super(mensagem);
+	}
+=======
  
     private static final long serialVersionUID = 1L;
      
@@ -20,4 +32,5 @@ public class LogicaException extends Exception {
     public LogicaException(String mensagem) {
         super(mensagem);
     }
+>>>>>>> master
 }
