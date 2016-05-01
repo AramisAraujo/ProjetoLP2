@@ -7,6 +7,6 @@ package paciente;
  */
 public enum TipoSanguineo {
 	
-	A_POSITIVO, A_NEGATIVO, B_POSITIVO, B_NEGATIVO, O_POSITIVO, O_NEGATIVO, AB_POSITIVO, AB_NEGATIVO; 
+	A+, A-, B+, B-, O+, O-, AB+, AB-; 
 
 }
