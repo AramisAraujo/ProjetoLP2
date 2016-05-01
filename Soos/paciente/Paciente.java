@@ -3,12 +3,12 @@ package paciente;
 import exceptions.VerificaExcecao;
 
 /**
- * A classe Paciente possui atributos e comportamentos necessarios para o cadastro de pacientes
+ * A classe Paciente possui atributos e comportamentos necessarios para a criacao de pacientes
  * e manipulacao de seus dados.
  * 
  * @author Elton Dantas
  */
-public class Paciente implements Comparable <Paciente> {
+public class Paciente implements Comparable<Paciente> {
 	
 	private String nome;
 	private int dataNascimento;
@@ -16,14 +16,21 @@ public class Paciente implements Comparable <Paciente> {
 	private String sexoBiologico;
 	private String genero;
 	private int ID;
-	private TipoSanguineo tipoSanguineo;
+	private String tipoSanguineo;
 	
 	public Paciente(String nome, int dataNascimento, int peso, String sexoBiologico,
-					String genero, TipoSanguineo tipoSanguineo, int ID) throws Exception {
+					String genero, String tipoSanguineo, int ID) throws Exception {
 		
-		VerificaExcecao.checarString(nome);
-		VerificaExcecao.checarString(sexoBiologico);
-		VerificaExcecao.checarString(genero);
+		VerificaExcecao.checharParametroNull(nome, "Nome");
+		VerificaExcecao.checharParametroNull(sexoBiologico, "Sexo biologico");
+		VerificaExcecao.checharParametroNull(genero, "Genero");
+		VerificaExcecao.checharParametroNull(tipoSanguineo, "Tipo sanguineo");
+		
+		VerificaExcecao.checarNomePaciente(nome);
+		VerificaExcecao.checarDataNascimento(dataNascimento);
+		VerificaExcecao.checarPeso(peso);
+		VerificaExcecao.checarSexoBiologico(sexoBiologico);
+		VerificaExcecao.checarTipoSanguineo(tipoSanguineo);
 		
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
@@ -73,7 +80,7 @@ public class Paciente implements Comparable <Paciente> {
 		this.genero = genero;
 	}
 
-	public TipoSanguineo getTipoSanguineo() {
+	public String getTipoSanguineo() {
 		return tipoSanguineo;
 	}
 	

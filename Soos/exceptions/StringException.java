@@ -9,7 +9,7 @@ public class StringException extends EntradaException {
     }
      
     public StringException(){
-        super("String inválida");
+        super("String invalida.");
     }
  
 }
