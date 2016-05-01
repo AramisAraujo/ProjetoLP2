@@ -2,35 +2,6 @@ package paciente;
 
 import java.util.ArrayList;
 import java.util.List;
-
-<<<<<<< HEAD
-/**
- * A classe Prontuario é composta de um objeto paciente e um conjunto de procedimentos.
- * 
- * @author Elton Dantas
- */
-public class Prontuario implements Comparable<Prontuario> {
-	
-	private Paciente paciente;
-	private List<Procedimento> procedimentos;
-	
-	public Prontuario(String nome, int dataNascimento, int peso, String sexoBiologico,
-						String genero, TipoSanguineo tipoSanguineo, int ID) {
-=======
-<<<<<<< HEAD
-/**
- * A classe Prontuario é composta de um objeto paciente e um conjunto de procedimentos.
- * 
- * @author Elton Dantas
- */
-public class Prontuario implements Comparable<Prontuario> {
-	
-	private Paciente paciente;
-	private List<Procedimento> procedimentos;
-	
-	public Prontuario(String nome, int dataNascimento, int peso, String sexoBiologico,
-						String genero, TipoSanguineo tipoSanguineo, int ID) {
-=======
 import exceptions.VerificaExcecao;
 
 /**
@@ -97,5 +68,4 @@ public class Prontuario implements Comparable<Prontuario> {
 			return false;
 		return true;
 	}
-	
 }
