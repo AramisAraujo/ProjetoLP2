@@ -19,7 +19,7 @@ public class VerificaExcecao {
 	}
 	
 	public static void checarString(String string) throws StringException {
-		if (string.equals("") || string == null) {
+		if (string == null || string.trim().isEmpty()) {
 			throw new StringException();
 		}
 	}

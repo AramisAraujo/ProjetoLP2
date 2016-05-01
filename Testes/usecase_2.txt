@@ -1,0 +1,96 @@
+#################
+# Caso de Uso 2      #
+#################
+
+#iniciaSistema e fechaSistema serao usados para carregar/armazenar os dados do sistema nos arquivos de dados.
+iniciaSistema
+
+############################
+#  Busca por  Funcionarios #
+############################
+#  Funcionarios cadastrados no caso de uso 1:
+# nome="Marie Curie" cargo="Diretor Geral" matricula = "12016001" dataNascimento="07/11/1967"
+# nome="Edgar Allan Poe" cargo="Medico" matricula = "22016002" dataNascimento= "01/19/1989"
+# nome="Erasmo de Rotterdam" cargo="Agente Administrativo" matricula = "32016003" dataNascimento= "28/10/1966"
+# nome="Mary Shelley" cargo="Agente Administrativo" matricula = "32016004" dataNascimento= "25/07/1988"
+# nome="Ada Lovelace" cargo="Medico" matricula =  "22016005" dataNascimento= "10/12/1975"
+
+login matricula="12016001" senha="19671201" 
+
+expect "Edgar Allan Poe" getInfoFuncionario matricula="22016002" atributo="Nome"
+
+expectError "Erro na consulta de funcionario. A matricula nao segue o padrao." getInfoFuncionario matricula="1bcde" atributo="Nome"
+expectError "Erro na consulta de funcionario. Funcionario nao cadastrado." getInfoFuncionario matricula="1234564" atributo="Nome"
+
+
+################################
+#  Exclusao de Funcionarios    #
+################################
+
+expectError "Erro ao excluir funcionario. Funcionario nao cadastrado." excluiFuncionario matricula="893427" senha="19671201"
+
+expect "Erasmo de Rotterdam" getInfoFuncionario matricula=32016003 atributo="Nome"
+expectError "Erro ao excluir funcionario. Funcionario nao cadastrado." excluiFuncionario matricula="893427" senha="19671201"
+expectError "Erro ao excluir funcionario. A matricula nao segue o padrao." excluiFuncionario matricula="ADCVDF" senha="19671201"
+expectError "Erro ao excluir funcionario. Senha invalida." excluiFuncionario matricula="32016004" senha="SENHA123"
+
+excluiFuncionario matricula=32016003 senha="19671201"
+expectError "Erro na consulta de funcionario. Funcionario nao cadastrado." getInfoFuncionario matricula=32016003 atributo="Nome"
+logout
+
+######################
+#    Atualizacao     #
+######################
+
+login matricula="12016001" senha="19671201"
+atualizaInfoFuncionario matricula="32016004" atributo="Nome" novoValor="Mary W. Shelley" 
+expectError "Erro ao atualizar funcionario. Data invalida." atualizaInfoFuncionario matricula="22016005" atributo="Data" novoValor="10/32/1975"
+atualizaInfoFuncionario matricula="22016005" atributo="Data" novoValor="10/12/1965"
+
+expect "Mary W. Shelley" getInfoFuncionario matricula="32016004" atributo="Nome"
+expect "Ada Lovelace" getInfoFuncionario matricula="22016005" atributo="Nome"
+
+expect "1988-07-25" getInfoFuncionario matricula="32016004" atributo="Data"
+expect "1965-12-10" getInfoFuncionario matricula="22016005" atributo="Data"
+
+#primeiro valida a senha antiga, e soh entao verifica o formato da nova senha.
+expectError "Erro ao atualizar funcionario. Senha invalida." atualizaSenha senhaAntiga="1234567" novaSenha="raioX1967" 
+expectError "Erro ao atualizar funcionario. Senha invalida." atualizaSenha antigaSenha="1234567" novaSenha="@#!$%#!"
+expectError "Erro ao atualizar funcionario. A nova senha deve ter entre 8 - 12 caracteres alfanumericos." atualizaSenha antigaSenha="19671201" novaSenha="@#!$%#!"
+
+atualizaSenha senhaAntiga="19671201" novaSenha="raioX1967" 
+logout
+
+login matricula="22016002" senha="19892201"
+expectError "Erro ao atualizar funcionario. Nome do funcionario nao pode ser vazio." atualizaInfoFuncionario atributo="nome" novoValor=""
+atualizaInfoFuncionario  atributo="Nome" novoValor="Edgar A. Poe"
+expectError "Erro ao atualizar funcionario. Data invalida." atualizaInfoFuncionario  atributo="Data" novoValor="24/85/1999"
+atualizaInfoFuncionario atributo="Data" novoValor="19/01/1999"
+
+expectError "Erro ao atualizar funcionario. Senha invalida." atualizaSenha senhaAntiga="nseiasenha" novaSenha="corvo1989" 
+expectError "Erro ao atualizar funcionario. A nova senha deve ter entre 8 - 12 caracteres alfanumericos." atualizaSenha antigaSenha="19892201" novaSenha="@#!$%#!"
+atualizaSenha antigaSenha="19892201" novaSenha="corvo1989"
+logout
+
+##########
+login matricula="32016004" senha="19883201"
+atualizaInfoFuncionario atributo="Nome" novoValor="Mary Shelley"
+atualizaInfoFuncionario atributo="Data" novoValor="28/07/1988"
+
+expectError "Erro ao atualizar funcionario. Senha invalida." atualizaSenha senhaAntiga="3698774123" novaSenha="vumborafazendo" 
+expectError "Erro ao atualizar funcionario. A nova senha deve ter entre 8 - 12 caracteres alfanumericos." atualizaSenha antigaSenha="19883201" novaSenha="@#!$%#!"
+atualizaSenha antigaSenha="19883201" novaSenha="paralembrar"
+
+expectError "Erro ao excluir funcionario. O funcionario Mary Shelley nao tem permissao para excluir funcionarios." excluiFuncionario matricula="32016004" senha="19883201"
+
+logout
+fechaSistema
+
+################################################
+#         Depois das alteracoes                #
+################################################
+#admin:  nome =’ "Marie Curie" cargo="Diretor Geral" matricula = "12016001" dataNascimento="07/11/1967"
+#id1:  nome="Edgar A. Poe" cargo="Medico" matricula = "22016002" dataNascimento= "01/19/1999" senha = corvo1989
+#id3: nome="Mary W. Shelley" cargo="Agente Administrativo" matricula = "32016004" dataNascimento= "28/07/1988"
+#id4: nome="Ada Lovelace" cargo="Medico" matricula =  "22016005" dataNascimento= "10/12/1965"
+

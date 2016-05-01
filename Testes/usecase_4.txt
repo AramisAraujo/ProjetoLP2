@@ -1,0 +1,98 @@
+####################
+# Caso de Uso 4    #
+####################
+
+#iniciaSistema e fechaSistema serao usados para carregar/armazenar os dados do sistema nos arquivos de dados.
+iniciaSistema
+
+#Logar como Mary Shelly q eh tecnica administrativa
+login matricula="32016004" senha="paralembrar"
+
+##############################
+#  Cadastro de Medicamentos  #
+##############################
+
+#O id retornado pela Facade eh o nome do medicamento.
+id1=cadastraMedicamento nome="Valium" tipo="generico" preco=21.50 quantidade=45 categorias="analgesico"
+id2=cadastraMedicamento nome="Metamizol" tipo="referencia" preco=58.30 quantidade=466 categorias="analgesico,antitermico" 
+id3=cadastraMedicamento nome="Morfina" tipo="referencia" preco=150 quantidade=600 categorias="analgesico"
+id4=cadastraMedicamento nome="Medroxyprogesterona" tipo="generico" preco=285.50 quantidade=200 categorias="hormonal"
+id5=cadastraMedicamento nome="Duraston" tipo="generico" preco=112.50 quantidade=150 categorias="hormonal"
+id6=cadastraMedicamento nome="Nimesulida" tipo="referencia" preco=12.50 quantidade=150 categorias="antiinflamatorio,antitermico,analgesico"
+id7=cadastraMedicamento nome="Penicilina" tipo="referencia" preco=80.00 quantidade=150 categorias="antibiotico"
+
+expectError "Erro no cadastro de medicamento. Nome do medicamento nao pode ser vazio." cadastraMedicamento nome="" tipo="generico" preco=29.85 quantidade=70 classe="analgesico"
+expectError "Erro no cadastro de medicamento. Nome do medicamento nao pode ser vazio." cadastraMedicamento nome=" " tipo="generico" preco=29.85 quantidade=70 classe="analgesico"
+expectError "Erro no cadastro de medicamento. Preco do medicamento nao pode ser negativo." cadastraMedicamento nome="Diazepam" tipo="generico" preco=-900 quantidade=2 classe="antitermico"
+expectError "Erro no cadastro de medicamento. Quantidade do medicamento nao pode ser negativo." cadastraMedicamento nome="Diazepam" tipo="generico" preco=29.85 quantidade=-14 classe="antitermico"
+
+expect "Generico" getInfoMedicamento atributo="tipo" medicamento=${id1}
+expect 12.9 getInfoMedicamento atributo="preco" medicamento=${id1}
+expect 45 getInfoMedicamento atributo="quantidade" medicamento=${id1}
+expect "analgesico" getInfoMedicamento atributo="categorias" medicamento=${id1}
+
+expect "Generico" getInfoMedicamento atributo="tipo" medicamento=${id4}
+expect 171.3  getInfoMedicamento atributo="preco" medicamento=${id4}
+expect 200 getInfoMedicamento atributo="quantidade" medicamento=${id4}
+expect "hormonal" getInfoMedicamento atributo="categorias" medicamento=${id4}
+
+expect "de Referencia" getInfoMedicamento atributo="tipo" medicamento=${id6}
+expect 12.5 getInfoMedicamento atributo="preco" medicamento=${id6}
+expect 150 getInfoMedicamento atributo="quantidade" medicamento=${id6}
+#qd ha categorias elas sao impressas em ordem alfabetica. Dica: deixe a declaracao das consntantes no enum de Categorias em ordem alfabetica.
+expect "analgesico,antiinflamatorio,antitermico" getInfoMedicamento atributo="categorias" medicamento=${id6}
+
+atualizaMedicamento nome="Nimesulida" atributo="preco" novoValor="15.00"
+atualizaMedicamento nome="Nimesulida" atributo="quantidade" novoValor="200"
+expect 15.0 getInfoMedicamento atributo="preco" medicamento=${id6}
+expect 200 getInfoMedicamento atributo="quantidade" medicamento=${id6}
+
+atualizaMedicamento nome="Valium" atributo="preco" novoValor="20.00"
+expect 12.0 getInfoMedicamento atributo="preco" medicamento=${id1}
+expect 45 getInfoMedicamento atributo="quantidade" medicamento=${id1}
+
+
+expectError "Erro ao atualizar medicamento. Nome do medicamento nao pode ser alterado." atualizaMedicamento nome="Nimesulida" atributo="nome" novoValor="Nimelusida"
+expectError "Erro ao atualizar medicamento. Tipo do medicamento nao pode ser alterado." atualizaMedicamento nome="Nimesulida" atributo="tipo" novoValor="generico"
+expectError "Erro ao atualizar medicamento. Medicamento nao cadastrado." atualizaMedicamento nome="Dorflex" atributo="preco" novoValor="17.00"
+
+###########################################
+#   Busca de medicamentos por categoria   #
+###########################################
+expect "Valium,Nimesulida,Metamizol,Morfina" consultaMedCategoria categoria="analgesico"
+expect "Duraston,Medroxyprogesterona" consultaMedCategoria categoria="hormonal"
+expect "Nimesulida" consultaMedCategoria categoria="antiinflamatorio"
+expect "Penicilina" consultaMedCategoria categoria="antibiotico"
+expectError "Erro na consulta de medicamentos. Nao ha remedios cadastrados nessa categoria." consultaMedCategoria categoria="antiemetico"
+expectError "Erro na consulta de medicamentos. Categoria invalida." consultaMedCategoria categoria="antialergico"
+
+# Efetua adicao de remedio antiemetico
+cadastraMedicamento nome="Hioscina" tipo="referencia" preco=10 quantidade=300 categorias="antiemetico"
+
+expect "Hioscina" consultaMedCategoria categoria="antiemetico"
+
+############################################
+#     Busca de medicamentos por nome       #
+############################################
+expectError "Erro na consulta de medicamentos. Medicamento nao cadastrado." consultaMedNome nomeRemedio="Opium"
+
+expect "Medicamento de Referencia: Metamizol - Preco: R$ 58,30 - Disponivel: 466 - Categorias: analgesico,antitermico" consultaMedNome nomeRemedio="Metamizol"
+expect "Medicamento Generico: Medroxyprogesterona - Preco: R$ 171,30 - Disponivel: 200 - Categorias: hormonal" consultaMedNome nomeRemedio="Medroxyprogesterona"
+expect "Medicamento de Referencia: Hioscina - Preco: R$ 10,00 - Disponivel: 300 - Categorias: antiemetico" consultaMedNome nomeRemedio="Hioscina"
+
+############################################
+#     Busca por todos os medicamentos      #
+############################################
+
+expect "Hioscina,Valium,Nimesulida,Metamizol,Duraston,Penicilina,Morfina,Medroxyprogesterona" getEstoqueFarmacia ordenacao="preco"
+expect "Duraston,Hioscina,Medroxyprogesterona,Metamizol,Morfina,Nimesulida,Penicilina,Valium" getEstoqueFarmacia ordenacao="alfabetica"
+expectError "Erro na consulta de medicamentos. Tipo de ordenacao invalida." getEstoqueFarmacia ordenacao="tipo"
+
+logout
+
+#Logar como Edgar A Poe q eh medico
+login matricula="22016002" senha="corvo1989"
+expectError "Erro no cadastro de medicamento. O funcionario Edgar A. Poe nao tem permissao para cadastrar medicamentos." id8=cadastraMedicamento nome="Dorflex" tipo="referencia" preco=21.50 quantidade=45 categorias="analgesico"
+logout
+
+fechaSistema
