@@ -1,6 +1,7 @@
 package exceptions;
 
 import java.util.List;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -36,8 +37,14 @@ public class VerificaExcecao {
 		}
 	}
 	
-	public static void checarDataNascimento(int dataNascimento) {
-	}
+	public static void checarData(LocalDate birthDate) throws Exception {
+		int thisYear = LocalDate.now().getYear();
+		
+		if(birthDate.getYear() > thisYear){
+			throw new Exception();
+		}
+		
+				}
 	
 	public static void checarPeso(int peso) throws PacienteException {
 		if (peso < 0) {

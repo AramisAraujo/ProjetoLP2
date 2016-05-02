@@ -1,16 +1,16 @@
 package usuario;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public abstract class Usuario {
 	private String nome;
-	private Date dataNascimento;
+	private LocalDate dataNascimento;
 	private String senha;
-	private int matricula;
+	private String matricula;
 	
-	public Usuario(String nome, Date dataNascimento, String senha, int matricula) {
+	public Usuario(String nome, LocalDate birthDate, String senha, String matricula) {
 		this.nome = nome;
-		this.dataNascimento = dataNascimento;
+		this.dataNascimento = birthDate;
 		this.senha = senha;
 		this.matricula = matricula;
 	}
@@ -23,11 +23,11 @@ public abstract class Usuario {
 		this.nome = nome;
 	}
 
-	public Date getDataNascimento() {
+	public LocalDate getDataNascimento() {
 		return this.dataNascimento;
 	}
 
-	public void setDataNascimento(Date dataNascimento) {
+	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
 
@@ -45,7 +45,7 @@ public abstract class Usuario {
 		}
 	}
 
-	public int getMatricula() {
+	public String getMatricula() {
 		return this.matricula;
 	}
 	

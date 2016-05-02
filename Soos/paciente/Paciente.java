@@ -12,13 +12,13 @@ public class Paciente implements Comparable<Paciente> {
 	
 	private String nome;
 	private int dataNascimento;
-	private int peso;
+	private double peso;
 	private String sexoBiologico;
 	private String genero;
 	private int ID;
 	private String tipoSanguineo;
 	
-	public Paciente(String nome, int dataNascimento, int peso, String sexoBiologico,
+	public Paciente(String nome, Date dataNascimento, int peso, String sexoBiologico,
 					String genero, String tipoSanguineo, int ID) throws Exception {
 		
 		VerificaExcecao.checharParametroNull(nome, "Nome");
@@ -27,7 +27,7 @@ public class Paciente implements Comparable<Paciente> {
 		VerificaExcecao.checharParametroNull(tipoSanguineo, "Tipo sanguineo");
 		
 		VerificaExcecao.checarNomePaciente(nome);
-		VerificaExcecao.checarDataNascimento(dataNascimento);
+		VerificaExcecao.checarData(dataNascimento);
 		VerificaExcecao.checarPeso(peso);
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 		VerificaExcecao.checarTipoSanguineo(tipoSanguineo);
@@ -56,7 +56,7 @@ public class Paciente implements Comparable<Paciente> {
 		this.dataNascimento = dataNascimento;
 	}
 
-	public int getPeso() {
+	public double getPeso() {
 		return peso;
 	}
 

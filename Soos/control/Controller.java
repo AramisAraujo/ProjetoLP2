@@ -1,26 +1,30 @@
 package control;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
+import exceptions.StringException;
+import exceptions.VerificaExcecao;
+import factories.FactoryUsuario;
 import usuario.Usuario;
 import usuario.TipoCargo;
 
 public class Controller {
 	
 	private boolean sistemaBloqueado;
+	private int cadastrosRealizados;
 	private Usuario usuarioAtual;
-	private Map bancoUsuarios;
+	private Map<String,Usuario> bancoUsuarios;
+	private FactoryUsuario factoryUsuarios;
+	
 	
 	public Controller(){
 		this.sistemaBloqueado = true;
+		this.cadastrosRealizados = 0;
 		this.bancoUsuarios = new HashMap<String,Usuario>();
+		this.factoryUsuarios = new FactoryUsuario();
 	}
 	
 	public void iniciaSistema(){
@@ -47,7 +51,7 @@ public class Controller {
 	}
 	
 	public boolean login(String matricula, String senha){
-		if(!temUsuario(matricula)){
+		if(!this.temUsuario(matricula)){
 			//throw new loginException("Nao foi possivel realizar o login. Funcionario nao cadastrado.")
 			return false;
 		}
@@ -64,6 +68,35 @@ public class Controller {
 	}
 	
 	private boolean cadstraFuncionario(String nome, String cargo, String dataNascimento){
+		
+		try {
+			VerificaExcecao.checarString(nome);
+		} catch (StringException e) {
+			//throw new cadastroException(nome invalido);
+		}
+		
+		LocalDate birthDate = stringToDate(dataNascimento);
+		
+		try {
+			VerificaExcecao.checarData(birthDate);
+		} catch (Exception e) {
+			//throw new cadastroException(data nao valida);
+		}				
+		
+		String matricula;
+		try {
+			matricula = this.gerarMatricula(birthDate, TipoCargo.valueOf(cargo));
+		} catch (Exception e) {
+			//throw new cadastroException(cargo nao existe);
+		}
+		String senha = this.gerarSenha(birthDate, matricula);
+		
+		try {
+			this.factoryUsuarios.criarUsuario(nome, birthDate, senha, matricula, TipoCargo.valueOf(cargo));
+		} catch (Exception e) {
+			//throw new cadastroException(cargo nao existe);
+		}
+		
 		return true;
 		
 	}
@@ -71,11 +104,49 @@ public class Controller {
 	public String getinfoFuncionario(String matricula, String info){
 		
 	}
-	private void gerarSenha(Date anoNascimento, String matricula){
+	private String gerarSenha(LocalDate anoNascimento, String matricula){
+		
+	}
+	private String gerarMatricula(LocalDate dataNascimento, TipoCargo cargo) throws Exception{
+		
+		String matricula = "";
+		int anoNascimento = dataNascimento.getYear();
+		
+		switch (cargo) {
+		
+		case DIRETOR:
+
+			matricula = matricula + "1";
+			matricula = matricula + String.valueOf(anoNascimento);
+			matricula = matricula + this.cadastrosRealizados;	
+			
+			break;
+		
+		case MEDICO:
+			
+			matricula = matricula + "2";
+			matricula = matricula + String.valueOf(anoNascimento);
+			matricula = matricula + this.cadastrosRealizados;
+			
+			break;
+			
+			
+		case TECNICOADM:
+			matricula = matricula + "3";
+			matricula = matricula + String.valueOf(anoNascimento);
+			matricula = matricula + this.cadastrosRealizados;	
+			
+			break;
+		
+		default:
+			throw new Exception();
+			
+		}
+		return matricula;
 		
 	}
 	private Usuario getUsuario(String matricula){
-		return true;
+		return null;
 		
 	}
 	private boolean removerUsuario(String matricula){
@@ -89,18 +160,14 @@ public class Controller {
 	private boolean temUsuario(String matricula){
 		return this.bancoUsuarios.containsKey(matricula);
 	}
-	private Date stringToDate(String dateCandidate){
+	private LocalDate stringToDate(String dateCandidate){
 		
-		DateFormat formato = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-		Date date;
-		try {
-			date = formato.parse(dateCandidate);
-			return date;
+		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
 
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return LocalDate.parse(dateCandidate, formatador);
+		
+
 	}
 	
 	

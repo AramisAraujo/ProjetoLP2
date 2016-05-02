@@ -1,11 +1,11 @@
 package usuario;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Medico extends Usuario{
 
-	public Medico(String nome, Date dataNascimento, int senha, int matricula) {
-		super(nome, dataNascimento, senha, matricula);
+	public Medico(String nome, LocalDate birthDate, String senha, String matricula) {
+		super(nome, birthDate, senha, matricula);
 	}
 
 	@Override
