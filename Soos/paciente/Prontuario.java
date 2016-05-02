@@ -1,5 +1,6 @@
 package paciente;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import exceptions.VerificaExcecao;
@@ -14,7 +15,7 @@ public class Prontuario implements Comparable<Prontuario> {
 	private Paciente paciente;
 	private List<Procedimento> procedimentos;
 	
-	public Prontuario(String nome, int dataNascimento, int peso, String sexoBiologico,
+	public Prontuario(String nome, LocalDate dataNascimento, int peso, String sexoBiologico,
 						String genero, String tipoSanguineo, int ID) throws Exception {
 		
 		VerificaExcecao.checharParametroNull(nome,"Nome");
@@ -23,7 +24,7 @@ public class Prontuario implements Comparable<Prontuario> {
 		VerificaExcecao.checharParametroNull(tipoSanguineo, "Tipo sanguineo");
 		
 		VerificaExcecao.checarNomePaciente(nome);
-		VerificaExcecao.checarDataNascimento(dataNascimento);
+		VerificaExcecao.checarData(dataNascimento);
 		VerificaExcecao.checarPeso(peso);
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 		VerificaExcecao.checarTipoSanguineo(tipoSanguineo);
