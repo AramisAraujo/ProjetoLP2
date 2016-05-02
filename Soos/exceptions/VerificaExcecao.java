@@ -1,6 +1,7 @@
 package exceptions;
 
 import java.util.List;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,43 +13,42 @@ import java.util.Arrays;
  */
 public class VerificaExcecao {
 	
-	private static List<String> tiposDeSangue;
-	
-	public VerificaExcecao() {
-		tiposDeSangue = new ArrayList<String>(Arrays.asList("A+","A-","B+","B-","AB+","AB-","O+","O-"));
-	}
-	
-	public static void checarString(String string) throws StringException {
-		if (string == null || string.trim().isEmpty()) {
-			throw new StringException();
+	public static void checkEmptyString(String umaString,String atributo) throws Exception {
+		if (umaString == null || umaString.trim().isEmpty()) {
+			throw new Exception(atributo+" nao pode ser vazio");
 		}
 	}
 	
-	public static void checharParametroNull(Object obj, String atributo) throws NullParameterException {
-		if (obj == null) {
-			throw new NullParameterException(atributo + " nao pode ser null.");
-		}
-	}
 	
-	public static void checarNomePaciente(String nome) throws PacienteException {
+	public static boolean checarNomePaciente(String nome) throws PacienteException {
 		if (nome == "") {
 			throw new PacienteException("Nome do paciente nao pode ser vazio.");
 		}
+		return true;
 	}
 	
-	public static void checarDataNascimento(int dataNascimento) {
+	public static boolean checarData(LocalDate birthDate) throws Exception {
+		int thisYear = LocalDate.now().getYear();
+		
+		if(birthDate.getYear() > thisYear){
+			throw new Exception();
+		}
+		return true;
+		
 	}
 	
-	public static void checarPeso(int peso) throws PacienteException {
+	public static boolean checarPeso(int peso) throws PacienteException {
 		if (peso < 0) {
 			throw new PacienteException("Peso do paciente nao pode ser negativo.");
 		}
+		return true;
 	}
 	
-	public static void checarSexoBiologico(String sexoBiologico) throws PacienteException {
+	public static boolean checarSexoBiologico(String sexoBiologico) throws PacienteException {
 		if (sexoBiologico != "feminino" || sexoBiologico != "masculino") {
-			throw new PacienteException("Sexo biologico invalido.");
+			throw new PacienteException("Sexo biologico nao identificado.");
 		}
+		return true;
 	}
 	
 	public static void checarTipoSanguineo(String tipoSanguineo) throws PacienteException {
