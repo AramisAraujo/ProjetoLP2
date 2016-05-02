@@ -18,6 +18,11 @@ public class Controller {
 	private Usuario usuarioAtual;
 	private Map bancoUsuarios;
 	
+	public Controller(){
+		this.sistemaBloqueado = true;
+		this.bancoUsuarios = new HashMap<String,Usuario>();
+	}
+	
 	public void iniciaSistema(){
 		
 	}
@@ -33,29 +38,47 @@ public class Controller {
 			//throw exception chave errada
 		}
 		//cadastrar diretor
-		this.cadstraFuncionario(nome, usuario.TipoCargo.DIRETOR,
+		this.cadstraFuncionario(nome, usuario.TipoCargo.DIRETOR.name(),
 				dataNascimento);
 		this.sistemaBloqueado = false;
 		
 		return false;
 		
 	}
+	
+	public boolean login(String matricula, String senha){
+		if(!temUsuario(matricula)){
+			//throw new loginException("Nao foi possivel realizar o login. Funcionario nao cadastrado.")
+			return false;
+		}
+		
+		Usuario loginTarget = (Usuario) bancoUsuarios.get(matricula);
+		
+		if (!loginTarget.getSenha().equals(senha)){
+			//throw new loginException("Nao foi possivel realizar o login. Senha incorreta.")
+			return false;
+		}
+		
+		this.usuarioAtual = loginTarget;
+		return true;
+	}
+	
 	private boolean cadstraFuncionario(String nome, String cargo, String dataNascimento){
 		return true;
 		
 	}
 	
-	public String getinfoFuncionario(int matricula, String info){
+	public String getinfoFuncionario(String matricula, String info){
 		
 	}
-	private void gerarSenha(int anoNascimento, int matricula){
+	private void gerarSenha(Date anoNascimento, String matricula){
 		
 	}
-	private Usuario getUsuario(int matricula){
+	private Usuario getUsuario(String matricula){
 		return true;
 		
 	}
-	private boolean removerUsuario(int matricula){
+	private boolean removerUsuario(String matricula){
 		return true;
 		
 	}
@@ -63,7 +86,9 @@ public class Controller {
 		return true;
 		
 	}
-	
+	private boolean temUsuario(String matricula){
+		return this.bancoUsuarios.containsKey(matricula);
+	}
 	private Date stringToDate(String dateCandidate){
 		
 		DateFormat formato = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -73,7 +98,6 @@ public class Controller {
 			return date;
 
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

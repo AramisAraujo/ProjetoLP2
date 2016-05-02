@@ -47,7 +47,7 @@ public class VerificaExcecao {
 	
 	public static void checarSexoBiologico(String sexoBiologico) throws PacienteException {
 		if (sexoBiologico != "feminino" || sexoBiologico != "masculino") {
-			throw new PacienteException("Sexo biologico invalido.");
+			throw new PacienteException("Sexo biologico nao identificado.");
 		}
 	}
 	

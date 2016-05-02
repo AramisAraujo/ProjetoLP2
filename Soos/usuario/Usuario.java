@@ -5,10 +5,10 @@ import java.util.Date;
 public abstract class Usuario {
 	private String nome;
 	private Date dataNascimento;
-	private int senha;
+	private String senha;
 	private int matricula;
 	
-	public Usuario(String nome, Date dataNascimento, int senha, int matricula) {
+	public Usuario(String nome, Date dataNascimento, String senha, int matricula) {
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.senha = senha;
@@ -33,13 +33,14 @@ public abstract class Usuario {
 
 	public abstract TipoCargo getCargo();
 
-	public int getSenha() {
-		return this.senha;
+	public String getSenha() {
+		String senha = this.senha;
+		return senha;
 	}
 
-	public void setSenha(int senhaAntiga, int senhaNova) {
+	public void setSenha(String senhaAntiga, String senhaNova) {
 		
-		if (this.senha == senhaAntiga){
+		if (this.senha.equals(senhaAntiga)){
 			this.senha = senhaNova;
 		}
 	}
