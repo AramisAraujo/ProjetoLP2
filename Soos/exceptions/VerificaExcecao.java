@@ -19,12 +19,6 @@ public class VerificaExcecao {
 		}
 	}
 	
-	public static boolean checharParametroNull(Object obj, String atributo) throws NullParameterException {
-		if (obj == null) {
-			throw new NullParameterException(atributo + " nao pode ser null.");
-		}
-		return true;
-	}
 	
 	public static boolean checarNomePaciente(String nome) throws PacienteException {
 		if (nome == "") {

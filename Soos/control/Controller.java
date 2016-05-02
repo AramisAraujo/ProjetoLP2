@@ -5,8 +5,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.security.auth.login.LoginException;
+
 import exceptions.CadastroException;
+import exceptions.ConsultaException;
 import exceptions.StringException;
+import exceptions.SystemCloseException;
 import exceptions.VerificaExcecao;
 import factories.FactoryUsuario;
 import usuario.Usuario;
@@ -31,11 +35,15 @@ public class Controller {
 	public void iniciaSistema(){
 		
 	}
-	public void fechaSistema(){
+	public void fechaSistema() throws SystemCloseException{
+		if(this.usuarioAtual != null){
+			String errorMsg = "Um funcionario ainda esta logado: " + usuarioAtual.getNome()+".";
+			throw new SystemCloseException(errorMsg);
+		}
 		
 	}
 	
-	public boolean liberaSistema(String chave, String nome, String dataNascimento){
+	public boolean liberaSistema(String chave, String nome, String dataNascimento) throws CadastroException{
 		if(sistemaBloqueado == false){
 			//throw exception sistema jah liberado
 		}
@@ -51,25 +59,33 @@ public class Controller {
 		
 	}
 	
-	public boolean login(String matricula, String senha){
-		if(!this.temUsuario(matricula)){
-			//throw new loginException("Nao foi possivel realizar o login. Funcionario nao cadastrado.")
-			return false;
+	public void login(String matricula, String senha) throws LoginException{
+		
+		if(usuarioAtual != null){
+			throw new LoginException("Um funcionario ainda esta logado:" + usuarioAtual.getNome()+".");
 		}
 		
-		Usuario loginTarget = (Usuario) bancoUsuarios.get(matricula);
+		if(!this.temUsuario(matricula)){
+			throw new LoginException("Funcionario nao cadastrado.");
+		}
+		
+		Usuario loginTarget = getUsuario(matricula);
 		
 		if (!loginTarget.getSenha().equals(senha)){
-			//throw new loginException("Nao foi possivel realizar o login. Senha incorreta.")
-			return false;
+			throw new LoginException("Senha incorreta.");
 		}
 		
 		this.usuarioAtual = loginTarget;
-		return true;
 	}
 	
 	private boolean cadstraFuncionario(String nome, String cargo, 
 			String dataNascimento) throws CadastroException{
+		
+		if(!usuarioAtual.getMatricula().startsWith("1")){
+			String errorMsg = "O funcionario "+usuarioAtual.getNome()+
+					" nao tem permissao para cadastrar funcionarios.";
+			throw new CadastroException("Funcionario", errorMsg);
+		}
 		
 		try {
 			VerificaExcecao.checkEmptyString(nome,"Nome do Funcionario");
@@ -111,12 +127,50 @@ public class Controller {
 		
 	}
 	
-	public String getinfoFuncionario(String matricula, String info){
+	public String getinfoFuncionario(String matricula, String info) throws ConsultaException{
+		
+		Usuario targetUser = getUsuario(matricula);
+		
+		if(targetUser == null){
+			throw new ConsultaException("Funcionario","Funcionario nao encontrado na base de dados.");
+		}
+		
+
+		if(info.equalsIgnoreCase("Nome")){
+			return targetUser.getNome();
+			
+		}
+		else if(info.equalsIgnoreCase("Cargo")){
+			return targetUser.getCargo().name();
+			
+		}
+		else if(info.equalsIgnoreCase("Data")){
+			return targetUser.getDataNascimento().toString();
+			
+		}
+		else if(info.equalsIgnoreCase("Senha")){
+			throw new ConsultaException("Funcionario", "A senha do funcionario eh protegida.");
+	
+		}
+		else{
+			throw new ConsultaException("Funcionario", "Atributo desconhecido.");
+		}
+		
+		
+		
+		
 		return info;
 		
 	}
 	private String gerarSenha(LocalDate anoNascimento, String matricula){
-		return matricula;
+		
+		String senha = "";
+		int ano = anoNascimento.getYear();
+		
+		senha = senha + String.valueOf(ano);
+		senha = senha + matricula.substring(0, 3);
+		
+		return senha;
 		
 	}
 	private String gerarMatricula(LocalDate dataNascimento, TipoCargo cargo) throws Exception{
@@ -164,6 +218,14 @@ public class Controller {
 		
 	}
 	private Usuario getUsuario(String matricula){
+		
+		for (Usuario usuario : this.bancoUsuarios.values()) {
+			
+			if(usuario.getMatricula().equals(matricula)){
+				return usuario;
+			}
+			
+		}
 		return null;
 		
 	}
