@@ -22,7 +22,7 @@ public class FactoryUsuario {
 			case TECNICOADM:
 				return new TecnicoAdm(nome, birthDate, senha, matricula);
 			default:
-				throw new Exception();
+				throw new Exception("Erro impossivel.");
 		}
 	}
 }

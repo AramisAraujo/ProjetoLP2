@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import exceptions.CadastroException;
 import exceptions.StringException;
 import exceptions.VerificaExcecao;
 import factories.FactoryUsuario;
@@ -67,34 +68,43 @@ public class Controller {
 		return true;
 	}
 	
-	private boolean cadstraFuncionario(String nome, String cargo, String dataNascimento){
+	private boolean cadstraFuncionario(String nome, String cargo, 
+			String dataNascimento) throws CadastroException{
 		
 		try {
-			VerificaExcecao.checarString(nome);
-		} catch (StringException e) {
-			//throw new cadastroException(nome invalido);
+			VerificaExcecao.checkEmptyString(nome,"Nome do Funcionario");
+		} catch (Exception e) {
+			throw new CadastroException("Funcionario",e.getMessage());
 		}
 		
-		LocalDate birthDate = stringToDate(dataNascimento);
+		LocalDate birthDate;
 		
 		try {
+			birthDate = stringToDate(dataNascimento);
 			VerificaExcecao.checarData(birthDate);
 		} catch (Exception e) {
-			//throw new cadastroException(data nao valida);
+			throw new CadastroException("Funcionario","Data invalida.");
 		}				
-		
+			
+		try {
+			VerificaExcecao.checkEmptyString(cargo, "Nome do Cargo");
+		} catch (Exception e) {
+			throw new CadastroException("Funcionario",e.getMessage());
+		}
+				
 		String matricula;
+		
 		try {
 			matricula = this.gerarMatricula(birthDate, TipoCargo.valueOf(cargo));
 		} catch (Exception e) {
-			//throw new cadastroException(cargo nao existe);
+			throw new CadastroException("Funcionario",e.getMessage());
 		}
 		String senha = this.gerarSenha(birthDate, matricula);
 		
 		try {
 			this.factoryUsuarios.criarUsuario(nome, birthDate, senha, matricula, TipoCargo.valueOf(cargo));
 		} catch (Exception e) {
-			//throw new cadastroException(cargo nao existe);
+			throw new CadastroException("Funcionario", "Erro impossivel.");
 		}
 		
 		return true;
@@ -102,20 +112,28 @@ public class Controller {
 	}
 	
 	public String getinfoFuncionario(String matricula, String info){
+		return info;
 		
 	}
 	private String gerarSenha(LocalDate anoNascimento, String matricula){
+		return matricula;
 		
 	}
 	private String gerarMatricula(LocalDate dataNascimento, TipoCargo cargo) throws Exception{
 		
 		String matricula = "";
 		int anoNascimento = dataNascimento.getYear();
-		
+				
 		switch (cargo) {
 		
 		case DIRETOR:
 
+			for (Usuario usuario : this.bancoUsuarios.values()) {
+				if(usuario.getMatricula().startsWith("1")){
+					throw new Exception("Nao eh possivel criar mais de um Diretor Geral.");
+				}
+			}
+			
 			matricula = matricula + "1";
 			matricula = matricula + String.valueOf(anoNascimento);
 			matricula = matricula + this.cadastrosRealizados;	
@@ -139,7 +157,7 @@ public class Controller {
 			break;
 		
 		default:
-			throw new Exception();
+			throw new Exception("Cargo invalido.");
 			
 		}
 		return matricula;
