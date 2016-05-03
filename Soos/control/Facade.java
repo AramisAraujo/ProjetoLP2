@@ -5,6 +5,7 @@ import java.io.IOException;
 import exceptions.CadastroException;
 import exceptions.ConsultaException;
 import exceptions.LoginException;
+import exceptions.LogoutException;
 import exceptions.OpenSystemException;
 import exceptions.SystemCloseException;
 
@@ -18,7 +19,7 @@ public class Facade {
 		
 	}
 	
-	public void iniciaSistema() throws IOException{
+	public void iniciaSistema() throws OpenSystemException{
 		this.controle.iniciaSistema();
 	
 		
@@ -40,10 +41,14 @@ public class Facade {
 		this.controle.login(matricula, senha);
 	}
 	
-	public void cadastraFuncionario(String nome, String cargo, 
+	public void logout()throws LogoutException{
+		this.controle.logout();
+	}
+	
+	public String cadastraFuncionario(String nome, String cargo, 
 			String dataNascimento) throws CadastroException{
 		
-		this.controle.cadastraFuncionario(nome, cargo, dataNascimento);
+		return this.controle.cadastraFuncionario(nome, cargo, dataNascimento);
 		
 	}
 	

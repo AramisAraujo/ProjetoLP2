@@ -36,10 +36,8 @@ expect "1967-11-07" getInfoFuncionario matricula=${id1} atributo="Data"
 ##################################
 
 id2=cadastraFuncionario nome="Edgar Allan Poe" cargo="Medico" dataNascimento="19/01/1989"
-
 id3=cadastraFuncionario nome="Erasmo de Rotterdam" cargo="Tecnico Administrativo" dataNascimento="28/10/1966"
 id4=cadastraFuncionario nome="Mary Shelley" cargo="Tecnico Administrativo" dataNascimento="25/07/1988"
-
 id5=cadastraFuncionario nome="Ada Lovelace" cargo="Medico" dataNascimento="10/12/1975"
 
 expectError "Erro no cadastro de funcionario. Nome do funcionario nao pode ser vazio." cadastraFuncionario nome="" cargo="medico" dataNascimento="28/03/1986"
