@@ -5,7 +5,7 @@ package exceptions;
  * @author Elton Dantas
  *
  */
-public class PacienteException extends EntradaException {
+public class PacienteException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	

@@ -1,7 +1,7 @@
 package exceptions;
 
-import paciente.TipoSanguineo;
 
+import paciente.TipoSanguineo;
 import java.time.LocalDate;
 
 /**
@@ -14,7 +14,9 @@ public class VerificaExcecao {
 	
 	public static void checkEmptyString(String umaString,String atributo) throws Exception {
 		if (umaString == null || umaString.trim().isEmpty()) {
+
 			throw new Exception(atributo+" nao pode ser vazio.");
+
 		}
 	}
 	
