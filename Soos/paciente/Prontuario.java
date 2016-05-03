@@ -18,12 +18,11 @@ public class Prontuario implements Comparable<Prontuario> {
 	public Prontuario(String nome, LocalDate dataNascimento, int peso, String sexoBiologico,
 						String genero, String tipoSanguineo, int ID) throws Exception {
 		
-		VerificaExcecao.checharParametroNull(nome,"Nome");
-		VerificaExcecao.checharParametroNull(sexoBiologico, "Sexo biologico");
-		VerificaExcecao.checharParametroNull(genero, "Genero");
-		VerificaExcecao.checharParametroNull(tipoSanguineo, "Tipo sanguineo");
+		VerificaExcecao.checkEmptyString(nome, "Nome do paciente");
+		VerificaExcecao.checkEmptyString(sexoBiologico, "Sexo biologico");
+		VerificaExcecao.checkEmptyString(genero, "Genero");
+		VerificaExcecao.checkEmptyString(tipoSanguineo, "Tipo sanguineo");
 		
-		VerificaExcecao.checarNomePaciente(nome);
 		VerificaExcecao.checarData(dataNascimento);
 		VerificaExcecao.checarPeso(peso);
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);

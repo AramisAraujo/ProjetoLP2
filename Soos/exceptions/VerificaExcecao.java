@@ -1,9 +1,8 @@
 package exceptions;
 
-import java.util.List;
+import paciente.TipoSanguineo;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A classe LancaExcecao contem metodos que verificam a validade dos parametros passados aos outros
@@ -19,25 +18,16 @@ public class VerificaExcecao {
 		}
 	}
 	
-	
-	public static boolean checarNomePaciente(String nome) throws PacienteException {
-		if (nome == "") {
-			throw new PacienteException("Nome do paciente nao pode ser vazio.");
-		}
-		return true;
-	}
-	
-	public static boolean checarData(LocalDate birthDate) throws Exception {
+	public static boolean checarData(LocalDate birthDate) throws PacienteException {
 		int thisYear = LocalDate.now().getYear();
 		
 		if(birthDate.getYear() > thisYear){
-			throw new Exception();
+			throw new PacienteException("Data invalida.");
 		}
 		return true;
-		
 	}
 	
-	public static boolean checarPeso(int peso) throws PacienteException {
+	public static boolean checarPeso(double peso) throws PacienteException {
 		if (peso < 0) {
 			throw new PacienteException("Peso do paciente nao pode ser negativo.");
 		}
@@ -51,14 +41,11 @@ public class VerificaExcecao {
 		return true;
 	}
 	
-	public static void checarTipoSanguineo(String tipoSanguineo) throws PacienteException {
-		if (!tiposDeSangue.contains(tipoSanguineo)) {
-			throw new PacienteException();
+	public static boolean checarTipoSanguineo(String tipoSanguineo) throws PacienteException {
+		if (!(TipoSanguineo.valueOf(tipoSanguineo) instanceof TipoSanguineo)) {
+			throw new PacienteException("Tipo sanguineo invalido.");
 		}
-	}
-	
-	public static void checharPacienteJaCadastrado() {
-		
+		return true;
 	}
 
 }
