@@ -13,7 +13,7 @@ import usuario.Usuario;
 public class FactoryUsuario {
 	
 	public Usuario criarUsuario(String nome, LocalDate birthDate, String senha, 
-			String matricula, TipoCargo cargo) throws Exception{
+			String matricula, TipoCargo cargo){
 		switch (cargo) {
 			case DIRETOR:
 				return new Diretor(nome, birthDate, senha, matricula);
@@ -22,7 +22,7 @@ public class FactoryUsuario {
 			case TECNICOADM:
 				return new TecnicoAdm(nome, birthDate, senha, matricula);
 			default:
-				throw new Exception("Erro impossivel.");
+				return null;
 		}
 	}
 }

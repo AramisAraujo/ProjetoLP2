@@ -1,15 +1,21 @@
 package control;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import javax.security.auth.login.LoginException;
-
 import exceptions.CadastroException;
 import exceptions.ConsultaException;
-import exceptions.StringException;
+import exceptions.LoginException;
+import exceptions.OpenSystemException;
 import exceptions.SystemCloseException;
 import exceptions.VerificaExcecao;
 import factories.FactoryUsuario;
@@ -32,31 +38,83 @@ public class Controller {
 		this.factoryUsuarios = new FactoryUsuario();
 	}
 	
-	public void iniciaSistema(){
+	public void iniciaSistema() throws IOException{
+		/*
+		File usuarios = new File("Usuarios.ser");
+		if(usuarios.exists() && !usuarios.isDirectory() && usuarios.canRead()){
+			ObjectInputStream objectinputstream = null;
 		
+			try {
+				FileInputStream streamIn = new FileInputStream("Usuarios.ser");
+		    
+				objectinputstream = new ObjectInputStream(streamIn);
+		    
+				@SuppressWarnings("unchecked")
+				List<Usuario> readCase = (List<Usuario>) objectinputstream.readObject();
+		    
+				for (Usuario usuario : readCase) {
+					this.bancoUsuarios.put(usuario.getMatricula(), usuario);
+				
+				}
+		    
+			} catch (Exception e) {
+			
+				e.printStackTrace();
+		    
+			} finally {
+			
+				if(objectinputstream != null){
+					objectinputstream .close();
+				} 
+			}
+		}
+		
+		*/
 	}
-	public void fechaSistema() throws SystemCloseException{
-		if(this.usuarioAtual != null){
+	
+	public void fechaSistema() throws SystemCloseException, IOException{
+	/*	if(this.usuarioAtual != null){
 			String errorMsg = "Um funcionario ainda esta logado: " + usuarioAtual.getNome()+".";
 			throw new SystemCloseException(errorMsg);
 		}
 		
+		ObjectOutputStream oos = null;
+		FileOutputStream fout = null;
+		try{
+		    fout = new FileOutputStream("Usuarios.ser", true);
+		    oos = new ObjectOutputStream(fout);
+		    
+		    List<Usuario> usuarios = new ArrayList<Usuario>();
+		    usuarios.addAll(bancoUsuarios.values());
+		    
+		    oos.writeObject(usuarios);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		} finally {
+		    if(oos  != null){
+		        oos.close();
+		    } 
+		}
+		*/
 	}
 	
-	public boolean liberaSistema(String chave, String nome, String dataNascimento) throws CadastroException{
+	public String liberaSistema(String chave, String nome, 
+			String dataNascimento) throws Exception{
+		
 		if(sistemaBloqueado == false){
-			//throw exception sistema jah liberado
+			throw new OpenSystemException("Sistema liberado anteriormente.");
 		}
-		if(!chave.equals("c041ebf8")){
-			//throw exception chave errada
+		
+		if(!(chave.equals("c041ebf8"))){
+			throw new OpenSystemException("Chave invalida.");
 		}
-		//cadastrar diretor
-		this.cadstraFuncionario(nome, usuario.TipoCargo.DIRETOR.name(),
-				dataNascimento);
+
+		String matriculaDiretor = this.cadastraFuncionario(nome, "Diretor Geral", dataNascimento);
+
 		this.sistemaBloqueado = false;
 		
-		return false;
-		
+		return matriculaDiretor;
+				
 	}
 	
 	public void login(String matricula, String senha) throws LoginException{
@@ -65,74 +123,112 @@ public class Controller {
 			throw new LoginException("Um funcionario ainda esta logado:" + usuarioAtual.getNome()+".");
 		}
 		
-		if(!this.temUsuario(matricula)){
-			throw new LoginException("Funcionario nao cadastrado.");
-		}
-		
 		Usuario loginTarget = getUsuario(matricula);
 		
-		if (!loginTarget.getSenha().equals(senha)){
+		if(loginTarget == null){
+			throw new LoginException("Funcionario nao cadastrado.");
+		}
+				
+		if (!(loginTarget.getSenha().equals(senha))){
 			throw new LoginException("Senha incorreta.");
 		}
 		
 		this.usuarioAtual = loginTarget;
 	}
 	
-	private boolean cadstraFuncionario(String nome, String cargo, 
+	public String cadastraFuncionario(String nome, String cargo, 
 			String dataNascimento) throws CadastroException{
 		
-		if(!usuarioAtual.getMatricula().startsWith("1")){
+		if(usuarioAtual != null && !usuarioAtual.getMatricula().startsWith("1")){
+			
 			String errorMsg = "O funcionario "+usuarioAtual.getNome()+
 					" nao tem permissao para cadastrar funcionarios.";
-			throw new CadastroException("Funcionario", errorMsg);
+			
+			throw new CadastroException("funcionario", errorMsg);
 		}
 		
 		try {
-			VerificaExcecao.checkEmptyString(nome,"Nome do Funcionario");
+			
+			VerificaExcecao.checkEmptyString(nome,"Nome do funcionario");
+			
 		} catch (Exception e) {
-			throw new CadastroException("Funcionario",e.getMessage());
+			
+			throw new CadastroException("funcionario",e.getMessage());
+		}
+		
+		try {
+			
+			VerificaExcecao.checkEmptyString(cargo, "Nome do cargo");
+			
+		} catch (Exception e) {
+			
+			throw new CadastroException("funcionario",e.getMessage());
 		}
 		
 		LocalDate birthDate;
 		
 		try {
-			birthDate = stringToDate(dataNascimento);
-			VerificaExcecao.checarData(birthDate);
-		} catch (Exception e) {
-			throw new CadastroException("Funcionario","Data invalida.");
-		}				
 			
-		try {
-			VerificaExcecao.checkEmptyString(cargo, "Nome do Cargo");
+			birthDate = stringToDate(dataNascimento);
+			
+			VerificaExcecao.checarData(birthDate);
+			
 		} catch (Exception e) {
-			throw new CadastroException("Funcionario",e.getMessage());
-		}
-				
+			
+			throw new CadastroException("funcionario","Data invalida.");
+		}				
+						
 		String matricula;
+		TipoCargo cargoReal;
 		
 		try {
-			matricula = this.gerarMatricula(birthDate, TipoCargo.valueOf(cargo));
+			
+			switch (cargo) {
+			
+			case "Medico":
+				cargoReal = TipoCargo.MEDICO;
+				break;
+			case "Diretor Geral":
+				cargoReal = TipoCargo.DIRETOR;
+				break;
+
+			case "Tecnico Administrativo":
+				cargoReal = TipoCargo.TECNICOADM;
+				break;
+
+			default:
+				throw new Exception("Cargo invalido.");
+			}
+			
+			matricula = this.gerarMatricula(birthDate, cargoReal);
+			
 		} catch (Exception e) {
-			throw new CadastroException("Funcionario",e.getMessage());
+			
+			throw new CadastroException("funcionario",e.getMessage());
 		}
 		String senha = this.gerarSenha(birthDate, matricula);
 		
-		try {
-			this.factoryUsuarios.criarUsuario(nome, birthDate, senha, matricula, TipoCargo.valueOf(cargo));
-		} catch (Exception e) {
-			throw new CadastroException("Funcionario", "Erro impossivel.");
-		}
+		Usuario usuarioCadastrado;
 		
-		return true;
+		usuarioCadastrado = this.factoryUsuarios.criarUsuario(nome, birthDate, senha, matricula, cargoReal);
+		
+		if(usuarioCadastrado == null){
+			throw new CadastroException("funcionario", "");
+		}
+
+		this.cadastrosRealizados = cadastrosRealizados + 1;
+		
+		this.bancoUsuarios.put(usuarioCadastrado.getMatricula(), usuarioCadastrado);
+		
+		return matricula;
 		
 	}
-	
-	public String getinfoFuncionario(String matricula, String info) throws ConsultaException{
+	public String getInfoFuncionario(String matricula, String info) throws ConsultaException{
 		
 		Usuario targetUser = getUsuario(matricula);
 		
 		if(targetUser == null){
-			throw new ConsultaException("Funcionario","Funcionario nao encontrado na base de dados.");
+			throw new ConsultaException("funcionario","funcionario nao encontrado na base de dados.");
 		}
 		
 
@@ -141,7 +237,20 @@ public class Controller {
 			
 		}
 		else if(info.equalsIgnoreCase("Cargo")){
-			return targetUser.getCargo().name();
+			switch (targetUser.getCargo()) {
+			case DIRETOR:
+
+				return "Diretor Geral";
+			case TECNICOADM:
+
+				return "Tecnico Administrativo";
+			case MEDICO:
+
+				return "Medico";
+
+			default:
+				throw new ConsultaException("funcionario", "Cargo invalido");
+			}
 			
 		}
 		else if(info.equalsIgnoreCase("Data")){
@@ -149,17 +258,14 @@ public class Controller {
 			
 		}
 		else if(info.equalsIgnoreCase("Senha")){
-			throw new ConsultaException("Funcionario", "A senha do funcionario eh protegida.");
+			throw new ConsultaException("funcionario", "A senha do funcionario eh protegida.");
 	
 		}
 		else{
-			throw new ConsultaException("Funcionario", "Atributo desconhecido.");
+			throw new ConsultaException("funcionario", "Atributo desconhecido.");
 		}
 		
-		
-		
-		
-		return info;
+
 		
 	}
 	private String gerarSenha(LocalDate anoNascimento, String matricula){
@@ -168,7 +274,7 @@ public class Controller {
 		int ano = anoNascimento.getYear();
 		
 		senha = senha + String.valueOf(ano);
-		senha = senha + matricula.substring(0, 3);
+		senha = senha + matricula.substring(0, 4);
 		
 		return senha;
 		
@@ -176,7 +282,9 @@ public class Controller {
 	private String gerarMatricula(LocalDate dataNascimento, TipoCargo cargo) throws Exception{
 		
 		String matricula = "";
-		int anoNascimento = dataNascimento.getYear();
+		int esteAno = LocalDate.now().getYear();
+		String parteCadastros = String.format("%03d", (this.cadastrosRealizados + 1));
+
 				
 		switch (cargo) {
 		
@@ -189,24 +297,24 @@ public class Controller {
 			}
 			
 			matricula = matricula + "1";
-			matricula = matricula + String.valueOf(anoNascimento);
-			matricula = matricula + this.cadastrosRealizados;	
+			matricula = matricula + String.valueOf(esteAno);
+			matricula = matricula + parteCadastros;	
 			
 			break;
 		
 		case MEDICO:
 			
 			matricula = matricula + "2";
-			matricula = matricula + String.valueOf(anoNascimento);
-			matricula = matricula + this.cadastrosRealizados;
+			matricula = matricula + String.valueOf(esteAno);
+			matricula = matricula + parteCadastros;	
 			
 			break;
 			
 			
 		case TECNICOADM:
 			matricula = matricula + "3";
-			matricula = matricula + String.valueOf(anoNascimento);
-			matricula = matricula + this.cadastrosRealizados;	
+			matricula = matricula + String.valueOf(esteAno);
+			matricula = matricula + parteCadastros;	
 			
 			break;
 		
@@ -229,23 +337,26 @@ public class Controller {
 		return null;
 		
 	}
-	private boolean removerUsuario(String matricula){
+	
+	public boolean removerUsuario(String matricula){
 		return true;
 		
 	}
-	private boolean atualizarInfo(){
+	public boolean atualizarInfo(){
 		return true;
 		
 	}
 	private boolean temUsuario(String matricula){
 		return this.bancoUsuarios.containsKey(matricula);
 	}
+	
 	private LocalDate stringToDate(String dateCandidate){
 		
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
+		LocalDate data = LocalDate.parse(dateCandidate, formatador);
 
-		return LocalDate.parse(dateCandidate, formatador);
+		return data;
 		
 
 	}
