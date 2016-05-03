@@ -27,7 +27,7 @@ public class Controller {
 	private boolean sistemaBloqueado;
 	private int cadastrosRealizados;
 	private Usuario usuarioAtual;
-	private Map<String,Usuario> bancoUsuarios;
+	private Map<String,Usuario> bancoUsuarios;//TODO achei o erro
 	private FactoryUsuario factoryUsuarios;
 	
 	
@@ -36,10 +36,11 @@ public class Controller {
 		this.cadastrosRealizados = 0;
 		this.bancoUsuarios = new HashMap<String,Usuario>();
 		this.factoryUsuarios = new FactoryUsuario();
+		this.usuarioAtual = null;
 	}
 	
 	public void iniciaSistema() throws IOException{
-		/*
+		
 		File usuarios = new File("Usuarios.ser");
 		if(usuarios.exists() && !usuarios.isDirectory() && usuarios.canRead()){
 			ObjectInputStream objectinputstream = null;
@@ -51,10 +52,12 @@ public class Controller {
 		    
 				@SuppressWarnings("unchecked")
 				List<Usuario> readCase = (List<Usuario>) objectinputstream.readObject();
-		    
+
+				
 				for (Usuario usuario : readCase) {
 					this.bancoUsuarios.put(usuario.getMatricula(), usuario);
-				
+
+					
 				}
 		    
 			} catch (Exception e) {
@@ -62,18 +65,18 @@ public class Controller {
 				e.printStackTrace();
 		    
 			} finally {
-			
+				
 				if(objectinputstream != null){
 					objectinputstream .close();
 				} 
+				
 			}
 		}
 		
-		*/
 	}
 	
 	public void fechaSistema() throws SystemCloseException, IOException{
-	/*	if(this.usuarioAtual != null){
+		if(this.usuarioAtual != null){
 			String errorMsg = "Um funcionario ainda esta logado: " + usuarioAtual.getNome()+".";
 			throw new SystemCloseException(errorMsg);
 		}
@@ -95,7 +98,7 @@ public class Controller {
 		        oos.close();
 		    } 
 		}
-		*/
+		
 	}
 	
 	public String liberaSistema(String chave, String nome, 
@@ -112,6 +115,8 @@ public class Controller {
 		String matriculaDiretor = this.cadastraFuncionario(nome, "Diretor Geral", dataNascimento);
 
 		this.sistemaBloqueado = false;
+		
+		this.usuarioAtual = getUsuario(matriculaDiretor);
 		
 		return matriculaDiretor;
 				
@@ -139,8 +144,14 @@ public class Controller {
 	public String cadastraFuncionario(String nome, String cargo, 
 			String dataNascimento) throws CadastroException{
 		
-		if(usuarioAtual != null && !usuarioAtual.getMatricula().startsWith("1")){
+		if(sistemaBloqueado == false && usuarioAtual == null){ 
 			
+			String errorMsg = "O usuario nao esta logado.";
+			
+			throw new CadastroException("funcionario", errorMsg);
+		}
+		
+		if(!(usuarioAtual.getMatricula().startsWith("1"))){
 			String errorMsg = "O funcionario "+usuarioAtual.getNome()+
 					" nao tem permissao para cadastrar funcionarios.";
 			
@@ -211,14 +222,14 @@ public class Controller {
 		Usuario usuarioCadastrado;
 		
 		usuarioCadastrado = this.factoryUsuarios.criarUsuario(nome, birthDate, senha, matricula, cargoReal);
-		
-		if(usuarioCadastrado == null){
-			throw new CadastroException("funcionario", "");
-		}
 
 		this.cadastrosRealizados = cadastrosRealizados + 1;
 		
 		this.bancoUsuarios.put(usuarioCadastrado.getMatricula(), usuarioCadastrado);
+		
+		if(!this.temUsuario(matricula)){
+			throw new CadastroException("funcionario","achei o erro");
+		}
 		
 		return matricula;
 		
@@ -337,7 +348,6 @@ public class Controller {
 		return null;
 		
 	}
-	
 	public boolean removerUsuario(String matricula){
 		return true;
 		
@@ -349,7 +359,6 @@ public class Controller {
 	private boolean temUsuario(String matricula){
 		return this.bancoUsuarios.containsKey(matricula);
 	}
-	
 	private LocalDate stringToDate(String dateCandidate){
 		
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
