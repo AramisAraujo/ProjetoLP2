@@ -12,23 +12,22 @@ import exceptions.VerificaExcecao;
  */
 public class Paciente implements Comparable<Paciente> {
 	
-	private String nome;
+	private String nome, sexoBiologico, genero, tipoSanguineo;
 	private LocalDate dataNascimento;
 	private double peso;
-	private String sexoBiologico;
-	private String genero;
 	private int ID;
-	private String tipoSanguineo;
 	
-	public Paciente(String nome, LocalDate dataNascimento, int peso, String sexoBiologico,
+	private final String NOME = "Nome", DATA = "Data", SEXO = "Sexo", GENERO = "Genero",
+			TIPO_SANGUINEO =  "TipoSanguineo", PESO = "Peso", IDADE = "Idade";
+	
+	public Paciente(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 					String genero, String tipoSanguineo, int ID) throws Exception {
 		
-		VerificaExcecao.checharParametroNull(nome, "Nome");
-		VerificaExcecao.checharParametroNull(sexoBiologico, "Sexo biologico");
-		VerificaExcecao.checharParametroNull(genero, "Genero");
-		VerificaExcecao.checharParametroNull(tipoSanguineo, "Tipo sanguineo");
+		VerificaExcecao.checkEmptyString(nome, "Nome do paciente");
+		VerificaExcecao.checkEmptyString(sexoBiologico, "Sexo biologico");
+		VerificaExcecao.checkEmptyString(genero, "Genero");
+		VerificaExcecao.checkEmptyString(tipoSanguineo, "Tipo sanguineo");
 		
-		VerificaExcecao.checarNomePaciente(nome);
 		VerificaExcecao.checarData(dataNascimento);
 		VerificaExcecao.checarPeso(peso);
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
@@ -50,8 +49,13 @@ public class Paciente implements Comparable<Paciente> {
 		this.nome = nome;
 	}
 
-	public LocalDate getDataNascimento() {
-		return dataNascimento;
+	public String getDataNascimento() {
+		return dataNascimento.toString();
+	}
+	
+	public int getIdade() {
+		int idade = LocalDate.now().getYear() - this.dataNascimento.getYear();
+		return idade;
 	}
 
 	public void setDataNascimento(LocalDate dataNascimento) {
@@ -84,6 +88,27 @@ public class Paciente implements Comparable<Paciente> {
 
 	public String getTipoSanguineo() {
 		return tipoSanguineo;
+	}
+	
+	public Object getInfoPaciente(String atributo) throws Exception {
+		switch (atributo) {
+		case NOME:
+			this.getNome();
+		case DATA:
+			this.getDataNascimento();
+		case SEXO:
+			this.getSexoBiologico();
+		case GENERO:
+			this.getGenero();
+		case TIPO_SANGUINEO:
+			this.getTipoSanguineo();
+		case PESO:
+			this.getPeso();
+		case IDADE:
+			this.getIdade();
+		default:
+			throw new Exception("Atributo invalido.");
+		}
 	}
 	
 	/**

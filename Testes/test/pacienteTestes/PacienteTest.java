@@ -1,10 +1,10 @@
-package paciente;
+package pacienteTestes;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class ProntuarioTest {
+public class PacienteTest {
 
 	@Test
 	public void test() {
