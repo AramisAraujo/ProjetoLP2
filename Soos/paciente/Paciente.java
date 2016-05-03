@@ -2,6 +2,7 @@ package paciente;
 
 import java.time.LocalDate;
 
+import exceptions.PacienteException;
 import exceptions.VerificaExcecao;
 
 /**
@@ -21,7 +22,7 @@ public class Paciente implements Comparable<Paciente> {
 			TIPO_SANGUINEO =  "TipoSanguineo", PESO = "Peso", IDADE = "Idade";
 	
 	public Paciente(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
-					String genero, String tipoSanguineo, int ID) throws Exception {
+					String genero, String tipoSanguineo, int ID) throws PacienteException {
 		
 		VerificaExcecao.checkEmptyString(nome, "Nome do paciente");
 		VerificaExcecao.checkEmptyString(sexoBiologico, "Sexo biologico");
@@ -42,7 +43,7 @@ public class Paciente implements Comparable<Paciente> {
 	}
 
 	public String getNome() {
-		return nome;
+		return this.nome;
 	}
 
 	public void setNome(String nome) {
@@ -50,7 +51,7 @@ public class Paciente implements Comparable<Paciente> {
 	}
 
 	public String getDataNascimento() {
-		return dataNascimento.toString();
+		return this.dataNascimento.toString();
 	}
 	
 	public int getIdade() {
@@ -63,7 +64,7 @@ public class Paciente implements Comparable<Paciente> {
 	}
 
 	public double getPeso() {
-		return peso;
+		return this.peso;
 	}
 
 	public void setPeso(int peso) {
@@ -71,7 +72,7 @@ public class Paciente implements Comparable<Paciente> {
 	}
 
 	public String getSexoBiologico() {
-		return sexoBiologico;
+		return this.sexoBiologico;
 	}
 
 	public void setSexoBiologico(String sexoBiologico) {
@@ -79,7 +80,7 @@ public class Paciente implements Comparable<Paciente> {
 	}
 
 	public String getGenero() {
-		return genero;
+		return this.genero;
 	}
 
 	public void setGenero(String genero) {
@@ -87,10 +88,14 @@ public class Paciente implements Comparable<Paciente> {
 	}
 
 	public String getTipoSanguineo() {
-		return tipoSanguineo;
+		return this.tipoSanguineo;
 	}
 	
-	public Object getInfoPaciente(String atributo) throws Exception {
+	public int getID() {
+		return this.ID;
+	}
+	
+	public String getInfoPaciente(String atributo) throws Exception {
 		switch (atributo) {
 		case NOME:
 			this.getNome();
