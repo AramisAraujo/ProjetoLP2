@@ -61,6 +61,11 @@ public class Facade {
 		
 		return this.controle.cadastraPaciente(nome, Data, Peso, sexoBio, genero, tipoSanguineo);
 	}
+	public String cadastraMedicamento(String nome, String tipo, double preco, 
+			int quantidade, String categorias) throws CadastroException{
+		
+		return this.controle.cadastraMedicamento(nome, tipo, preco, quantidade, categorias);
+	}
 	
 	public String getProntuario(int posicao) throws ProntuarioException{
 		return this.controle.getProntuario(posicao);

@@ -1,7 +1,6 @@
 package exceptions;
 
 
-import paciente.TipoSanguineo;
 import java.time.LocalDate;
 
 /**
@@ -28,11 +27,22 @@ public class VerificaExcecao {
 		return true;
 	}
 	
-	public static boolean checarPeso(double peso) throws ProntuarioException {
-		if (peso < 0) {
-			throw new ProntuarioException("Peso do paciente nao pode ser negativo.");
+	public static void checarValor(double valor,String atributo) throws ProntuarioException {
+		if (valor < 0) {
+			throw new ProntuarioException(atributo+" nao pode ser negativo.");
 		}
-		return true;
+		
+		
+		
+	}
+	
+	public static void checarValor(int valor,String atributo) throws ProntuarioException {
+		if (valor < 0) {
+			throw new ProntuarioException(atributo+" nao pode ser negativo.");
+		}
+		
+		
+		
 	}
 	
 	public static boolean checarSexoBiologico(String sexoBiologico) throws ProntuarioException {

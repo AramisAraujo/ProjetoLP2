@@ -5,8 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -16,11 +18,14 @@ import exceptions.ConsultaException;
 import exceptions.ExcluirCadastroException;
 import exceptions.LoginException;
 import exceptions.LogoutException;
+import exceptions.MedicamentoException;
 import exceptions.OpenSystemException;
 import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
 import exceptions.VerificaExcecao;
 import factories.FactoryUsuario;
+import farmacia.CategoriasDeMedicamentos;
+import farmacia.Farmacia;
 import paciente.Prontuario;
 import paciente.TipoSanguineo;
 import usuario.Usuario;
@@ -33,6 +38,7 @@ public class Controller {
 	private Usuario usuarioAtual;
 	private Map<String,Usuario> bancoUsuarios;
 	private List<Prontuario> bancoProntuarios;
+	private Farmacia farmacia;
 	private FactoryUsuario factoryUsuarios;
 	
 	
@@ -41,6 +47,7 @@ public class Controller {
 		this.cadastrosRealizados = 0;
 		this.bancoUsuarios = new HashMap<String,Usuario>();
 		this.bancoProntuarios = new ArrayList<Prontuario>();
+		this.farmacia = new Farmacia();
 		this.factoryUsuarios = new FactoryUsuario();
 		this.usuarioAtual = null;
 	}
@@ -105,6 +112,73 @@ public class Controller {
 		
 		this.usuarioAtual = null;
 		
+	}
+	
+	public String cadastraMedicamento(String nome, String tipo, double preco, 
+			int quantidade, String categorias) throws CadastroException{
+		
+		String[] categoriasSplit;
+		Set<CategoriasDeMedicamentos> categoriasMed = new HashSet<CategoriasDeMedicamentos>();
+				
+		try {
+			VerificaExcecao.checkEmptyString(nome, "Nome do medicamento.");
+		} catch (Exception e) {
+			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
+		}
+		
+		try {
+			VerificaExcecao.checkEmptyString(tipo, "Tipo do medicamento");
+		} catch (Exception e) {
+			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
+		}
+		
+		try {
+			VerificaExcecao.checarValor(preco, "Preco do medicamento.");
+		} catch (ProntuarioException e) {
+			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
+		}
+		
+		
+		try {
+			VerificaExcecao.checarValor(quantidade, "Quantidade do medicamento.");
+		} catch (ProntuarioException e) {
+			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
+		}
+		
+		if(categorias.contains(",")){
+			
+			categoriasSplit = categorias.split(",");
+			
+			for (String categoria : categoriasSplit) {
+				try {
+					categoriasMed.add(CategoriasDeMedicamentos.valueOf(categoria.toUpperCase()));
+
+				} catch (Exception e) {
+					throw new CadastroException("Erro no cadastro do medicamento.", "Categoria invalida."+
+				categoriasMed);
+				}
+			
+			}
+		}
+		
+		try{
+			CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos.valueOf(categorias);
+			categoriasMed.add(tipoMed);
+		}catch(Exception e){
+			
+		}
+		
+
+		
+		
+		try {
+			this.farmacia.criaMedicamento(nome, preco, quantidade, categoriasMed, tipo);
+		} catch (MedicamentoException e) {
+			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
+		}
+		
+		return nome;
+			
 	}
 	
 	public String cadastraFuncionario(String nome, String cargo, 
@@ -199,10 +273,9 @@ public class Controller {
 		}
 		
 		try {
-			VerificaExcecao.checarPeso(Peso);
+			VerificaExcecao.checarValor(Peso,"Peso do paciente");
 		} catch (ProntuarioException e) {
-			throw new CadastroException("Nao foi possivel cadastrar o paciente.", "Peso do paciente "
-					+ "nao pode ser negativo.");
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
 		
 		try {
