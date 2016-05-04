@@ -9,6 +9,7 @@ import exceptions.ExcluirCadastroException;
 import exceptions.LoginException;
 import exceptions.LogoutException;
 import exceptions.OpenSystemException;
+import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
 
 public class Facade {
@@ -26,6 +27,7 @@ public class Facade {
 	
 		
 	}
+	
 	public void fechaSistema() throws SystemCloseException, IOException{
 		this.controle.fechaSistema();
 		
@@ -54,28 +56,47 @@ public class Facade {
 		
 	}
 	
+	public String cadastraPaciente(String nome, String Data, double Peso
+			, String sexoBio, String genero, String tipoSanguineo) throws CadastroException{
+		
+		return this.controle.cadastraPaciente(nome, Data, Peso, sexoBio, genero, tipoSanguineo);
+	}
+	
+	public String getProntuario(int posicao) throws ProntuarioException{
+		return this.controle.getProntuario(posicao);
+	}
+	
+	public String getInfoPaciente(String paciente, String atributo) throws ConsultaException{
+		return this.controle.getInfoPaciente(paciente, atributo);
+	}
+	
 	public String getInfoFuncionario(String matricula, String info) throws ConsultaException{
 		
 		return this.controle.getInfoFuncionario(matricula, info);
 	}
 	
-	public void excluiFuncionario(String matricula, String senha) throws Exception{
+	public void excluiFuncionario(String matricula, String senha) throws ExcluirCadastroException{
 		this.controle.excluiFuncionario(matricula, senha);
 		
 	}
+	
 	public void atualizaInfoFuncionario(String matricula, 
 			String atributo, String novoValor) throws AtualizarInfoException{
 		
 		this.controle.atualizaInfoFuncionario(matricula, atributo, novoValor);
 		
 	}
+	
 	public void atualizaInfoFuncionario(String atributo, String novoValor) throws AtualizarInfoException{
 		
 		this.controle.atualizaInfoFuncionario(atributo, novoValor);
 		
 	}
+	
 	public void atualizaSenha(String senhaAntiga, String novaSenha) throws AtualizarInfoException{
 		this.controle.atualizaSenha(senhaAntiga, novaSenha);
 	}
 
+	
+	
 }

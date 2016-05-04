@@ -1,8 +1,9 @@
 package paciente;
 
 import java.time.LocalDate;
-
-import exceptions.VerificaExcecao;
+import java.time.Month;
+import java.time.Year;
+import java.util.UUID;
 
 /**
  * A classe Paciente possui atributos e comportamentos necessarios para a criacao de pacientes
@@ -12,27 +13,19 @@ import exceptions.VerificaExcecao;
  */
 public class Paciente implements Comparable<Paciente> {
 	
-	private String nome, sexoBiologico, genero, tipoSanguineo;
+	private String nome, sexoBiologico, genero;
+	private TipoSanguineo tipoSanguineo;
 	private LocalDate dataNascimento;
 	private double peso;
-	private int ID;
+	private UUID ID;
 	
 	private final String NOME = "Nome", DATA = "Data", SEXO = "Sexo", GENERO = "Genero",
 			TIPO_SANGUINEO =  "TipoSanguineo", PESO = "Peso", IDADE = "Idade";
 	
 	public Paciente(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
-					String genero, String tipoSanguineo, int ID) throws Exception {
+					String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
 		
-		VerificaExcecao.checkEmptyString(nome, "Nome do paciente");
-		VerificaExcecao.checkEmptyString(sexoBiologico, "Sexo biologico");
-		VerificaExcecao.checkEmptyString(genero, "Genero");
-		VerificaExcecao.checkEmptyString(tipoSanguineo, "Tipo sanguineo");
-		
-		VerificaExcecao.checarData(dataNascimento);
-		VerificaExcecao.checarPeso(peso);
-		VerificaExcecao.checarSexoBiologico(sexoBiologico);
-		VerificaExcecao.checarTipoSanguineo(tipoSanguineo);
-		
+		this.ID = ID;
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.peso = peso;
@@ -41,6 +34,11 @@ public class Paciente implements Comparable<Paciente> {
 		this.tipoSanguineo = tipoSanguineo;
 	}
 
+	public UUID getID(){
+		UUID iD = this.ID;
+		return iD;
+	}
+	
 	public String getNome() {
 		return nome;
 	}
@@ -53,9 +51,19 @@ public class Paciente implements Comparable<Paciente> {
 		return dataNascimento.toString();
 	}
 	
-	public int getIdade() {
+	public String getIdade() {
+		
 		int idade = LocalDate.now().getYear() - this.dataNascimento.getYear();
-		return idade;
+		
+		boolean jaPassouNiverMes = LocalDate.now().getMonthValue() > this.dataNascimento.getMonthValue();
+		boolean jaPassouNiverDia = LocalDate.now().getDayOfMonth() >= this.dataNascimento.getDayOfMonth();
+		
+		if(!jaPassouNiverMes && !jaPassouNiverDia){
+			idade = idade - 1;
+		}
+		
+		return String.valueOf(idade);
+		
 	}
 
 	public void setDataNascimento(LocalDate dataNascimento) {
@@ -87,38 +95,46 @@ public class Paciente implements Comparable<Paciente> {
 	}
 
 	public String getTipoSanguineo() {
-		return tipoSanguineo;
+		return this.tipoSanguineo.toString();
 	}
 	
-	public Object getInfoPaciente(String atributo) throws Exception {
+	public String getInfoPaciente(String atributo) throws Exception {
+		
 		switch (atributo) {
+		
 		case NOME:
-			this.getNome();
+			return this.getNome();
+			
 		case DATA:
-			this.getDataNascimento();
+			return this.getDataNascimento();
+
 		case SEXO:
-			this.getSexoBiologico();
+			return this.getSexoBiologico();
+			
 		case GENERO:
-			this.getGenero();
+			return this.getGenero();
+			
 		case TIPO_SANGUINEO:
-			this.getTipoSanguineo();
+			return this.getTipoSanguineo();
+			
 		case PESO:
-			this.getPeso();
+			String peso = String.valueOf(this.getPeso());
+			return peso;
+			
 		case IDADE:
-			this.getIdade();
+			String idade = String.valueOf(this.getIdade());
+			return idade;
+			
 		default:
 			throw new Exception("Atributo invalido.");
 		}
 	}
 	
-	/**
-	 * Dois pacientes sao iguais se possuem o mesmo ID.
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ID;
+		result = prime * result + ((ID == null) ? 0 : ID.hashCode());
 		return result;
 	}
 
@@ -131,7 +147,10 @@ public class Paciente implements Comparable<Paciente> {
 		if (getClass() != obj.getClass())
 			return false;
 		Paciente other = (Paciente) obj;
-		if (ID != other.ID)
+		if (ID == null) {
+			if (other.ID != null)
+				return false;
+		} else if (!ID.equals(other.ID))
 			return false;
 		return true;
 	}

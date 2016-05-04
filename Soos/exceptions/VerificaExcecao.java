@@ -19,32 +19,25 @@ public class VerificaExcecao {
 		}
 	}
 	
-	public static boolean checarData(LocalDate birthDate) throws PacienteException {
+	public static boolean checarData(LocalDate birthDate) throws ProntuarioException {
 		int thisYear = LocalDate.now().getYear();
 		
 		if(birthDate.getYear() > thisYear){
-			throw new PacienteException("Data invalida.");
+			throw new ProntuarioException("Data invalida.");
 		}
 		return true;
 	}
 	
-	public static boolean checarPeso(double peso) throws PacienteException {
+	public static boolean checarPeso(double peso) throws ProntuarioException {
 		if (peso < 0) {
-			throw new PacienteException("Peso do paciente nao pode ser negativo.");
+			throw new ProntuarioException("Peso do paciente nao pode ser negativo.");
 		}
 		return true;
 	}
 	
-	public static boolean checarSexoBiologico(String sexoBiologico) throws PacienteException {
-		if (sexoBiologico != "feminino" || sexoBiologico != "masculino") {
-			throw new PacienteException("Sexo biologico nao identificado.");
-		}
-		return true;
-	}
-	
-	public static boolean checarTipoSanguineo(String tipoSanguineo) throws PacienteException {
-		if (!(TipoSanguineo.valueOf(tipoSanguineo) instanceof TipoSanguineo)) {
-			throw new PacienteException("Tipo sanguineo invalido.");
+	public static boolean checarSexoBiologico(String sexoBiologico) throws ProntuarioException {
+		if ((!sexoBiologico.equalsIgnoreCase("masculino")) && (!sexoBiologico.equalsIgnoreCase("feminino"))) {
+			throw new ProntuarioException("Sexo biologico nao identificado.");
 		}
 		return true;
 	}

@@ -1,17 +1,13 @@
 package control;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import exceptions.AtualizarInfoException;
@@ -21,10 +17,12 @@ import exceptions.ExcluirCadastroException;
 import exceptions.LoginException;
 import exceptions.LogoutException;
 import exceptions.OpenSystemException;
-import exceptions.PacienteException;
+import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
 import exceptions.VerificaExcecao;
 import factories.FactoryUsuario;
+import paciente.Prontuario;
+import paciente.TipoSanguineo;
 import usuario.Usuario;
 import usuario.TipoCargo;
 
@@ -34,6 +32,7 @@ public class Controller {
 	private int cadastrosRealizados;
 	private Usuario usuarioAtual;
 	private Map<String,Usuario> bancoUsuarios;
+	private List<Prontuario> bancoProntuarios;
 	private FactoryUsuario factoryUsuarios;
 	
 	
@@ -41,74 +40,23 @@ public class Controller {
 		this.sistemaBloqueado = true;
 		this.cadastrosRealizados = 0;
 		this.bancoUsuarios = new HashMap<String,Usuario>();
+		this.bancoProntuarios = new ArrayList<Prontuario>();
 		this.factoryUsuarios = new FactoryUsuario();
 		this.usuarioAtual = null;
 	}
 	
 	public void iniciaSistema() throws OpenSystemException{
-		
-		/*File usuarios = new File("Usuarios.ser");
-		if(usuarios.exists() && !usuarios.isDirectory() && usuarios.canRead()){
-			ObjectInputStream objectinputstream = null;
-		
-			try {
-				FileInputStream streamIn = new FileInputStream("Usuarios.ser");
-		    
-				objectinputstream = new ObjectInputStream(streamIn);
-		    
-				@SuppressWarnings("unchecked")
-				List<Usuario> readCase = (List<Usuario>) objectinputstream.readObject();
-
-				
-				for (Usuario usuario : readCase) {
-					this.bancoUsuarios.put(usuario.getMatricula(), usuario);
-
-					
-				}
-		    
-			} catch (Exception e) {
-			
-				e.printStackTrace();
-		    
-			} finally {
-				
-				if(objectinputstream != null){
-					try {
-						objectinputstream .close();
-					} catch (IOException e) {
-						throw new OpenSystemException(e.getMessage());
-					}
-				} 
-				
-			}
-		}*/
+		//NYI
 		
 	}
 	
-	public void fechaSistema() throws SystemCloseException, IOException{
+	public void fechaSistema() throws SystemCloseException{
+		
 		if(this.usuarioAtual != null){
 			String errorMsg = "Um funcionario ainda esta logado: " + usuarioAtual.getNome()+".";
 			throw new SystemCloseException(errorMsg);
 		}
-		/*
-		ObjectOutputStream oos = null;
-		FileOutputStream fout = null;
-		try{
-		    fout = new FileOutputStream("Usuarios.ser", true);
-		    oos = new ObjectOutputStream(fout);
-		    
-		    List<Usuario> usuarios = new ArrayList<Usuario>();
-		    usuarios.addAll(bancoUsuarios.values());
-		    
-		    oos.writeObject(usuarios);
-		} catch (Exception e) {
-		    e.printStackTrace();
-		} finally {
-		    if(oos  != null){
-		        oos.close();
-		    } 
-		}
-		*/
+		//NYI
 	}
 	
 	public String liberaSistema(String chave, String nome, 
@@ -125,16 +73,14 @@ public class Controller {
 		String matriculaDiretor = this.cadastraFuncionario(nome, "Diretor Geral", dataNascimento);
 
 		this.sistemaBloqueado = false;
-		
-		//this.usuarioAtual = getUsuario(matriculaDiretor);
-		
+				
 		return matriculaDiretor;
 				
 	}
 	
 	public void login(String matricula, String senha) throws LoginException{
 			
-		Usuario loginTarget = getUsuario(matricula);
+		Usuario loginTarget = this.getUsuario(matricula);
 		
 		if(loginTarget == null){
 			throw new LoginException("Funcionario nao cadastrado.");
@@ -173,37 +119,37 @@ public class Controller {
 			if(usuarioAtual == null){
 				String errorMsg = "Nenhum funcionario estah logado.";
 				
-				throw new CadastroException("funcionario", errorMsg);
+				throw new CadastroException("Erro no cadastro de funcionario.", errorMsg);
 			}
 			else if(!usuarioAtual.getMatricula().startsWith("1")){
 			String errorMsg = "O funcionario "+usuarioAtual.getNome()+
   					" nao tem permissao para cadastrar funcionarios.";
-			throw new CadastroException("funcionario", errorMsg);
+			throw new CadastroException("Erro no cadastro de funcionario.", errorMsg);
 			}
 		}
 		
 		try {
 			VerificaExcecao.checkEmptyString(nome, "Nome do funcionario");
 		} catch (Exception e) {
-			throw new CadastroException("funcionario", e.getMessage());
+			throw new CadastroException("Erro no cadastro de funcionario.", e.getMessage());
 		}
 		try {
 			VerificaExcecao.checkEmptyString(cargo, "Nome do cargo");
 			targetCargo = this.stringToCargo(cargo);
 		} catch (Exception e) {
-			throw new CadastroException("funcionario", e.getMessage());
+			throw new CadastroException("Erro no cadastro de funcionario.", e.getMessage());
 		}
 		try {
 			birthDate = stringToDate(dataNascimento);
 			VerificaExcecao.checarData(birthDate);
 		} catch (Exception e) {
-			throw new CadastroException("funcionario", "Data invalida.");
+			throw new CadastroException("Erro no cadastro de funcionario.", "Data invalida.");
 		}
 		
 		try {
 			matricula = this.gerarMatricula(birthDate, targetCargo);
 		} catch (Exception e) {
-			throw new CadastroException("funcionario", e.getMessage());
+			throw new CadastroException("Erro no cadastro de funcionario.", e.getMessage());
 		}
 		senha = this.gerarSenha(birthDate, matricula);
 		
@@ -216,6 +162,130 @@ public class Controller {
 		return matricula;
 		
 	}
+	
+	public String cadastraPaciente(String nome, String Data, double Peso
+			, String sexoBio, String genero, String tipoSanguineo) throws CadastroException{
+		
+		if(!this.usuarioAtual.getMatricula().startsWith("3")){
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", 
+					"O funcionario " + usuarioAtual.getNome()+" nao tem permissao para cadastrar pacientes.");
+		}
+		
+		for (Prontuario prontuario : this.bancoProntuarios) {
+			
+			try {
+				if(prontuario.getInfoPaciente("Nome").equals(nome)){
+					throw new Exception("Paciente ja cadastrado.");
+				}
+			} catch (Exception e) {
+				throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+			}
+			
+		}
+		
+		try {
+			VerificaExcecao.checkEmptyString(nome, "Nome");
+		} catch (Exception e) {
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", "Nome do paciente "
+					+ "nao pode ser vazio.");
+		}
+		
+		LocalDate birthDate;
+		try {
+			birthDate = this.stringToDate(Data);
+			VerificaExcecao.checarData(birthDate);
+		} catch (Exception e) {
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", "Data invalida.");
+		}
+		
+		try {
+			VerificaExcecao.checarPeso(Peso);
+		} catch (ProntuarioException e) {
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", "Peso do paciente "
+					+ "nao pode ser negativo.");
+		}
+		
+		try {
+			VerificaExcecao.checarSexoBiologico(sexoBio);
+		} catch (ProntuarioException e) {
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", "Sexo biologico "
+					+ "nao identificado.");
+		}
+		
+		try {
+			VerificaExcecao.checkEmptyString(genero, "Genero");
+		} catch (Exception e) {
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+		}
+		
+		
+		
+		UUID novoID = UUID.randomUUID();
+		TipoSanguineo tipoSangue;
+		Prontuario novoProntuario;
+		
+		try {
+			tipoSangue = this.stringToSanguineo(tipoSanguineo);
+		} catch (Exception e) {
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+		}
+		
+		try {
+			novoProntuario = new Prontuario(nome, birthDate, Peso, 
+					sexoBio, genero, tipoSangue, novoID);
+		} catch (Exception e) {
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+		}
+		
+		this.bancoProntuarios.add(novoProntuario);
+		
+		Collections.sort(this.bancoProntuarios);
+		
+		return novoID.toString();
+		
+		
+	}
+
+	public String getInfoPaciente(String paciente, String atributo) throws ConsultaException{
+		
+		Prontuario targetProntuario = null;
+		
+		for (Prontuario prontuario : this.bancoProntuarios) {
+			
+			if(prontuario.getID().equals(paciente)){
+				targetProntuario = prontuario;
+			}
+			
+		}
+		
+		if(targetProntuario == null){
+			throw new ConsultaException("paciente", "Paciente nao cadastrado.");
+		}
+		
+		try {
+			return targetProntuario.getInfoPaciente(atributo);
+		} catch (Exception e) {
+			throw new ConsultaException("paciente", e.getMessage());
+		}
+		
+	}
+	
+	public String getProntuario(int posicao) throws ProntuarioException{
+		
+		if(posicao < 0){
+			throw new ProntuarioException("Erro ao consultar prontuario. Indice do prontuario nao pode"
+					+ " ser negativo.");
+		}
+		if(posicao > this.bancoProntuarios.size()){
+		
+			throw new ProntuarioException("Erro ao consultar prontuario. "+
+					"Nao ha prontuarios suficientes (max = "+this.bancoProntuarios.size()+").");
+		}
+		
+		return this.bancoProntuarios.get(posicao).getID();
+		
+	}
+	
 	public String getInfoFuncionario(String matricula, String info) throws ConsultaException{
 		
 		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
@@ -273,75 +343,6 @@ public class Controller {
 		}
 		
 
-		
-	}
-	private String gerarSenha(LocalDate anoNascimento, String matricula){
-		
-		String senha = "";
-		int ano = anoNascimento.getYear();
-		
-		senha = senha + String.valueOf(ano);
-		senha = senha + matricula.substring(0, 4);
-		
-		return senha;
-		
-	}
-	private String gerarMatricula(LocalDate dataNascimento, TipoCargo cargo) throws Exception{
-		
-		String matricula = "";
-		int esteAno = LocalDate.now().getYear();
-		String parteCadastros = String.format("%03d", (this.cadastrosRealizados + 1));
-
-				
-		switch (cargo) {
-		
-		case DIRETOR:
-
-			for (Usuario usuario : this.bancoUsuarios.values()) {
-				if(usuario.getMatricula().startsWith("1")){
-					throw new Exception("Nao eh possivel criar mais de um Diretor Geral.");
-				}
-			}
-			
-			matricula = matricula + "1";
-			matricula = matricula + String.valueOf(esteAno);
-			matricula = matricula + parteCadastros;	
-			
-			break;
-		
-		case MEDICO:
-			
-			matricula = matricula + "2";
-			matricula = matricula + String.valueOf(esteAno);
-			matricula = matricula + parteCadastros;	
-			
-			break;
-			
-			
-		case TECNICOADM:
-			matricula = matricula + "3";
-			matricula = matricula + String.valueOf(esteAno);
-			matricula = matricula + parteCadastros;	
-			
-			break;
-		
-		default:
-			throw new Exception("Cargo invalido.");
-			
-		}
-		return matricula;
-		
-	}
-	private Usuario getUsuario(String matricula){
-		
-		for (Usuario usuario : this.bancoUsuarios.values()) {
-			
-			if(usuario.getMatricula().equals(matricula)){
-				return usuario;
-			}
-			
-		}
-		return null;
 		
 	}
 	
@@ -427,7 +428,7 @@ public class Controller {
 			
 			try {
 				VerificaExcecao.checarData(novaData);
-			} catch (PacienteException e) {
+			} catch (ProntuarioException e) {
 				throw new AtualizarInfoException("funcionario", e.getMessage());
 			}
 			
@@ -474,7 +475,7 @@ public class Controller {
 			
 			try {
 				VerificaExcecao.checarData(novaData);
-			} catch (PacienteException e) {
+			} catch (ProntuarioException e) {
 				throw new AtualizarInfoException("funcionario", e.getMessage());
 			}
 			
@@ -483,7 +484,7 @@ public class Controller {
 			break;
 			
 		default:
-			throw new AtualizarInfoException("funcionario", "Atributo invalido.");
+			throw new AtualizarInfoException("Erro no cadastro de funcionario.", "Atributo invalido.");
 		}
 				
 	}
@@ -502,15 +503,93 @@ public class Controller {
 		
 		if ((Pattern.matches("[a-zA-Z0-9]+", novaSenha) == false) ||
 				novaSenha.length() < 8 || novaSenha.length() > 12) {
+			
 			throw new AtualizarInfoException("funcionario", "A nova senha deve "
 					+ "ter entre 8 - 12 caracteres alfanumericos.");
 		}
 		
-		usuarioAtual.setSenha("", novaSenha);
+		String matricula = this.usuarioAtual.getMatricula();
+		
+		Usuario targetUser = this.getUsuario(matricula);
+		
+		targetUser.setSenha(senhaAntiga, novaSenha);
+		
+		this.usuarioAtual = targetUser;
 		
 	}
 	
+	private String gerarSenha(LocalDate anoNascimento, String matricula){
+		
+		String senha = "";
+		int ano = anoNascimento.getYear();
+		
+		senha = senha + String.valueOf(ano);
+		senha = senha + matricula.substring(0, 4);
+		
+		return senha;
+		
+	}
 	
+	private String gerarMatricula(LocalDate dataNascimento, TipoCargo cargo) throws Exception{
+		
+		String matricula = "";
+		int esteAno = LocalDate.now().getYear();
+		String parteCadastros = String.format("%03d", (this.cadastrosRealizados + 1));
+
+				
+		switch (cargo) {
+		
+		case DIRETOR:
+
+			for (Usuario usuario : this.bancoUsuarios.values()) {
+				if(usuario.getMatricula().startsWith("1")){
+					throw new Exception("Nao eh possivel criar mais de um Diretor Geral.");
+				}
+			}
+			
+			matricula = matricula + "1";
+			matricula = matricula + String.valueOf(esteAno);
+			matricula = matricula + parteCadastros;	
+			
+			break;
+		
+		case MEDICO:
+			
+			matricula = matricula + "2";
+			matricula = matricula + String.valueOf(esteAno);
+			matricula = matricula + parteCadastros;	
+			
+			break;
+			
+			
+		case TECNICOADM:
+			matricula = matricula + "3";
+			matricula = matricula + String.valueOf(esteAno);
+			matricula = matricula + parteCadastros;	
+			
+			break;
+		
+		default:
+			throw new Exception("Cargo invalido.");
+			
+		}
+		return matricula;
+		
+	}
+	
+	private Usuario getUsuario(String matricula){
+		
+		for (Usuario usuario : this.bancoUsuarios.values()) {
+			
+			if(usuario.getMatricula().equals(matricula)){
+				return usuario;
+			}
+			
+		}
+		return null;
+		
+	}
+
 	private LocalDate stringToDate(String dateCandidate){
 		
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -521,6 +600,7 @@ public class Controller {
 		
 
 	}
+	
 	private TipoCargo stringToCargo(String cargo) throws Exception{
 		
 		switch (cargo.toUpperCase()){
@@ -540,8 +620,17 @@ public class Controller {
 		
 	}
 	
+	private TipoSanguineo stringToSanguineo(String tipoSanguineo) throws Exception{
+		
+		for (TipoSanguineo sangue : TipoSanguineo.values()) {
+			if(sangue.toString().equalsIgnoreCase(tipoSanguineo)){
+				return sangue;
+			}
+				
+		}
+		throw new Exception("Tipo sanguineo invalido.");
+			
+		
+	}
 	
-	
-	
-
 }
