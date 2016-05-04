@@ -9,7 +9,10 @@ import exceptions.VerificaExcecao;
  * A classe Paciente possui atributos e comportamentos necessarios para a criacao de pacientes
  * e manipulacao de seus dados.
  * 
- * @author Elton Dantas
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
  */
 public class Paciente implements Comparable<Paciente> {
 	
@@ -17,9 +20,6 @@ public class Paciente implements Comparable<Paciente> {
 	private LocalDate dataNascimento;
 	private double peso;
 	private int ID;
-	
-	private final String NOME = "Nome", DATA = "Data", SEXO = "Sexo", GENERO = "Genero",
-			TIPO_SANGUINEO =  "TipoSanguineo", PESO = "Peso", IDADE = "Idade";
 	
 	public Paciente(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 					String genero, String tipoSanguineo, int ID) throws PacienteException {
@@ -40,6 +40,7 @@ public class Paciente implements Comparable<Paciente> {
 		this.sexoBiologico = sexoBiologico;
 		this.genero = genero;
 		this.tipoSanguineo = tipoSanguineo;
+		this.ID = ID;
 	}
 
 	public String getNome() {
@@ -93,27 +94,6 @@ public class Paciente implements Comparable<Paciente> {
 	
 	public int getID() {
 		return this.ID;
-	}
-	
-	public String getInfoPaciente(String atributo) throws Exception {
-		switch (atributo) {
-		case NOME:
-			this.getNome();
-		case DATA:
-			this.getDataNascimento();
-		case SEXO:
-			this.getSexoBiologico();
-		case GENERO:
-			this.getGenero();
-		case TIPO_SANGUINEO:
-			this.getTipoSanguineo();
-		case PESO:
-			this.getPeso();
-		case IDADE:
-			this.getIdade();
-		default:
-			throw new Exception("Atributo invalido.");
-		}
 	}
 	
 	/**
