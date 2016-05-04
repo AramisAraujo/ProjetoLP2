@@ -12,11 +12,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+
+import exceptions.AtualizarInfoException;
 import exceptions.CadastroException;
 import exceptions.ConsultaException;
+import exceptions.ExcluirCadastroException;
 import exceptions.LoginException;
 import exceptions.LogoutException;
 import exceptions.OpenSystemException;
+import exceptions.PacienteException;
 import exceptions.SystemCloseException;
 import exceptions.VerificaExcecao;
 import factories.FactoryUsuario;
@@ -42,7 +47,7 @@ public class Controller {
 	
 	public void iniciaSistema() throws OpenSystemException{
 		
-		File usuarios = new File("Usuarios.ser");
+		/*File usuarios = new File("Usuarios.ser");
 		if(usuarios.exists() && !usuarios.isDirectory() && usuarios.canRead()){
 			ObjectInputStream objectinputstream = null;
 		
@@ -76,7 +81,7 @@ public class Controller {
 				} 
 				
 			}
-		}
+		}*/
 		
 	}
 	
@@ -85,7 +90,7 @@ public class Controller {
 			String errorMsg = "Um funcionario ainda esta logado: " + usuarioAtual.getNome()+".";
 			throw new SystemCloseException(errorMsg);
 		}
-		
+		/*
 		ObjectOutputStream oos = null;
 		FileOutputStream fout = null;
 		try{
@@ -103,7 +108,7 @@ public class Controller {
 		        oos.close();
 		    } 
 		}
-		
+		*/
 	}
 	
 	public String liberaSistema(String chave, String nome, 
@@ -200,11 +205,6 @@ public class Controller {
 		} catch (Exception e) {
 			throw new CadastroException("funcionario", e.getMessage());
 		}
-		//
-		if(matricula == null||matricula == ""){
-			throw new CadastroException("funcionario", "Oie Aramis");
-		}
-		//
 		senha = this.gerarSenha(birthDate, matricula);
 		
 		Usuario targetUser = this.factoryUsuarios.criarUsuario(nome, birthDate, senha, matricula, targetCargo);
@@ -218,13 +218,17 @@ public class Controller {
 	}
 	public String getInfoFuncionario(String matricula, String info) throws ConsultaException{
 		
+		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
+			throw new ConsultaException("funcionario", "A matricula nao segue o padrao.");
+		}
+		
 		Usuario targetUser = getUsuario(matricula);
 		
 		if(targetUser == null){
-			throw new ConsultaException("funcionario","funcionario nao encontrado na base de dados.");
+			throw new ConsultaException("funcionario","Funcionario nao cadastrado.");
 		}
 		
-
+		
 		if(info.equalsIgnoreCase("Nome")){
 			String nome = targetUser.getNome();
 			return nome;
@@ -340,14 +344,173 @@ public class Controller {
 		return null;
 		
 	}
-	public boolean removerUsuario(String matricula){
-		return true;
+	
+	public void excluiFuncionario(String matricula, String senha)throws ExcluirCadastroException{
+		
+		String senhaDiretor = "";
+		
+		if(!usuarioAtual.getMatricula().startsWith("1")){
+			
+			String erroMsg = "O funcionario "+usuarioAtual.getNome()
+			+" nao tem permissao para excluir funcionarios.";
+			
+			throw new ExcluirCadastroException("funcionario", erroMsg);
+		}
+		
+		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
+			throw new ExcluirCadastroException("funcionario", "A matricula nao segue o padrao.");
+		}
+		
+		Usuario targetUser = getUsuario(matricula);
+		
+		if(targetUser == null){
+			throw new ExcluirCadastroException("funcionario", "Funcionario nao cadastrado.");
+		}
+		
+		for (Usuario funcionario : this.bancoUsuarios.values()) {
+			if(funcionario.getMatricula().startsWith("1")){
+				senhaDiretor = funcionario.getSenha();
+			}
+			
+		}
+		
+		if(!senha.equals(senhaDiretor)){
+			throw new ExcluirCadastroException("funcionario","Senha invalida.");
+		}
+		
+		this.bancoUsuarios.remove(matricula);
 		
 	}
-	public boolean atualizarInfo(){
-		return true;
+	
+	public void atualizaInfoFuncionario(String matricula, 
+			String atributo, String novoValor) throws AtualizarInfoException{
+		
+		if(!usuarioAtual.getMatricula().startsWith("1")){
+			throw new AtualizarInfoException("funcionario", "O usuario atual nao tem permissao para"
+					+ "alterar informacoes.");
+		}
+		
+		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
+			throw new AtualizarInfoException("funcionario", "A matricula nao segue o padrao.");
+		}
+		
+		Usuario targetUser = this.getUsuario(matricula);
+		
+		switch (atributo.toUpperCase()) {
+		
+		case "NOME":
+			
+			try {
+				VerificaExcecao.checkEmptyString(novoValor, "Nome");
+			} catch (Exception e) {
+				throw new AtualizarInfoException("funcionario", "Nome do funcionario nao pode ser vazio.");
+			}
+			
+			if ((Pattern.matches("[a-zA-Z0-9]+", novoValor)) || novoValor.length() > 50) {
+				throw new AtualizarInfoException("funcionario", "Nome invalido.");
+			}
+			
+			targetUser.setNome(novoValor);
+			
+			break;
+
+		case "DATA":
+			
+			LocalDate novaData;
+			try{
+				
+			novaData = this.stringToDate(novoValor);
+			
+			}catch(Exception e){
+				throw new AtualizarInfoException("funcionario", "Data invalida.");
+			}
+			
+			try {
+				VerificaExcecao.checarData(novaData);
+			} catch (PacienteException e) {
+				throw new AtualizarInfoException("funcionario", e.getMessage());
+			}
+			
+			targetUser.setDataNascimento(novaData);
+			
+			break;
+			
+		default:
+			throw new AtualizarInfoException("funcionario", "Atributo invalido.");
+		}
+				
+	}
+	
+	public void atualizaInfoFuncionario(String atributo, String novoValor) throws AtualizarInfoException{
+		
+		switch (atributo.toUpperCase()) {
+		
+		case "NOME":
+			
+			try {
+				VerificaExcecao.checkEmptyString(novoValor, "Nome");
+			} catch (Exception e) {
+				throw new AtualizarInfoException("funcionario", "Nome do funcionario nao pode ser vazio.");
+			}
+			
+			if ((Pattern.matches("[a-zA-Z0-9]+", novoValor)) || novoValor.length() > 50) {
+				throw new AtualizarInfoException("funcionario", "Nome invalido.");
+			}
+			
+			usuarioAtual.setNome(novoValor);
+			
+			break;
+
+		case "DATA":
+			
+			LocalDate novaData;
+			try{
+				
+			novaData = this.stringToDate(novoValor);
+			
+			}catch(Exception e){
+				throw new AtualizarInfoException("funcionario", "Data invalida.");
+			}
+			
+			try {
+				VerificaExcecao.checarData(novaData);
+			} catch (PacienteException e) {
+				throw new AtualizarInfoException("funcionario", e.getMessage());
+			}
+			
+			usuarioAtual.setDataNascimento(novaData);
+			
+			break;
+			
+		default:
+			throw new AtualizarInfoException("funcionario", "Atributo invalido.");
+		}
+				
+	}
+	
+	public void atualizaSenha(String senhaAntiga,String novaSenha) throws AtualizarInfoException{
+		
+		if(!usuarioAtual.getSenha().equals(senhaAntiga)){
+			throw new AtualizarInfoException("funcionario", "Senha invalida.");
+		}
+		
+		try {
+			VerificaExcecao.checkEmptyString(novaSenha, "Senha");
+		} catch (Exception e) {
+			throw new AtualizarInfoException("funcionario", e.getMessage());
+		}
+		
+		if ((Pattern.matches("[a-zA-Z0-9]+", novaSenha) == false) ||
+				novaSenha.length() < 8 || novaSenha.length() > 12) {
+			throw new AtualizarInfoException("funcionario", "A nova senha deve "
+					+ "ter entre 8 - 12 caracteres alfanumericos.");
+		}
+		
+		usuarioAtual.setSenha("", novaSenha);
 		
 	}
+	
+	
 	private LocalDate stringToDate(String dateCandidate){
 		
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");

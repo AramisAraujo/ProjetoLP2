@@ -2,8 +2,10 @@ package control;
 
 import java.io.IOException;
 
+import exceptions.AtualizarInfoException;
 import exceptions.CadastroException;
 import exceptions.ConsultaException;
+import exceptions.ExcluirCadastroException;
 import exceptions.LoginException;
 import exceptions.LogoutException;
 import exceptions.OpenSystemException;
@@ -57,12 +59,23 @@ public class Facade {
 		return this.controle.getInfoFuncionario(matricula, info);
 	}
 	
-	public void removerUsuario(String matricula){
-		this.controle.removerUsuario(matricula);
-	}
-	public void atualizarInfo(){
-		this.controle.atualizarInfo();
+	public void excluiFuncionario(String matricula, String senha) throws Exception{
+		this.controle.excluiFuncionario(matricula, senha);
 		
+	}
+	public void atualizaInfoFuncionario(String matricula, 
+			String atributo, String novoValor) throws AtualizarInfoException{
+		
+		this.controle.atualizaInfoFuncionario(matricula, atributo, novoValor);
+		
+	}
+	public void atualizaInfoFuncionario(String atributo, String novoValor) throws AtualizarInfoException{
+		
+		this.controle.atualizaInfoFuncionario(atributo, novoValor);
+		
+	}
+	public void atualizaSenha(String senhaAntiga, String novaSenha) throws AtualizarInfoException{
+		this.controle.atualizaSenha(senhaAntiga, novaSenha);
 	}
 
 }

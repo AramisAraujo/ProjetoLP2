@@ -35,7 +35,7 @@ public class FactoryDeMedicamentos {
      * @throws StringException 
      */
     private Medicamento criaMedicamentoDeReferencia(String nome, double preco,
-            int quantidade, Set<CategoriasDeMedicamentos> categorias) throws EntradaException {
+            int quantidade, Set<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
         Medicamento medicamento = new Medicamento(nome, preco, quantidade,
                 categorias);
         return medicamento;

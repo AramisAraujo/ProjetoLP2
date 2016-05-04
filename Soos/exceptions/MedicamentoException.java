@@ -10,7 +10,7 @@ package exceptions;
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
-public class MedicamentoException extends LogicaException {
+public class MedicamentoException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

@@ -27,10 +27,10 @@ expectError "Erro na consulta de funcionario. Funcionario nao cadastrado." getIn
 #  Exclusao de Funcionarios    #
 ################################
 
-expectError "Erro ao excluir funcionario. Funcionario nao cadastrado." excluiFuncionario matricula="893427" senha="19671201"
+expectError "Erro ao excluir funcionario. Funcionario nao cadastrado." excluiFuncionario matricula="19671201" senha="893427"
 
 expect "Erasmo de Rotterdam" getInfoFuncionario matricula=32016003 atributo="Nome"
-expectError "Erro ao excluir funcionario. Funcionario nao cadastrado." excluiFuncionario matricula="893427" senha="19671201"
+expectError "Erro ao excluir funcionario. Funcionario nao cadastrado." excluiFuncionario matricula="19671201" senha="893427"
 expectError "Erro ao excluir funcionario. A matricula nao segue o padrao." excluiFuncionario matricula="ADCVDF" senha="19671201"
 expectError "Erro ao excluir funcionario. Senha invalida." excluiFuncionario matricula="32016004" senha="SENHA123"
 
