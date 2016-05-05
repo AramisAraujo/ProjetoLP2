@@ -80,6 +80,10 @@ public class Facade {
 		return this.controle.getInfoFuncionario(matricula, info);
 	}
 	
+	public String getInfoMedicamento(String atributo, String medicamento) throws ConsultaException{
+		return this.controle.getInfoMedicamento(atributo, medicamento);
+	}
+	
 	public void excluiFuncionario(String matricula, String senha) throws ExcluirCadastroException{
 		this.controle.excluiFuncionario(matricula, senha);
 		
@@ -102,6 +106,21 @@ public class Facade {
 		this.controle.atualizaSenha(senhaAntiga, novaSenha);
 	}
 
+	public void atualizaMedicamento(String nome, String atributo,
+			String novoValor) throws AtualizarInfoException{
+		this.controle.atualizaMedicamento(nome, atributo, novoValor);
+	}
 	
+	public String consultaMedCategoria(String categoria) throws ConsultaException{
+		return this.controle.consultaMedCategoria(categoria);
+	}
+	
+	public String consultaMedNome(String nome) throws ConsultaException{
+		return this.controle.consultaMedNome(nome);
+	}
+	
+	public String getEstoqueFarmacia(String ordenacao) throws ConsultaException{
+		return this.controle.getEstoqueFarmacia(ordenacao);
+	}
 	
 }

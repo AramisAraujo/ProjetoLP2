@@ -1,11 +1,11 @@
 package farmacia;
  
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import exceptions.EntradaException;
-import exceptions.StringException;
-import exceptions.ValorException;
 import farmacia.CategoriasDeMedicamentos;
  
 /**
@@ -22,47 +22,16 @@ public class Medicamento implements Comparable<Medicamento> {
     private double preco;
     private int quantidade;
     private Set<CategoriasDeMedicamentos> categorias;
+    protected String tipo;
  
     public Medicamento(String nome, double preco, int quantidade,
-            Set<CategoriasDeMedicamentos> categorias) throws EntradaException {
-    	verificaString(nome);
-    	verificaPreco(preco);
-    	verificaQuantidade(quantidade);
-    	verificaCategorias(categorias);
+            Set<CategoriasDeMedicamentos> categorias){
+
         this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
         this.categorias = categorias;
-    }
- 
-    public void verificaString(String string) throws StringException{
-    	if (string == null){
-    		throw new StringException("O nome do medicamento nao pode ser nulo.");
-    	}
-    	else if (string.equals("".trim())){
-    		throw new StringException("O nome do medicamento nao pode ser vazio.");
-    	}
-    }
-    
-    public void verificaPreco(double preco) throws ValorException{
-    	if (preco < 0){
-    		throw new ValorException("O preco do medicamento nao pode ser negativo.");
-    	}
-    }
-    
-    public void verificaQuantidade(int quantidade) throws ValorException{
-    	if (quantidade == 0){
-    		throw new ValorException("A quantidade do medicamento nao pode ser zero.");
-    	}
-    	else if (quantidade < 0){
-    		throw new ValorException("A quantidade do medicamento nao pode ser negativa.");
-    	}
-    }
-    
-    public void verificaCategorias(Set categorias) throws ValorException{
-    	if (categorias == null){
-    		throw new ValorException("A categoria do medicamento nao pode ser nula.");
-    	}
+        this.tipo = "de Referencia";
     }
     
     public String getNome() {
@@ -97,6 +66,10 @@ public class Medicamento implements Comparable<Medicamento> {
         this.categorias = categorias;
     }
  
+    public String getTipo() {
+        return this.tipo;
+    }
+    
     /**
      * HashCode implementado considerando que um medicamento eh igual a outro se
      * possuem os mesmos nomes e precos.
@@ -131,13 +104,30 @@ public class Medicamento implements Comparable<Medicamento> {
  
     @Override
     public String toString() {
-        String formatacao = "Nome: " + this.nome + ". \n";
-        formatacao += "Preco: " + this.preco + ". \n";
-        formatacao += "Quantidade: " + this.quantidade + ". \n";
-        formatacao += "Categorias: \n";
-        for (CategoriasDeMedicamentos categoria : categorias) {
-            formatacao += "   - " + categoria + "\n";
-        }
+    	
+    	List<CategoriasDeMedicamentos> categorias = new ArrayList<CategoriasDeMedicamentos>();
+    	String categoriaString = "";
+    	
+    	categorias.addAll(this.getCategorias());
+    	
+    	Collections.sort(categorias);
+    	
+    	for(int i = 0; i < categorias.size(); i++ ){
+    		if(i == categorias.size() -1){
+    			categoriaString =  categoriaString + categorias.get(i).toString();
+    		}
+    		else{
+    			categoriaString = categoriaString + categorias.get(i).toString()+",";
+    		}
+    	}
+    	
+    	
+    	
+        String formatacao = String.format("Medicamento de Referencia: %s - ", this.getNome());
+        formatacao = formatacao + String.format("Preco: R$ %.2f - ",this.getPreco());
+        formatacao = formatacao + String.format("Disponivel: %d - ", this.getQuantidade());
+        formatacao = formatacao + String.format("Categorias: %s", categoriaString);
+        
         return formatacao;
     }
  

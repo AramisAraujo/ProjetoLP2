@@ -1,10 +1,11 @@
 package farmacia;
  
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
-import exceptions.EntradaException;
-import exceptions.StringException;
+import exceptions.MedicamentoException;
 import farmacia.CategoriasDeMedicamentos;
  
 /**
@@ -18,8 +19,9 @@ import farmacia.CategoriasDeMedicamentos;
 public class MedicamentoGenerico extends Medicamento {
  
     public MedicamentoGenerico(String nome, double preco, int quantidade,
-            Set<CategoriasDeMedicamentos> categorias) throws EntradaException {
+            Set<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
         super(nome, preco, quantidade, categorias);
+        this.tipo ="Generico";
     }
  
     /**
@@ -30,5 +32,34 @@ public class MedicamentoGenerico extends Medicamento {
         double desconto = super.getPreco() * 0.4;
         double precoFinal = super.getPreco() - desconto;
         return precoFinal;
+    }
+    
+    @Override
+    public String toString() {
+    	
+    	List<CategoriasDeMedicamentos> categorias = new ArrayList<CategoriasDeMedicamentos>();
+    	String categoriaString = "";
+    	
+    	categorias.addAll(this.getCategorias());
+    	
+    	Collections.sort(categorias);
+    	
+    	for(int i = 0; i < categorias.size(); i++ ){
+    		if(i == categorias.size() -1){
+    			categoriaString =  categoriaString + categorias.get(i).toString();
+    		}
+    		else{
+    			categoriaString = categoriaString + categorias.get(i).toString()+",";
+    		}
+    	}
+    	
+    	
+    	
+        String formatacao = String.format("Medicamento Generico: %s - ", this.getNome());
+        formatacao = formatacao + String.format("Preco: R$ %.2f - ",this.getPreco());
+        formatacao = formatacao + String.format("Disponivel: %d - ", this.getQuantidade());
+        formatacao = formatacao + String.format("Categorias: %s", categoriaString);
+        
+        return formatacao;
     }
 }

@@ -1,5 +1,5 @@
 package farmacia;
- 
+  
 /**
  * Enum implementado para diferenciar as diferentes categorias de medicamentos.
  * 
@@ -9,6 +9,22 @@ package farmacia;
  * @author Mainara Cavalcanti de Farias
  * 
  */
-public enum CategoriasDeMedicamentos {
-    ANALGESICO, ANTIBIOTICO, ANTIEMETICO, ANTI_INFLAMATORIO, ANTITERMICO, HORMONAL;
+public enum CategoriasDeMedicamentos {//Favor manter ordem alfabetica
+    ANALGESICO ("analgesico"), 
+    ANTIBIOTICO ("antibiotico"), 
+    ANTIEMETICO ("antiemetico"), 
+    ANTIINFLAMATORIO ("antiinflamatorio"),
+    ANTITERMICO ("antitermico"),
+    HORMONAL ("hormonal");
+     
+    private String tipo;
+    private CategoriasDeMedicamentos(String emString){
+          this.tipo = emString;
+       }
+ 
+    @Override
+    public String toString()
+       {
+          return this.tipo; 
+       }
 }

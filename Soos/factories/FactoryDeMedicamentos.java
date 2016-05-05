@@ -1,12 +1,9 @@
 package factories;
  
-import java.util.HashSet;
 import java.util.Set;
 
 import farmacia.CategoriasDeMedicamentos;
-import exceptions.EntradaException;
-import exceptions.StringException;
- 
+import exceptions.MedicamentoException;
 import farmacia.Medicamento;
 import farmacia.MedicamentoGenerico;
  
@@ -56,7 +53,7 @@ public class FactoryDeMedicamentos {
      * @throws EntradaException 
      */
     private Medicamento criaMedicamentoGenerico(String nome, double preco,
-            int quantidade, Set<CategoriasDeMedicamentos> categorias) throws EntradaException {
+            int quantidade, Set<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
         Medicamento medicamento = new MedicamentoGenerico(nome, preco,
                 quantidade, categorias);
         return medicamento;
@@ -81,14 +78,16 @@ public class FactoryDeMedicamentos {
      * @throws EntradaException 
      */
     public Medicamento criaMedicamento(String nome, double preco,
-            int quantidade, Set categorias,
-            String tipo) throws EntradaException {
-        if (tipo.equalsIgnoreCase("medicamento generico")) {
+            int quantidade, Set<CategoriasDeMedicamentos> categorias,
+            String tipo) throws MedicamentoException {
+    	
+    	
+        if (tipo.equalsIgnoreCase("Generico")) {
             return criaMedicamentoGenerico(nome, preco, quantidade, categorias);
-        } else if (tipo.equalsIgnoreCase("medicamento de referencia")) {
+        } else if (tipo.equalsIgnoreCase("Referencia")) {
             return criaMedicamentoDeReferencia(nome, preco, quantidade,
                     categorias);
         }
-        throw new StringException("Esse tipo de medicamento nao existe!");
+        throw new MedicamentoException("Esse tipo de medicamento nao existe!");
     }
 }

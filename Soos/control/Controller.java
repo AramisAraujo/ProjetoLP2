@@ -26,6 +26,7 @@ import exceptions.VerificaExcecao;
 import factories.FactoryUsuario;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Farmacia;
+import farmacia.Medicamento;
 import paciente.Prontuario;
 import paciente.TipoSanguineo;
 import usuario.Usuario;
@@ -118,31 +119,37 @@ public class Controller {
 			int quantidade, String categorias) throws CadastroException{
 		
 		String[] categoriasSplit;
-		Set<CategoriasDeMedicamentos> categoriasMed = new HashSet<CategoriasDeMedicamentos>();
+		Set<CategoriasDeMedicamentos> categoriasMed = new HashSet<CategoriasDeMedicamentos>();		
+
+		if(!usuarioAtual.getMatricula().startsWith("3")){
+			String errorMsg = "O funcionario "+usuarioAtual.getNome()+
+  					" nao tem permissao para cadastrar medicamentos.";
+			throw new CadastroException("Erro no cadastro de medicamento.", errorMsg);
+		}
 				
 		try {
-			VerificaExcecao.checkEmptyString(nome, "Nome do medicamento.");
+			VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");
 		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
+			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
 		}
 		
 		try {
 			VerificaExcecao.checkEmptyString(tipo, "Tipo do medicamento");
 		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
+			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
 		}
 		
 		try {
-			VerificaExcecao.checarValor(preco, "Preco do medicamento.");
+			VerificaExcecao.checarValor(preco, "Preco do medicamento");
 		} catch (ProntuarioException e) {
-			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
+			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
 		}
 		
 		
 		try {
-			VerificaExcecao.checarValor(quantidade, "Quantidade do medicamento.");
+			VerificaExcecao.checarValor(quantidade, "Quantidade do medicamento");
 		} catch (ProntuarioException e) {
-			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
+			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
 		}
 		
 		if(categorias.contains(",")){
@@ -162,7 +169,7 @@ public class Controller {
 		}
 		
 		try{
-			CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos.valueOf(categorias);
+			CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos.valueOf(categorias.toUpperCase());
 			categoriasMed.add(tipoMed);
 		}catch(Exception e){
 			
@@ -319,46 +326,6 @@ public class Controller {
 		
 	}
 
-	public String getInfoPaciente(String paciente, String atributo) throws ConsultaException{
-		
-		Prontuario targetProntuario = null;
-		
-		for (Prontuario prontuario : this.bancoProntuarios) {
-			
-			if(prontuario.getID().equals(paciente)){
-				targetProntuario = prontuario;
-			}
-			
-		}
-		
-		if(targetProntuario == null){
-			throw new ConsultaException("paciente", "Paciente nao cadastrado.");
-		}
-		
-		try {
-			return targetProntuario.getInfoPaciente(atributo);
-		} catch (Exception e) {
-			throw new ConsultaException("paciente", e.getMessage());
-		}
-		
-	}
-	
-	public String getProntuario(int posicao) throws ProntuarioException{
-		
-		if(posicao < 0){
-			throw new ProntuarioException("Erro ao consultar prontuario. Indice do prontuario nao pode"
-					+ " ser negativo.");
-		}
-		if(posicao > this.bancoProntuarios.size()){
-		
-			throw new ProntuarioException("Erro ao consultar prontuario. "+
-					"Nao ha prontuarios suficientes (max = "+this.bancoProntuarios.size()+").");
-		}
-		
-		return this.bancoProntuarios.get(posicao).getID();
-		
-	}
-	
 	public String getInfoFuncionario(String matricula, String info) throws ConsultaException{
 		
 		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
@@ -416,6 +383,109 @@ public class Controller {
 		}
 		
 
+		
+	}
+	
+	public String getInfoPaciente(String paciente, String atributo) throws ConsultaException{
+		
+		Prontuario targetProntuario = null;
+		
+		for (Prontuario prontuario : this.bancoProntuarios) {
+			
+			if(prontuario.getID().equals(paciente)){
+				targetProntuario = prontuario;
+			}
+			
+		}
+		
+		if(targetProntuario == null){
+			throw new ConsultaException("paciente", "Paciente nao cadastrado.");
+		}
+		
+		try {
+			return targetProntuario.getInfoPaciente(atributo);
+		} catch (Exception e) {
+			throw new ConsultaException("paciente", e.getMessage());
+		}
+		
+	}
+	
+	public String getInfoMedicamento(String atributo, String medicamento) throws ConsultaException{
+		
+		if(this.farmacia.buscaMedicamento(medicamento) == null){
+			throw new ConsultaException("medicamento", "Medicamento nao existe.");
+			
+		}
+		
+		switch (atributo.toUpperCase()) {
+		
+		case "NOME":
+			
+			String nome;
+			try {
+				nome = this.farmacia.getNome(medicamento);
+			} catch (Exception e) {
+				throw new ConsultaException("medicamento", e.getMessage());
+			}
+			return nome;
+
+		case "PRECO":
+			
+			String preco;
+			try {
+				preco = String.valueOf(this.farmacia.getPreco(medicamento));
+			} catch (Exception e) {
+				throw new ConsultaException("medicamento", e.getMessage());
+			}
+			return preco;
+			
+		case "QUANTIDADE":
+			
+			String quantidade;
+			try {
+				quantidade = String.valueOf(this.farmacia.getQuantidade(medicamento));
+			} catch (Exception e) {
+				throw new ConsultaException("medicamento", e.getMessage());
+			}
+			return quantidade;			
+			
+		case "CATEGORIAS":
+			
+			String categorias = this.farmacia.getCategorias(medicamento);
+			return categorias;
+			
+			
+		case "TIPO":
+			
+			String tipo;
+			try {
+				tipo = this.farmacia.getTipoMedicamento(medicamento);
+			} catch (Exception e) {
+				throw new ConsultaException("medicamento", e.getMessage());
+			}
+			return tipo;
+			
+		default:
+			throw new ConsultaException("medicamento", "Atributo invalido.");
+		}
+		
+		
+		
+	}
+	
+	public String getProntuario(int posicao) throws ProntuarioException{
+		
+		if(posicao < 0){
+			throw new ProntuarioException("Erro ao consultar prontuario. Indice do prontuario nao pode"
+					+ " ser negativo.");
+		}
+		if(posicao > this.bancoProntuarios.size()){
+		
+			throw new ProntuarioException("Erro ao consultar prontuario. "+
+					"Nao ha prontuarios suficientes (max = "+this.bancoProntuarios.size()+").");
+		}
+		
+		return this.bancoProntuarios.get(posicao).getID();
 		
 	}
 	
@@ -588,6 +658,101 @@ public class Controller {
 		targetUser.setSenha(senhaAntiga, novaSenha);
 		
 		this.usuarioAtual = targetUser;
+		
+	}
+	
+	public void atualizaMedicamento(String nome, String atributo,
+			String novoValor) throws AtualizarInfoException{
+		
+		try {
+			this.farmacia.atualizaMedicamento(nome, atributo, novoValor);
+		} catch (Exception e) {
+			throw new AtualizarInfoException("medicamento", e.getMessage());
+		}
+
+	}
+	
+	public String consultaMedCategoria(String categoria) throws ConsultaException{
+		
+		CategoriasDeMedicamentos category;
+		ArrayList<Medicamento> medicamentos;
+		
+		try {
+			category = CategoriasDeMedicamentos.valueOf(categoria.toUpperCase());
+		} catch (Exception e) {
+			throw new ConsultaException("medicamentos", "Categoria invalida.");
+		}
+		
+		medicamentos = this.farmacia.buscaMedicamentos(category);
+		
+		if (medicamentos.isEmpty()){
+			throw new ConsultaException("medicamentos", "Nao ha remedios cadastrados nessa categoria.");
+		}
+		
+		String resultado = "";
+		
+		for(int i = 0; i < medicamentos.size(); i++ ){
+			
+    		if(i == medicamentos.size() -1){
+    			
+    			resultado =  resultado + medicamentos.get(i).getNome();
+    		}
+    		else{
+    			resultado = resultado + medicamentos.get(i).getNome()+",";
+    		}
+    	}
+			
+		return resultado;
+		
+	}
+
+	public String consultaMedNome(String nome) throws ConsultaException{
+		
+		String medicamentoDesc;
+		
+		try {
+			medicamentoDesc = this.farmacia.getMedicamentoDesc(nome);
+		} catch (Exception e) {
+			throw new ConsultaException("medicamentos", e.getMessage());
+		}
+		
+		return medicamentoDesc;
+	}
+
+	public String getEstoqueFarmacia(String ordenacao) throws ConsultaException{
+		
+		String medicamentos = "";
+		
+		List<Medicamento> meds;
+		switch (ordenacao.toUpperCase()) {
+		
+		case "ALFABETICA":
+			meds = this.farmacia.getMedicamentosNome();
+			
+			break;
+
+		case "PRECO":
+			meds = this.farmacia.getMedicamentosPreco();
+			break;
+			
+		default:
+			
+			throw new ConsultaException("medicamentos", "Tipo de ordenacao invalida.");
+
+		}
+		
+		for(int i = 0; i < meds.size(); i++ ){
+			
+    		if(i == meds.size() -1){
+    			
+    			medicamentos =  medicamentos + meds.get(i).getNome();
+    		}
+    		else{
+    			medicamentos = medicamentos + meds.get(i).getNome()+",";
+    		}
+    	}
+		
+		return medicamentos;
 		
 	}
 	
