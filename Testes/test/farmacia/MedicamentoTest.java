@@ -3,31 +3,30 @@ package farmacia;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
  
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
+ 
 import org.junit.Before;
 import org.junit.Test;
- 
+
+import exceptions.MedicamentoException;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Farmacia;
 import farmacia.Medicamento;
  
 public class MedicamentoTest {
  
-    @SuppressWarnings("unused")
-	private Farmacia farmacia;
-    private Set<CategoriasDeMedicamentos> categorias;
+    private Farmacia farmacia;
+    private List<CategoriasDeMedicamentos> categorias;
  
     @Before
     public void inicializa() {
         farmacia = new Farmacia();
-        categorias = new HashSet<CategoriasDeMedicamentos>();
+        categorias = new ArrayList<CategoriasDeMedicamentos>();
         categorias.add(CategoriasDeMedicamentos.ANTIBIOTICO);
     }
      
-    @SuppressWarnings("unused")
-	@Test
+    @Test
     public void testMedicamento() {
         // caso normal
         try {
@@ -43,9 +42,11 @@ public class MedicamentoTest {
         // nome nulo
         try {
             Medicamento morfina = new Medicamento(null, 49, 4, categorias);
-            fail("Nao deveria criar um medicamento com o nome nulo.");
-        } catch (Exception exp) {
+            fail("Nao deveria criar um medicamento com o nome null.");
+        } catch (MedicamentoException exp) {
             assertEquals("O nome do medicamento nao pode ser nulo." , exp.getMessage());
+        } catch (Exception exp) {
+            fail();
         }
          
         // nome vazio
@@ -60,8 +61,10 @@ public class MedicamentoTest {
         try {
             Medicamento morfina = new Medicamento("Morfina", -49, 4, categorias);
             fail("Nao deveria criar um medicamento com o preco negativo.");
-        } catch (Exception exp) {
+        } catch (MedicamentoException exp) {
             assertEquals("Erro no cadastro de medicamento. Preco do medicamento nao pode ser negativo." , exp.getMessage());
+        } catch (Exception exp) {
+            fail();
         }
          
         // quantidade vazia.

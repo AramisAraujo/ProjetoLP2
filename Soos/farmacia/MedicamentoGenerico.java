@@ -3,7 +3,6 @@ package farmacia;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import exceptions.MedicamentoException;
 import farmacia.CategoriasDeMedicamentos;
@@ -19,9 +18,9 @@ import farmacia.CategoriasDeMedicamentos;
 public class MedicamentoGenerico extends Medicamento {
  
     public MedicamentoGenerico(String nome, double preco, int quantidade,
-            Set<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
+            List<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
         super(nome, preco, quantidade, categorias);
-        this.tipo ="Generico";
+        this.tipo = "Generico";
     }
  
     /**

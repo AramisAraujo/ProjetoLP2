@@ -1,12 +1,14 @@
 package factories;
- 
-import java.util.Set;
+  
+import java.util.List;
 
+ 
 import farmacia.CategoriasDeMedicamentos;
 import exceptions.MedicamentoException;
+
 import farmacia.Medicamento;
 import farmacia.MedicamentoGenerico;
- 
+  
 /**
  * Classe responsavel por criar todos os medicamentos.
  * 
@@ -16,7 +18,7 @@ import farmacia.MedicamentoGenerico;
  * @author Mainara Cavalcanti de Farias
  */
 public class FactoryDeMedicamentos {
- 
+  
     /**
      * Metodo utilizado para criar medicamentos de referencia.
      * 
@@ -32,12 +34,12 @@ public class FactoryDeMedicamentos {
      * @throws StringException 
      */
     private Medicamento criaMedicamentoDeReferencia(String nome, double preco,
-            int quantidade, Set<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
+            int quantidade, List<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
         Medicamento medicamento = new Medicamento(nome, preco, quantidade,
                 categorias);
         return medicamento;
     }
- 
+  
     /**
      * Metodo utilizado para criar medicamentos genericos.
      * 
@@ -53,12 +55,13 @@ public class FactoryDeMedicamentos {
      * @throws EntradaException 
      */
     private Medicamento criaMedicamentoGenerico(String nome, double preco,
-            int quantidade, Set<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
+            int quantidade, List<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
         Medicamento medicamento = new MedicamentoGenerico(nome, preco,
                 quantidade, categorias);
+ 
         return medicamento;
     }
- 
+  
     /**
      * Metodo utilizado para criar medicamentos de acordo com o seu tipo, que
      * pode ser "medicamento generico" ou "medicamento de referencia".
@@ -78,13 +81,11 @@ public class FactoryDeMedicamentos {
      * @throws EntradaException 
      */
     public Medicamento criaMedicamento(String nome, double preco,
-            int quantidade, Set<CategoriasDeMedicamentos> categorias,
+            int quantidade, List categorias,
             String tipo) throws MedicamentoException {
-    	
-    	
-        if (tipo.equalsIgnoreCase("Generico")) {
+        if (tipo.equalsIgnoreCase("generico")) {
             return criaMedicamentoGenerico(nome, preco, quantidade, categorias);
-        } else if (tipo.equalsIgnoreCase("Referencia")) {
+        } else if (tipo.equalsIgnoreCase("referencia")) {
             return criaMedicamentoDeReferencia(nome, preco, quantidade,
                     categorias);
         }

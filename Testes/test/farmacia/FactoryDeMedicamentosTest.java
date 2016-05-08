@@ -2,9 +2,9 @@ package farmacia;
  
  
 import static org.junit.Assert.*;
- 
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,12 +17,12 @@ import farmacia.MedicamentoGenerico;
  
 public class FactoryDeMedicamentosTest {
     private FactoryDeMedicamentos factory;
-    private Set<CategoriasDeMedicamentos> categorias;
+    private List <CategoriasDeMedicamentos> categorias;
  
     @Before
     public void inicializa() {
         factory = new FactoryDeMedicamentos();
-        categorias = new HashSet<CategoriasDeMedicamentos>();
+        categorias = new ArrayList<CategoriasDeMedicamentos>();
         categorias.add(CategoriasDeMedicamentos.ANTIBIOTICO);
     }
  
