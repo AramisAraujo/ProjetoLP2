@@ -31,10 +31,10 @@ public class FactoryDeMedicamentos {
      * @param categorias
      *            - categorias as quais o medicamento que sera criado pertence
      * @return - o medicamento criado
-     * @throws StringException 
+     * @throws Exception - excessao lancada caso ocorra algum erro
      */
     private Medicamento criaMedicamentoDeReferencia(String nome, double preco,
-            int quantidade, List<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
+            int quantidade, List<CategoriasDeMedicamentos> categorias) throws Exception {
         Medicamento medicamento = new Medicamento(nome, preco, quantidade,
                 categorias);
         return medicamento;
@@ -52,10 +52,10 @@ public class FactoryDeMedicamentos {
      * @param categorias
      *            - categorias as quais o medicamento que sera criado pertence
      * @return - o medicamento criado
-     * @throws EntradaException 
+     * @throws Exception - excessao lancada caso ocorra algum erro
      */
     private Medicamento criaMedicamentoGenerico(String nome, double preco,
-            int quantidade, List<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
+            int quantidade, List<CategoriasDeMedicamentos> categorias) throws Exception {
         Medicamento medicamento = new MedicamentoGenerico(nome, preco,
                 quantidade, categorias);
  
@@ -78,11 +78,12 @@ public class FactoryDeMedicamentos {
      *            - tipo do medicamento que sera criado (medicamento generico ou
      *            medicamento de refenrencia)
      * @return - medicamento criado
+     * @throws Exception 
      * @throws EntradaException 
      */
     public Medicamento criaMedicamento(String nome, double preco,
             int quantidade, List categorias,
-            String tipo) throws MedicamentoException {
+            String tipo) throws Exception {
         if (tipo.equalsIgnoreCase("generico")) {
             return criaMedicamentoGenerico(nome, preco, quantidade, categorias);
         } else if (tipo.equalsIgnoreCase("referencia")) {

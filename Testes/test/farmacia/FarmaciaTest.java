@@ -260,7 +260,7 @@ public class FarmaciaTest {
 			farmacia.getEstoqueFarmacia("tipo");
 			fail();
 		} catch (Exception e) {
-			assertEquals("Erro na consulta de medicamentos. Tipo de ordenacao invalida.", e.getMessage());
+			assertEquals("Tipo de ordenacao invalida.", e.getMessage());
 		}
 	}
 }

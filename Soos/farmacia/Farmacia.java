@@ -44,14 +44,10 @@ public class Farmacia {
 	 * @param categorias
 	 *            - categorias as quais o medicamento que sera criado pertence
 	 * @return - medicamento criado
-	 * @throws EntradaException
-	 *             - excessao lancada caso algum dado invalido seja informado
-	 * @throws MedicamentoException
-	 *             - excessao lancada caso ja exista algum medicamento com o
-	 *             mesmo nome e o mesmo preco
+	 * @throws Exception - excecao lancada caso ocorra algum erro
 	 */
-	public boolean cadastraMedicamento(String nome, double preco, int quantidade,
-			List<CategoriasDeMedicamentos> categorias, String tipo) throws MedicamentoException, MedicamentoException {
+	public boolean cadastraMedicamento(String nome, String tipo, double preco, int quantidade,
+			List<CategoriasDeMedicamentos> categorias) throws Exception {
 		if (existeMedicamento(nome)) {
 			throw new MedicamentoException("Esse medicamento ja foi cadastrado.");
 		}
@@ -146,6 +142,9 @@ public class Farmacia {
 	 */
 	public double getPreco(String nomeMedicamento) throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
+		if (medicamento == null){
+			throw new MedicamentoException("Erro na consulta de medicamentos. Medicamento inexistente.");
+		}
 		return medicamento.getPreco();
 
 	}
@@ -163,6 +162,9 @@ public class Farmacia {
 	 */
 	public int getQuantidade(String nomeMedicamento) throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
+		if (medicamento == null){
+			throw new MedicamentoException("Erro na consulta de medicamentos. Medicamento inexistente.");
+		}
 		return medicamento.getQuantidade();
 
 	}
@@ -180,6 +182,9 @@ public class Farmacia {
 	 */
 	public String getCategoriasMedicamento(String nomeMedicamento) throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
+		if (medicamento == null){
+			throw new MedicamentoException("Erro na consulta de medicamentos. Medicamento inexistente.");
+		}
 		String categorias = "";
 		int cont = 0;
 		for (CategoriasDeMedicamentos categoria : medicamento.getCategorias()) {
@@ -254,9 +259,11 @@ public class Farmacia {
 	 *             - excessao lancada caso ocorra algum erro
 	 */
 	public String consultaMedCategoria(String nomeCategoria) throws MedicamentoException {
-		if (!nomeCategoria.equalsIgnoreCase("analgesico") && !nomeCategoria.equalsIgnoreCase("antibiotico")
-				&& !nomeCategoria.equalsIgnoreCase("antiemetico") && !nomeCategoria.equalsIgnoreCase("antitermico")
-				&& !nomeCategoria.equalsIgnoreCase("antiinflamatorio") && !nomeCategoria.equalsIgnoreCase("hormonal")) {
+		List<String> nomes = new ArrayList<>();
+		for (CategoriasDeMedicamentos categoria : CategoriasDeMedicamentos.values()) {
+			nomes.add(categoria.toString());
+		}
+		if (!nomes.contains(nomeCategoria)) {
 			throw new MedicamentoException("Erro na consulta de medicamentos. Categoria invalida.");
 
 		}
@@ -330,7 +337,7 @@ public class Farmacia {
 			}
 			return estoque;
 		}
-		throw new MedicamentoException("Erro na consulta de medicamentos. Tipo de ordenacao invalida.");
+		throw new MedicamentoException("Tipo de ordenacao invalida.");
 	}
 
 }

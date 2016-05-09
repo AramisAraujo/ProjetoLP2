@@ -18,7 +18,7 @@ import farmacia.CategoriasDeMedicamentos;
 public class MedicamentoGenerico extends Medicamento {
  
     public MedicamentoGenerico(String nome, double preco, int quantidade,
-            List<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
+            List<CategoriasDeMedicamentos> categorias) throws Exception {
         super(nome, preco, quantidade, categorias);
         this.tipo = "Generico";
     }

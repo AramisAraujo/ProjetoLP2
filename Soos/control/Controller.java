@@ -420,7 +420,7 @@ public class Controller {
 		switch (atributo.toUpperCase()) {
 		
 		case "NOME":
-			
+			farmacia.existeMedicamento(medicamento);
 			return medicamento;
 
 		case "PRECO":
@@ -677,10 +677,10 @@ public class Controller {
 	}
 
 
-	public String consultaMedNome(String nome) throws ConsultaException{
+	public Medicamento consultaMedNome(String nome) throws ConsultaException{
 		
 		try {
-			farmacia.consultaMedNome(nome);
+			return farmacia.consultaMedNome(nome);
 		} catch (Exception e) {
 			throw new ConsultaException("medicamentos", e.getMessage());
 		}
@@ -688,7 +688,7 @@ public class Controller {
 
 	public String getEstoqueFarmacia(String ordenacao) throws MedicamentoException{
 		try {
-			farmacia.getEstoqueFarmacia(ordenacao);
+			return farmacia.getEstoqueFarmacia(ordenacao);
 		} catch (Exception e) {
 			throw new ConsultaException("medicamentos", e.getMessage());
 		}
