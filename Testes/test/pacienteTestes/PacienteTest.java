@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import paciente.Paciente;
+import paciente.Prontuario;
 import paciente.TipoSanguineo;
 
 public class PacienteTest {
@@ -27,6 +28,7 @@ public class PacienteTest {
 		this.sangue = TipoSanguineo.O_NEG;
 		this.id = UUID.randomUUID();
 	}
+	
 	@Test
 	public void testPaciente() {
 		
@@ -144,57 +146,103 @@ public class PacienteTest {
 		} catch (Exception e) {
 			assertEquals("ID nao pode ser vazio.", e.getMessage());
 		}
-	
-//	
-//	@Test
-//	public void testEquals() {
-//		try {
-//			dataNascimento = LocalDate.parse("31/12/2000",formatador);
-//			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", "O-", 1);
-//			Paciente outroPaciente = new Paciente("Helton", dataNascimento, 60.0, "masculino", "masculino", "O-", 1);
-//			assertTrue(paciente.equals(outroPaciente));
-//		} catch(Exception e) {
-//			fail();
-//		}
-//		
-//		try {
-//			dataNascimento = LocalDate.parse("31/12/2000",formatador);
-//			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", "O-", 1);
-//			Paciente outroPaciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", "O-", 2);
-//			assertFalse(paciente.equals(outroPaciente));
-//		} catch(Exception e) {
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void testCompareTo() {
-//		try {
-//			dataNascimento = LocalDate.parse("31/12/2000",formatador);
-//			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", "O-", 1);
-//			Paciente outroPaciente = new Paciente("Elton", dataNascimento, 58.0, "masculino", "feminino", "O+", 2);
-//			assertTrue(paciente.compareTo(outroPaciente) == 0);
-//		} catch(Exception e) {
-//			fail();
-//		}
-//		
-//		try {
-//			dataNascimento = LocalDate.parse("31/12/2000",formatador);
-//			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", "O-", 1);
-//			Paciente outroPaciente = new Paciente("Helton", dataNascimento, 58.0, "masculino", "feminino", "O+", 2);
-//			assertTrue(paciente.compareTo(outroPaciente) < 0);
-//		} catch(Exception e) {
-//			fail();
-//		}
-//		
-//		try {
-//			dataNascimento = LocalDate.parse("31/12/2000",formatador);
-//			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", "O-", 1);
-//			Paciente outroPaciente = new Paciente("Eltn", dataNascimento, 58.0, "masculino", "feminino", "O+", 2);
-//			assertTrue(paciente.compareTo(outroPaciente) > 0);
-//		} catch(Exception e) {
-//			fail();
-//		}
 	}
-
+	
+	
+	@Test
+	public void testEquals() {
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			Paciente outroPaciente = new Paciente("Helton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			assertTrue(paciente.equals(outroPaciente));
+		} catch(Exception e) {
+			fail();
+		}
+		
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			UUID outroId = UUID.randomUUID();
+			Paciente outroPaciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, outroId);
+			assertFalse(paciente.equals(outroPaciente));
+		} catch(Exception e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void testCompareTo() {
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			UUID outroId = UUID.randomUUID();
+			Paciente outroPaciente = new Paciente("Elton", dataNascimento, 58.0, "masculino", "feminino", sangue, outroId);
+			assertTrue(paciente.compareTo(outroPaciente) == 0);
+		} catch(Exception e) {
+			fail();
+		}
+		
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			UUID outroId = UUID.randomUUID();
+			Paciente outroPaciente = new Paciente("Helton", dataNascimento, 58.0, "masculino", "feminino", sangue, outroId);
+			assertTrue(paciente.compareTo(outroPaciente) < 0);
+		} catch(Exception e) {
+			fail();
+		}
+		
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			UUID outroId = UUID.randomUUID();
+			Paciente outroPaciente = new Paciente("Eltn", dataNascimento, 58.0, "masculino", "feminino", sangue, outroId);
+			assertTrue(paciente.compareTo(outroPaciente) > 0);
+		} catch(Exception e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void testGetInfoPaciente() {
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			assertEquals("Elton", paciente.getInfoPaciente("Nome"));
+			assertEquals("2000-12-31", paciente.getInfoPaciente("Data"));
+			assertEquals("60.0", paciente.getInfoPaciente("Peso"));
+			assertEquals("masculino", paciente.getInfoPaciente("Sexo"));
+			assertEquals("masculino", paciente.getInfoPaciente("Genero"));
+			assertEquals("15", paciente.getInfoPaciente("Idade"));
+		} catch (Exception e) {
+			fail();
+		}
+		
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			String nomeInvalido = paciente.getInfoPaciente("");
+			fail();
+		} catch (Exception e) {
+			assertEquals("Atributo invalido.", e.getMessage());
+		}
+		
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			String nomeInvalido = paciente.getInfoPaciente(" ");
+			fail();
+		} catch (Exception e) {
+			assertEquals("Atributo invalido.", e.getMessage());
+		}
+		
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			String nomeInvalido = paciente.getInfoPaciente(null);
+			fail();
+		} catch (Exception e) {
+			assertEquals("Atributo invalido.", e.getMessage());
+		}
+		
+		try {
+			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			String nomeInvalido = paciente.getInfoPaciente("Endereco");
+			fail();
+		} catch (Exception e) {
+			assertEquals("Atributo invalido.", e.getMessage());
+		}
+	}
 }

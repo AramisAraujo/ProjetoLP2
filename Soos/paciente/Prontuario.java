@@ -44,8 +44,8 @@ public class Prontuario implements Comparable<Prontuario> {
 		return this.paciente.getInfoPaciente(atributo);
 	}
 	
-	public String getProcedimentos() {
-		return this.procedimentos.toString();
+	public int getQntProcedimentos() {
+		return this.procedimentos.size();
 	}
 	
 	/**

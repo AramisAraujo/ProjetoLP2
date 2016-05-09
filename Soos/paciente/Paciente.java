@@ -77,7 +77,8 @@ public class Paciente implements Comparable<Paciente> {
 		
 	}
 
-	public void setDataNascimento(LocalDate dataNascimento) {
+	public void setDataNascimento(LocalDate dataNascimento) throws Exception {
+		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
 		this.dataNascimento = dataNascimento;
 	}
 
@@ -85,7 +86,8 @@ public class Paciente implements Comparable<Paciente> {
 		return peso;
 	}
 
-	public void setPeso(int peso) {
+	public void setPeso(int peso) throws Exception {
+		VerificaExcecao.checarValor(peso, "Peso");
 		this.peso = peso;
 	}
 
@@ -93,7 +95,8 @@ public class Paciente implements Comparable<Paciente> {
 		return sexoBiologico;
 	}
 
-	public void setSexoBiologico(String sexoBiologico) {
+	public void setSexoBiologico(String sexoBiologico) throws Exception {
+		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
 		this.sexoBiologico = sexoBiologico;
 	}
 
@@ -101,7 +104,8 @@ public class Paciente implements Comparable<Paciente> {
 		return genero;
 	}
 
-	public void setGenero(String genero) {
+	public void setGenero(String genero) throws Exception {
+		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Genero");
 		this.genero = genero;
 	}
 
@@ -110,7 +114,9 @@ public class Paciente implements Comparable<Paciente> {
 	}
 	
 	public String getInfoPaciente(String atributo) throws Exception {
-		
+		if (atributo == null) {
+			throw new Exception("Atributo invalido.");
+		}
 		switch (atributo) {
 		
 		case NOME:
