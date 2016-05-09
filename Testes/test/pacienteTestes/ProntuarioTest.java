@@ -4,12 +4,14 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import paciente.Prontuario;
-import exceptions.PacienteException;
+import paciente.TipoSanguineo;
+import exceptions.ProntuarioException;
 
 public class ProntuarioTest {
 	
@@ -27,9 +29,10 @@ public class ProntuarioTest {
 	public void testProntuario() {
 		
 		try {
-			prontuario = new Prontuario("Elton", dataNascimento, 60.0, "masculino", "masculino", "O-", 1);
+			UUID id = UUID.randomUUID();
+			prontuario = new Prontuario("Elton", dataNascimento, 60.0, "masculino", "masculino", TipoSanguineo.O_NEG, id);
 			assertTrue(prontuario.getProcedimentos().isEmpty());
-		} catch (PacienteException e) {
+		} catch (ProntuarioException e) {
 			fail();
 		}
 	}

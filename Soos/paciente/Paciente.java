@@ -1,9 +1,9 @@
 package paciente;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
 import java.util.UUID;
+
+import exceptions.VerificaExcecao;
 
 /**
  * A classe Paciente possui atributos e comportamentos necessarios para a criacao de pacientes
@@ -24,6 +24,17 @@ public class Paciente implements Comparable<Paciente> {
 	
 	public Paciente(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 					String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
+		
+		VerificaExcecao.checkEmptyParameter(nome, "Nome do paciente");
+		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
+		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
+		VerificaExcecao.checkEmptyParameter(genero, "Genero");
+		VerificaExcecao.checkEmptyParameter(tipoSanguineo, "Tipo sanguineo");
+		VerificaExcecao.checkEmptyParameter(ID, "ID");
+		
+		VerificaExcecao.checarData(dataNascimento);
+		VerificaExcecao.checarValor(peso, "Peso do paciente");
+		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 		
 		this.ID = ID;
 		this.nome = nome;

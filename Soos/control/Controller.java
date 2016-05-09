@@ -141,14 +141,14 @@ public class Controller {
 		
 		try {
 			VerificaExcecao.checarValor(preco, "Preco do medicamento");
-		} catch (ProntuarioException e) {
+		} catch (Exception e) {
 			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
 		}
 		
 		
 		try {
 			VerificaExcecao.checarValor(quantidade, "Quantidade do medicamento");
-		} catch (ProntuarioException e) {
+		} catch (Exception e) {
 			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
 		}
 		
@@ -281,7 +281,7 @@ public class Controller {
 		
 		try {
 			VerificaExcecao.checarValor(Peso,"Peso do paciente");
-		} catch (ProntuarioException e) {
+		} catch (Exception e) {
 			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
 		
@@ -571,7 +571,7 @@ public class Controller {
 			
 			try {
 				VerificaExcecao.checarData(novaData);
-			} catch (ProntuarioException e) {
+			} catch (Exception e) {
 				throw new AtualizarInfoException("funcionario", e.getMessage());
 			}
 			
@@ -618,7 +618,7 @@ public class Controller {
 			
 			try {
 				VerificaExcecao.checarData(novaData);
-			} catch (ProntuarioException e) {
+			} catch (Exception e) {
 				throw new AtualizarInfoException("funcionario", e.getMessage());
 			}
 			
