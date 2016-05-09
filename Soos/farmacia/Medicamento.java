@@ -25,9 +25,10 @@ public class Medicamento implements Comparable<Medicamento> {
     protected String tipo;
  
     public Medicamento(String nome, double preco, int quantidade, List<CategoriasDeMedicamentos> categorias) throws Exception{
-        VerificaExcecao.checkEmptyString(nome, "medicamento");
-        VerificaExcecao.checarValor(preco, "medicamento");
-        VerificaExcecao.checarValor(quantidade, "medicamento");
+        VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");
+        VerificaExcecao.checarValor(preco, "Preco do medicamento");
+        VerificaExcecao.checarValorNegativo(quantidade, "Quantidade do medicamento");
+        VerificaExcecao.checarValorZero(quantidade, "A quantidade do medicamento");
         verificaCategorias(categorias);
     	this.nome = nome;
         this.preco = preco;

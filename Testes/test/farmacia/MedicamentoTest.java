@@ -44,14 +44,14 @@ public class MedicamentoTest {
 			Medicamento morfina = new Medicamento(null, 49, 4, categorias);
 			fail("Nao deveria criar um medicamento com o nome null.");
 		} catch (Exception exp) {
-			assertEquals("O nome do medicamento nao pode ser vazio.", exp.getMessage());
+			assertEquals("Nome do medicamento nao pode ser vazio.", exp.getMessage());
 
 			// nome vazio
 			try {
 				Medicamento morfina = new Medicamento("", 49, 4, categorias);
 				fail("Nao deveria criar um medicamento com o nome vazio.");
 			} catch (Exception e) {
-				assertEquals("Erro no cadastro de medicamento. Nome do medicamento nao pode ser vazio.",
+				assertEquals("Nome do medicamento nao pode ser vazio.",
 						e.getMessage());
 			}
 
@@ -60,7 +60,7 @@ public class MedicamentoTest {
 				Medicamento morfina = new Medicamento("Morfina", -49, 4, categorias);
 				fail("Nao deveria criar um medicamento com o preco negativo.");
 			} catch (Exception e) {
-				assertEquals("Erro no cadastro de medicamento. Preco do medicamento nao pode ser negativo.",
+				assertEquals("Preco do medicamento nao pode ser negativo.",
 						e.getMessage());
 			}
 
@@ -77,7 +77,7 @@ public class MedicamentoTest {
 				Medicamento morfina = new Medicamento("Morfina", 49, -4, categorias);
 				fail("Nao deveria criar um medicamento com a quantidade negativa.");
 			} catch (Exception erro) {
-				assertEquals("Erro no cadastro de medicamento. Quantidade do medicamento nao pode ser negativo.",
+				assertEquals("Quantidade do medicamento nao pode ser negativo.",
 						erro.getMessage());
 			}
 

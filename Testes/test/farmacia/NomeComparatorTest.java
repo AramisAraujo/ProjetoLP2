@@ -22,7 +22,7 @@ public class NomeComparatorTest {
     private Medicamento dorflex;
  
     @Before
-    public void inicializa() throws MedicamentoException {
+    public void inicializa() throws Exception {
         comparator = new NomeComparator();
         categorias1 = new ArrayList<CategoriasDeMedicamentos>();
         categorias1.add(CategoriasDeMedicamentos.ANALGESICO);

@@ -15,8 +15,8 @@ import farmacia.CategoriasDeMedicamentos;
 public class VerificaExcecao {
 	
 	public static void checkEmptyString(String umaString,String atributo) throws Exception {
-		if (umaString.trim().isEmpty() || umaString == null) {
-			throw new Exception("O nome do " + atributo+" nao pode ser vazio.");
+		if (umaString == null || umaString.trim().isEmpty()) {
+			throw new Exception(atributo+" nao pode ser vazio.");
 		}
 	}
 	
@@ -38,13 +38,18 @@ public class VerificaExcecao {
 		
 	}
 	
-	public static void checarValor(int valor,String atributo) throws ProntuarioException {
+	public static void checarValorNegativo(int valor,String atributo) throws ProntuarioException {
 		if (valor < 0) {
 			throw new ProntuarioException(atributo+" nao pode ser negativo.");
 		}
-		
-		
-		
+			
+	}
+	
+	public static void checarValorZero(int valor,String atributo) throws ProntuarioException {
+		if (valor == 0) {
+			throw new ProntuarioException(atributo+" nao pode ser zero.");
+		}
+			
 	}
 	
 	public static boolean checarSexoBiologico(String sexoBiologico) throws ProntuarioException {

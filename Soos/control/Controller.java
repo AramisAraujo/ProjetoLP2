@@ -126,61 +126,10 @@ public class Controller {
   					" nao tem permissao para cadastrar medicamentos.";
 			throw new CadastroException("Erro no cadastro de medicamento.", errorMsg);
 		}
-				
+		
 		try {
-			VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");
+			this.farmacia.cadastraMedicamento(nome, tipo, preco, quantidade, categoriasMed);
 		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
-		}
-		
-		try {
-			VerificaExcecao.checkEmptyString(tipo, "Tipo do medicamento");
-		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
-		}
-		
-		try {
-			VerificaExcecao.checarValor(preco, "Preco do medicamento");
-		} catch (ProntuarioException e) {
-			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
-		}
-		
-		
-		try {
-			VerificaExcecao.checarValor(quantidade, "Quantidade do medicamento");
-		} catch (ProntuarioException e) {
-			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
-		}
-		
-		if(categorias.contains(",")){
-			
-			categoriasSplit = categorias.split(",");
-			
-			for (String categoria : categoriasSplit) {
-				try {
-					categoriasMed.add(CategoriasDeMedicamentos.valueOf(categoria.toUpperCase()));
-
-				} catch (Exception e) {
-					throw new CadastroException("Erro no cadastro do medicamento.", "Categoria invalida."+
-				categoriasMed);
-				}
-			
-			}
-		}
-		
-		try{
-			CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos.valueOf(categorias.toUpperCase());
-			categoriasMed.add(tipoMed);
-		}catch(Exception e){
-			
-		}
-		
-
-		
-		
-		try {
-			this.farmacia.cadastraMedicamento(nome, preco, quantidade, categoriasMed, tipo);
-		} catch (MedicamentoException e) {
 			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
 		}
 		
@@ -410,7 +359,7 @@ public class Controller {
 		
 	}
 	
-	public String getInfoMedicamento(String atributo, String medicamento) throws ConsultaException{
+	public String getInfoMedicamento(String atributo, String medicamento) throws ConsultaException, MedicamentoException{
 		
 		if(this.farmacia.buscaMedicamento(medicamento) == null){
 			throw new ConsultaException("medicamento", "Medicamento nao existe.");
@@ -669,7 +618,7 @@ public class Controller {
 	public String consultaMedCategoria(String categoria) throws ConsultaException{
 		
 	try {
-		farmacia.consultaMedCategoria(categoria);
+		return farmacia.consultaMedCategoria(categoria);
 	} catch (Exception e) {
 		throw new ConsultaException("medicamentos", e.getMessage());
 	}
@@ -686,7 +635,7 @@ public class Controller {
 		}
 	}
 
-	public String getEstoqueFarmacia(String ordenacao) throws MedicamentoException{
+	public String getEstoqueFarmacia(String ordenacao) throws MedicamentoException, ConsultaException{
 		try {
 			return farmacia.getEstoqueFarmacia(ordenacao);
 		} catch (Exception e) {
