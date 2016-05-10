@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.UUID;
 
+import exceptions.ProntuarioException;
 import exceptions.VerificaExcecao;
 
 /**
@@ -26,16 +27,8 @@ public class Paciente implements Comparable<Paciente> {
 	public Paciente(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 					String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
 		
-		VerificaExcecao.checkEmptyParameter(nome, "Nome do paciente");
-		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
-		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
-		VerificaExcecao.checkEmptyParameter(genero, "Genero");
-		VerificaExcecao.checkEmptyParameter(tipoSanguineo, "Tipo sanguineo");
-		VerificaExcecao.checkEmptyParameter(ID, "ID");
-		
-		VerificaExcecao.checarData(dataNascimento);
-		VerificaExcecao.checarValor(peso, "Peso do paciente");
-		VerificaExcecao.checarSexoBiologico(sexoBiologico);
+		validaParametros(nome, dataNascimento, peso, sexoBiologico, genero,
+				tipoSanguineo, ID);
 		
 		this.ID = ID;
 		this.nome = nome;
@@ -169,6 +162,22 @@ public class Paciente implements Comparable<Paciente> {
 	@Override
 	public int compareTo(Paciente outroPaciente) {
 		return this.nome.compareTo(outroPaciente.getNome());
+	}
+
+	private void validaParametros(String nome, LocalDate dataNascimento,
+			double peso, String sexoBiologico, String genero,
+			TipoSanguineo tipoSanguineo, UUID ID) throws Exception,
+			ProntuarioException {
+		VerificaExcecao.checkEmptyParameter(nome, "Nome do paciente");
+		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
+		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
+		VerificaExcecao.checkEmptyParameter(genero, "Genero");
+		VerificaExcecao.checkEmptyParameter(tipoSanguineo, "Tipo sanguineo");
+		VerificaExcecao.checkEmptyParameter(ID, "ID");
+		
+		VerificaExcecao.checarData(dataNascimento);
+		VerificaExcecao.checarValor(peso, "Peso do paciente");
+		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 	}
 	
 
