@@ -22,19 +22,18 @@ public class PacienteTest {
 	private UUID id;
 
 	@Before
-	public void inicializa() {
+	public void inicializa() throws Exception {
 		this.formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		this.dataNascimento = LocalDate.parse("31/12/2000",formatador);
 		this.sangue = TipoSanguineo.O_NEG;
 		this.id = UUID.randomUUID();
+		this.paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 	}
 	
 	@Test
 	public void testPaciente() {
 		
-		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
-			
+		try {			
 			assertEquals("Elton", paciente.getNome());
 			assertEquals("2000-12-31", paciente.getDataNascimento());
 			assertTrue(paciente.getPeso() == 60.0);
@@ -152,15 +151,13 @@ public class PacienteTest {
 	@Test
 	public void testEquals() {
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
-			Paciente outroPaciente = new Paciente("Helton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			Paciente outroPaciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			assertTrue(paciente.equals(outroPaciente));
 		} catch(Exception e) {
 			fail();
 		}
 		
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			UUID outroId = UUID.randomUUID();
 			Paciente outroPaciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, outroId);
 			assertFalse(paciente.equals(outroPaciente));
@@ -172,7 +169,6 @@ public class PacienteTest {
 	@Test
 	public void testCompareTo() {
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			UUID outroId = UUID.randomUUID();
 			Paciente outroPaciente = new Paciente("Elton", dataNascimento, 58.0, "masculino", "feminino", sangue, outroId);
 			assertTrue(paciente.compareTo(outroPaciente) == 0);
@@ -181,7 +177,6 @@ public class PacienteTest {
 		}
 		
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			UUID outroId = UUID.randomUUID();
 			Paciente outroPaciente = new Paciente("Helton", dataNascimento, 58.0, "masculino", "feminino", sangue, outroId);
 			assertTrue(paciente.compareTo(outroPaciente) < 0);
@@ -190,7 +185,6 @@ public class PacienteTest {
 		}
 		
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			UUID outroId = UUID.randomUUID();
 			Paciente outroPaciente = new Paciente("Eltn", dataNascimento, 58.0, "masculino", "feminino", sangue, outroId);
 			assertTrue(paciente.compareTo(outroPaciente) > 0);
@@ -202,7 +196,6 @@ public class PacienteTest {
 	@Test
 	public void testGetInfoPaciente() {
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			assertEquals("Elton", paciente.getInfoPaciente("Nome"));
 			assertEquals("2000-12-31", paciente.getInfoPaciente("Data"));
 			assertEquals("60.0", paciente.getInfoPaciente("Peso"));
@@ -214,7 +207,6 @@ public class PacienteTest {
 		}
 		
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			String nomeInvalido = paciente.getInfoPaciente("");
 			fail();
 		} catch (Exception e) {
@@ -222,7 +214,6 @@ public class PacienteTest {
 		}
 		
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			String nomeInvalido = paciente.getInfoPaciente(" ");
 			fail();
 		} catch (Exception e) {
@@ -230,7 +221,6 @@ public class PacienteTest {
 		}
 		
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			String nomeInvalido = paciente.getInfoPaciente(null);
 			fail();
 		} catch (Exception e) {
@@ -238,7 +228,6 @@ public class PacienteTest {
 		}
 		
 		try {
-			paciente = new Paciente("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
 			String nomeInvalido = paciente.getInfoPaciente("Endereco");
 			fail();
 		} catch (Exception e) {

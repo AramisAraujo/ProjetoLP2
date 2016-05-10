@@ -1,6 +1,7 @@
 package paciente;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.UUID;
 
 import exceptions.VerificaExcecao;
@@ -64,14 +65,14 @@ public class Paciente implements Comparable<Paciente> {
 	
 	public String getIdade() {
 		
-		int idade = LocalDate.now().getYear() - this.dataNascimento.getYear();
+		int idade = Period.between(dataNascimento, LocalDate.now()).getYears();
 		
-		boolean jaPassouNiverMes = LocalDate.now().getMonthValue() > this.dataNascimento.getMonthValue();
-		boolean jaPassouNiverDia = LocalDate.now().getDayOfMonth() >= this.dataNascimento.getDayOfMonth();
-		
-		if(!jaPassouNiverMes && !jaPassouNiverDia){
-			idade = idade - 1;
-		}
+//		boolean jaPassouNiverMes = LocalDate.now().getMonthValue() > this.dataNascimento.getMonthValue();
+//		boolean jaPassouNiverDia = LocalDate.now().getDayOfMonth() >= this.dataNascimento.getDayOfMonth();
+//		
+//		if(!jaPassouNiverMes && !jaPassouNiverDia){
+//			idade = idade - 1;
+//		}
 		
 		return String.valueOf(idade);
 		
