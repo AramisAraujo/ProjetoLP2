@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import exceptions.ProntuarioException;
 import exceptions.VerificaExcecao;
 
 /**
@@ -19,11 +20,14 @@ public class Prontuario implements Comparable<Prontuario> {
 	
 	public Prontuario(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 						String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
-				
+		
+		validaParametro(nome, dataNascimento, peso, sexoBiologico, genero,
+				tipoSanguineo, ID);
+		
 		this.paciente = new Paciente(nome, dataNascimento, peso, sexoBiologico, genero, tipoSanguineo, ID);
 		this.procedimentos = new ArrayList<Procedimento>();
 	}
-	
+
 	public String getID(){
 		return this.paciente.getID().toString();
 	}
@@ -31,6 +35,10 @@ public class Prontuario implements Comparable<Prontuario> {
 	public String getInfoPaciente(String atributo) throws Exception{
 		
 		return this.paciente.getInfoPaciente(atributo);
+	}
+	
+	public int getQntProcedimentos() {
+		return this.procedimentos.size();
 	}
 	
 	/**
@@ -69,4 +77,21 @@ public class Prontuario implements Comparable<Prontuario> {
 			return false;
 		return true;
 	}
+
+	private void validaParametro(String nome, LocalDate dataNascimento,
+			double peso, String sexoBiologico, String genero,
+			TipoSanguineo tipoSanguineo, UUID ID) throws Exception,
+			ProntuarioException {
+		VerificaExcecao.checkEmptyParameter(nome, "Nome do paciente");
+		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
+		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
+		VerificaExcecao.checkEmptyParameter(genero, "Genero");
+		VerificaExcecao.checkEmptyParameter(tipoSanguineo, "Tipo sanguineo");
+		VerificaExcecao.checkEmptyParameter(ID, "ID");
+		
+		VerificaExcecao.checarData(dataNascimento);
+		VerificaExcecao.checarValor(peso, "Peso do paciente");
+		VerificaExcecao.checarSexoBiologico(sexoBiologico);
+	}
+
 }
