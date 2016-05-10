@@ -27,6 +27,8 @@ public class Paciente implements Comparable<Paciente> {
 	public Paciente(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 					String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
 		
+		
+		
 		validaParametros(nome, dataNascimento, peso, sexoBiologico, genero,
 				tipoSanguineo, ID);
 		
@@ -179,7 +181,4 @@ public class Paciente implements Comparable<Paciente> {
 		VerificaExcecao.checarValor(peso, "Peso do paciente");
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 	}
-	
-
-	
 }

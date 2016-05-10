@@ -864,10 +864,9 @@ public class Controller {
 			if(sangue.toString().equalsIgnoreCase(tipoSanguineo)){
 				return sangue;
 			}
-				
+		
 		}
 		throw new Exception("Tipo sanguineo invalido.");
-			
 		
 	}
 	
