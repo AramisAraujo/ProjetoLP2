@@ -64,18 +64,8 @@ public class Paciente implements Comparable<Paciente> {
 	}
 	
 	public String getIdade() {
-		
 		int idade = Period.between(dataNascimento, LocalDate.now()).getYears();
-		
-//		boolean jaPassouNiverMes = LocalDate.now().getMonthValue() > this.dataNascimento.getMonthValue();
-//		boolean jaPassouNiverDia = LocalDate.now().getDayOfMonth() >= this.dataNascimento.getDayOfMonth();
-//		
-//		if(!jaPassouNiverMes && !jaPassouNiverDia){
-//			idade = idade - 1;
-//		}
-		
 		return String.valueOf(idade);
-		
 	}
 
 	public void setDataNascimento(LocalDate dataNascimento) throws Exception {
