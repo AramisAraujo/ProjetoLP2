@@ -22,6 +22,10 @@ public enum CategoriasDeMedicamentos {//Favor manter ordem alfabetica
           this.tipo = emString;
        }
  
+    public String getTipo(){
+    	return this.tipo;
+    }
+    
     @Override
     public String toString()
        {

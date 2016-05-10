@@ -76,8 +76,18 @@ public class Medicamento implements Comparable<Medicamento> {
         this.quantidade = quantidade;
     }
  
-    public List<CategoriasDeMedicamentos> getCategorias() {
-        return categorias;
+    public String getCategorias() {
+    	Collections.sort(categorias);
+    	String toStringCategorias = "";
+		int cont = 0;
+		for (CategoriasDeMedicamentos categoria : this.categorias) {
+			cont++;
+			toStringCategorias += categoria.name().toLowerCase();
+			if (cont != categorias.size()) {
+				toStringCategorias += ",";
+			}
+		}
+		return toStringCategorias;
     }
  
     public void setCategorias(List<CategoriasDeMedicamentos> categorias) {
@@ -121,7 +131,7 @@ public class Medicamento implements Comparable<Medicamento> {
     	List<CategoriasDeMedicamentos> categorias = new ArrayList<CategoriasDeMedicamentos>();
     	String categoriaString = "";
     	
-    	categorias.addAll(this.getCategorias());
+    	categorias.addAll(this.categorias);
     	
     	Collections.sort(categorias);
     	

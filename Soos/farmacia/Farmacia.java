@@ -7,6 +7,7 @@ import java.util.List;
 import comparators.NomeComparator;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Medicamento;
+import exceptions.ConsultaException;
 import exceptions.MedicamentoException;
 import factories.FactoryDeMedicamentos;
 
@@ -44,14 +45,18 @@ public class Farmacia {
 	 * @param categorias
 	 *            - categorias as quais o medicamento que sera criado pertence
 	 * @return - medicamento criado
-	 * @throws Exception - excecao lancada caso ocorra algum erro
+	 * @throws Exception
+	 *             - excecao lancada caso ocorra algum erro
 	 */
-	public boolean cadastraMedicamento(String nome, String tipo, double preco, int quantidade,
-			List<CategoriasDeMedicamentos> categorias) throws Exception {
+	public boolean cadastraMedicamento(String nome, String tipo, double preco,
+			int quantidade, List<CategoriasDeMedicamentos> categorias)
+			throws Exception {
 		if (existeMedicamento(nome)) {
-			throw new MedicamentoException("Esse medicamento ja foi cadastrado.");
+			throw new MedicamentoException(
+					"Esse medicamento ja foi cadastrado.");
 		}
-		Medicamento medicamento = factoryDeMedicamentos.criaMedicamento(nome, preco, quantidade, categorias, tipo);
+		Medicamento medicamento = factoryDeMedicamentos.criaMedicamento(nome,
+				preco, quantidade, categorias, tipo);
 		medicamentos.add(medicamento);
 		return true;
 	}
@@ -101,7 +106,8 @@ public class Farmacia {
 	 *             - excessao lancada caso nao exista nenhum medicamento com o
 	 *             nome especificado
 	 */
-	public String getTipoMedicamento(String nomeMedicamento) throws MedicamentoException {
+	public String getTipoMedicamento(String nomeMedicamento)
+			throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
 		return medicamento.getTipo();
 
@@ -142,8 +148,9 @@ public class Farmacia {
 	 */
 	public double getPreco(String nomeMedicamento) throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
-		if (medicamento == null){
-			throw new MedicamentoException("Erro na consulta de medicamentos. Medicamento inexistente.");
+		if (medicamento == null) {
+			throw new MedicamentoException(
+					"Erro na consulta de medicamentos. Medicamento inexistente.");
 		}
 		return medicamento.getPreco();
 
@@ -160,10 +167,12 @@ public class Farmacia {
 	 *             - excessao lancada caso nao exista nenhum medicamento com o
 	 *             nome especificado
 	 */
-	public int getQuantidade(String nomeMedicamento) throws MedicamentoException {
+	public int getQuantidade(String nomeMedicamento)
+			throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
-		if (medicamento == null){
-			throw new MedicamentoException("Erro na consulta de medicamentos. Medicamento inexistente.");
+		if (medicamento == null) {
+			throw new MedicamentoException(
+					"Erro na consulta de medicamentos. Medicamento inexistente.");
 		}
 		return medicamento.getQuantidade();
 
@@ -180,21 +189,14 @@ public class Farmacia {
 	 *             - excessao lancada caso nao exista nenhum medicamento com o
 	 *             nome especificado
 	 */
-	public String getCategoriasMedicamento(String nomeMedicamento) throws MedicamentoException {
+	public String getCategoriasMedicamento(String nomeMedicamento)
+			throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
-		if (medicamento == null){
-			throw new MedicamentoException("Erro na consulta de medicamentos. Medicamento inexistente.");
+		if (medicamento == null) {
+			throw new MedicamentoException(
+					"Erro na consulta de medicamentos. Medicamento inexistente.");
 		}
-		String categorias = "";
-		int cont = 0;
-		for (CategoriasDeMedicamentos categoria : medicamento.getCategorias()) {
-			cont++;
-			categorias += categoria.name().toLowerCase();
-			if (cont != medicamento.getCategorias().size()) {
-				categorias += ",";
-			}
-		}
-		return categorias;
+		return medicamento.getCategorias();
 	}
 
 	/**
@@ -211,7 +213,8 @@ public class Farmacia {
 	 *             representando um caso de erro.
 	 */
 
-	public void atualizaMedicamento(String nome, String atributo, String novoValor) throws Exception {
+	public void atualizaMedicamento(String nome, String atributo,
+			String novoValor) throws Exception {
 
 		if (buscaMedicamento(nome) != null) {
 
@@ -233,11 +236,13 @@ public class Farmacia {
 
 			case "NOME":
 
-				throw new MedicamentoException("Nome do medicamento nao pode ser alterado.");
+				throw new MedicamentoException(
+						"Nome do medicamento nao pode ser alterado.");
 
 			case "TIPO":
 
-				throw new MedicamentoException("Tipo do medicamento nao pode ser alterado.");
+				throw new MedicamentoException(
+						"Tipo do medicamento nao pode ser alterado.");
 
 			default:
 				throw new MedicamentoException("Esse atributo nao existe.");
@@ -257,34 +262,39 @@ public class Farmacia {
 	 * @return - nome dos medicamentos que pertencem a categoria especificada
 	 * @throws MedicamentoException
 	 *             - excessao lancada caso ocorra algum erro
+	 * @throws ConsultaException
 	 */
-	public String consultaMedCategoria(String nomeCategoria) throws MedicamentoException {
-		List<String> nomes = new ArrayList<>();
-		for (CategoriasDeMedicamentos categoria : CategoriasDeMedicamentos.values()) {
-			nomes.add(categoria.toString());
-		}
-		if (!nomes.contains(nomeCategoria)) {
-			throw new MedicamentoException("Erro na consulta de medicamentos. Categoria invalida.");
+	public String consultaMedCategoria(String categoria)
+			throws MedicamentoException, ConsultaException {
+		
+		ArrayList<String> medicamentosBusca = new ArrayList<String>();
+		
+	
 
-		}
-		CategoriasDeMedicamentos categoria = CategoriasDeMedicamentos.valueOf(nomeCategoria.toUpperCase());
-		String medicamentos = "";
-		int cont = 0;
-		for (Medicamento medicamento : this.medicamentos) {
+		for (Medicamento medicamento : medicamentos) {
 			if (medicamento.getCategorias().contains(categoria)) {
-				medicamentos += medicamento.getNome();
-				cont += 1;
-				medicamentos += ",";
+				medicamentosBusca.add(medicamento.getNome());
 			}
 		}
-		if (medicamentos.length() > 0) {
-			medicamentos = medicamentos.substring(0, medicamentos.length() - 1);
+
+		if (medicamentos.isEmpty()) {
+			throw new ConsultaException("medicamentos",
+					"Nao ha remedios cadastrados nessa categoria.");
 		}
-		if (cont == 0) {
-			throw new MedicamentoException(
-					"Erro na consulta de medicamentos. Nao ha remedios cadastrados nessa categoria.");
+
+		String resultado = "";
+
+		for (int i = 0; i < medicamentos.size(); i++) {
+
+			if (i == medicamentos.size() - 1) {
+
+				resultado = resultado + medicamentos.get(i).getNome();
+			} else {
+				resultado = resultado + medicamentos.get(i).getNome() + ",";
+			}
 		}
-		return medicamentos;
+
+		return resultado;
 	}
 
 	/**
@@ -303,7 +313,8 @@ public class Farmacia {
 				return medicamento;
 			}
 		}
-		throw new MedicamentoException("Erro na consulta de medicamentos. Medicamento nao cadastrado.");
+		throw new MedicamentoException(
+				"Erro na consulta de medicamentos. Medicamento nao cadastrado.");
 	}
 
 	/**
@@ -316,7 +327,8 @@ public class Farmacia {
 	 * @throws MedicamentoException
 	 *             - excessao lancada caso o tipo de ordenacao seja invalida
 	 */
-	public String getEstoqueFarmacia(String ordenacao) throws MedicamentoException {
+	public String getEstoqueFarmacia(String ordenacao)
+			throws MedicamentoException {
 		String estoque = "";
 		if (ordenacao.equalsIgnoreCase("preco")) {
 			Collections.sort(this.medicamentos);

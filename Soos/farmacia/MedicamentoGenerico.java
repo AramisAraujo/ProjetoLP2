@@ -37,22 +37,7 @@ public class MedicamentoGenerico extends Medicamento {
     public String toString() {
     	
     	List<CategoriasDeMedicamentos> categorias = new ArrayList<CategoriasDeMedicamentos>();
-    	String categoriaString = "";
-    	
-    	categorias.addAll(this.getCategorias());
-    	
-    	Collections.sort(categorias);
-    	
-    	for(int i = 0; i < categorias.size(); i++ ){
-    		if(i == categorias.size() -1){
-    			categoriaString =  categoriaString + categorias.get(i).toString();
-    		}
-    		else{
-    			categoriaString = categoriaString + categorias.get(i).toString()+",";
-    		}
-    	}
-    	
-    	
+    	String categoriaString = super.getCategorias();	
     	
         String formatacao = String.format("Medicamento Generico: %s - ", this.getNome());
         formatacao = formatacao + String.format("Preco: R$ %.2f - ",this.getPreco());
