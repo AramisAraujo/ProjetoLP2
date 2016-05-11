@@ -132,17 +132,29 @@ public class FarmaciaTest {
 		// casos normais
 		try {
 			List<CategoriasDeMedicamentos> categoria1 = new ArrayList<CategoriasDeMedicamentos>();
+			List<CategoriasDeMedicamentos> categoria_2 = new ArrayList<CategoriasDeMedicamentos>();
+			List<CategoriasDeMedicamentos> categoria_3 = new ArrayList<CategoriasDeMedicamentos>();
+
 			categoria1.add(CategoriasDeMedicamentos.ANALGESICO);
-			farmacia.cadastraMedicamento("Valium", "generico", 29.0, 4,
+			
+			categoria_2.add(CategoriasDeMedicamentos.ANALGESICO);
+			categoria_2.add(CategoriasDeMedicamentos.ANTITERMICO);
+			
+			categoria_3.add(CategoriasDeMedicamentos.ANTIINFLAMATORIO);
+			categoria_3.add(CategoriasDeMedicamentos.ANTITERMICO);
+			categoria_3.add(CategoriasDeMedicamentos.ANALGESICO);
+			
+			farmacia.cadastraMedicamento("Valium", "generico", 21.50, 45,
 					categoria1);
-			farmacia.cadastraMedicamento("Nimesulida", "generico", 29.0, 4,
+			farmacia.cadastraMedicamento("Metamizol", "referencia", 58.30, 466,
+					categoria_2);
+			farmacia.cadastraMedicamento("Morfina", "referencia", 150, 600,
 					categoria1);
-			farmacia.cadastraMedicamento("Metamizol", "generico", 29.0, 4,
-					categoria1);
-			farmacia.cadastraMedicamento("Morfina", "generico", 29.0, 4,
-					categoria1);
-			assertEquals(farmacia.consultaMedCategoria("analgesico"),
-					"Valium,Nimesulida,Metamizol,Morfina");
+			farmacia.cadastraMedicamento("Nimesulida", "referencia", 12.50, 150,
+					categoria_3);
+			
+			assertEquals("Valium,Nimesulida,Metamizol,Morfina",farmacia.consultaMedCategoria("analgesico"));
+			
 			List<CategoriasDeMedicamentos> categoria2 = new ArrayList<CategoriasDeMedicamentos>();
 			categoria2.add(CategoriasDeMedicamentos.HORMONAL);
 			farmacia.cadastraMedicamento("Duraston", "referencia", 52.9, 73,
@@ -200,7 +212,7 @@ public class FarmaciaTest {
 			fail();
 		} catch (Exception e) {
 			assertEquals(
-					"Erro na consulta de medicamentos. Medicamento nao cadastrado.",
+					"Medicamento nao cadastrado.",
 					e.getMessage());
 		}
 

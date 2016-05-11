@@ -2,7 +2,9 @@ package farmacia;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import comparators.NomeComparator;
 import farmacia.CategoriasDeMedicamentos;
@@ -22,11 +24,11 @@ import factories.FactoryDeMedicamentos;
 public class Farmacia {
 
 	private FactoryDeMedicamentos factoryDeMedicamentos;
-	private List<Medicamento> medicamentos;
+	private Set<Medicamento> medicamentos;
 
 	public Farmacia() {
 		this.factoryDeMedicamentos = new FactoryDeMedicamentos();
-		this.medicamentos = new ArrayList<Medicamento>();
+		this.medicamentos = new HashSet<Medicamento>();
 	}
 
 	/**
@@ -120,8 +122,13 @@ public class Farmacia {
 	 * @return - lista de medicamentos ordenada pelo menor preco
 	 */
 	public List<Medicamento> getMedicamentosPreco() {
-		Collections.sort(this.medicamentos);
-		return this.medicamentos;
+		
+		List<Medicamento> meds = new ArrayList<Medicamento>();
+		
+		meds.addAll(this.medicamentos);
+		
+		Collections.sort(meds);
+		return meds;
 	}
 
 	/**
@@ -131,8 +138,13 @@ public class Farmacia {
 	 * @return - lista de medicamentos ordenada por ordem alfabetica
 	 */
 	public List<Medicamento> getMedicamentosNome() {
-		Collections.sort(this.medicamentos, new NomeComparator());
-		return this.medicamentos;
+		
+		List<Medicamento> meds = new ArrayList<Medicamento>();
+		
+		meds.addAll(this.medicamentos);
+		
+		Collections.sort(meds, new NomeComparator());
+		return meds;
 	}
 
 	/**
@@ -267,32 +279,36 @@ public class Farmacia {
 	public String consultaMedCategoria(String categoria)
 			throws MedicamentoException, ConsultaException {
 		
-		ArrayList<String> medicamentosBusca = new ArrayList<String>();
+		ArrayList<Medicamento> medicamentosBusca = new ArrayList<Medicamento>();
+		CategoriasDeMedicamentos category;
 		
-	
-
-		for (Medicamento medicamento : medicamentos) {
+		try {
+			category = CategoriasDeMedicamentos.valueOf(categoria.toUpperCase());
+		} catch (Exception e) {
+			throw new MedicamentoException("Categoria invalida.");
+		}
+		
+		for (Medicamento medicamento : this.medicamentos) {
 			if (medicamento.getCategorias().contains(categoria)) {
-				medicamentosBusca.add(medicamento.getNome());
+				medicamentosBusca.add(medicamento);
 			}
 		}
+		
+		Collections.sort(medicamentosBusca);
 
-		if (medicamentos.isEmpty()) {
-			throw new ConsultaException("medicamentos",
-					"Nao ha remedios cadastrados nessa categoria.");
+		if (medicamentosBusca.isEmpty()) {
+			throw new MedicamentoException("Nao ha remedios cadastrados nessa categoria.");
 		}
 
 		String resultado = "";
 
-		for (int i = 0; i < medicamentos.size(); i++) {
-
-			if (i == medicamentos.size() - 1) {
-
-				resultado = resultado + medicamentos.get(i).getNome();
-			} else {
-				resultado = resultado + medicamentos.get(i).getNome() + ",";
-			}
+		for (Medicamento Med : medicamentosBusca) {
+			
+			resultado = resultado + Med.getNome() + ",";
+			
 		}
+		
+		resultado = resultado.substring(0,resultado.length() - 1);
 
 		return resultado;
 	}
@@ -313,8 +329,7 @@ public class Farmacia {
 				return medicamento;
 			}
 		}
-		throw new MedicamentoException(
-				"Erro na consulta de medicamentos. Medicamento nao cadastrado.");
+		throw new MedicamentoException("Medicamento nao cadastrado.");
 	}
 
 	/**
@@ -329,19 +344,35 @@ public class Farmacia {
 	 */
 	public String getEstoqueFarmacia(String ordenacao)
 			throws MedicamentoException {
+		
 		String estoque = "";
+		
 		if (ordenacao.equalsIgnoreCase("preco")) {
-			Collections.sort(this.medicamentos);
-			for (Medicamento medicamento : medicamentos) {
+			
+			List<Medicamento> meds = new ArrayList<Medicamento>();
+			
+			meds.addAll(this.medicamentos);
+			
+			Collections.sort(meds);
+			
+			
+			for (Medicamento medicamento : meds) {
 				estoque += medicamento.getNome() + ",";
 			}
 			if (estoque.length() > 0) {
 				estoque = estoque.substring(0, estoque.length() - 1);
 			}
 			return estoque;
+			
 		} else if (ordenacao.equalsIgnoreCase("alfabetica")) {
-			Collections.sort(this.medicamentos, new NomeComparator());
-			for (Medicamento medicamento : medicamentos) {
+			
+			List<Medicamento> meds = new ArrayList<Medicamento>();
+			
+			meds.addAll(this.medicamentos);
+			
+			Collections.sort(meds, new NomeComparator());
+			
+			for (Medicamento medicamento : meds) {
 				estoque += medicamento.getNome() + ",";
 			}
 			if (estoque.length() > 0) {
