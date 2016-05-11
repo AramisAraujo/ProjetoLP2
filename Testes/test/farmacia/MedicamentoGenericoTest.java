@@ -2,9 +2,9 @@ package farmacia;
  
 import static org.junit.Assert.*;
  
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
+ 
 import org.junit.Test;
  
 import farmacia.CategoriasDeMedicamentos;
@@ -16,7 +16,7 @@ public class MedicamentoGenericoTest {
     @Test
     public void testGetPreco() {
         try {
-            Set<CategoriasDeMedicamentos> categorias = new HashSet<CategoriasDeMedicamentos>();
+            List<CategoriasDeMedicamentos> categorias = new ArrayList<CategoriasDeMedicamentos>();
             categorias.add(CategoriasDeMedicamentos.ANTIBIOTICO);
             Medicamento tylenol = new MedicamentoGenerico("tylenol", 10, 3, categorias);
             assertEquals(tylenol.getPreco(), 6, 0.0);

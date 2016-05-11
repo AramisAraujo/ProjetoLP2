@@ -2,10 +2,10 @@ package farmacia;
  
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import exceptions.MedicamentoException;
+import exceptions.VerificaExcecao;
 import farmacia.CategoriasDeMedicamentos;
  
 /**
@@ -21,17 +21,35 @@ public class Medicamento implements Comparable<Medicamento> {
     private String nome;
     private double preco;
     private int quantidade;
-    private Set<CategoriasDeMedicamentos> categorias;
+    private List<CategoriasDeMedicamentos> categorias;
     protected String tipo;
  
-    public Medicamento(String nome, double preco, int quantidade,
-            Set<CategoriasDeMedicamentos> categorias){
-
-        this.nome = nome;
+    public Medicamento(String nome, double preco, int quantidade, List<CategoriasDeMedicamentos> categorias) throws Exception{
+        VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");
+        VerificaExcecao.checarValor(preco, "Preco do medicamento");
+        VerificaExcecao.checarValor(quantidade, "Quantidade do medicamento");
+        VerificaExcecao.checarValor(quantidade, "A quantidade do medicamento");
+        verificaCategorias(categorias);
+    	this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
         this.categorias = categorias;
         this.tipo = "de Referencia";
+    }
+    
+	   /**
+     * Metodo utilizado para verificar se a(s) categoria(s) eh(sao) nula(s),
+     * caso ela(s) seja(m), uma excessao eh lancada.
+     * 
+     * @param categorias
+     *            - categoria(s) que sera(o) verificada(s)
+     * @throws ValorException
+     *             - excessao lancada caso a(s) categoria(s) eh(sejam) nula(s)
+     */
+    public static void verificaCategorias(List<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
+        if (categorias == null) {
+            throw new MedicamentoException("A categoria do medicamento nao pode ser nula.");
+        }
     }
     
     public String getNome() {
@@ -58,11 +76,21 @@ public class Medicamento implements Comparable<Medicamento> {
         this.quantidade = quantidade;
     }
  
-    public Set<CategoriasDeMedicamentos> getCategorias() {
-        return categorias;
+    public String getCategorias() {
+    	Collections.sort(categorias);
+    	String toStringCategorias = "";
+		int cont = 0;
+		for (CategoriasDeMedicamentos categoria : this.categorias) {
+			cont++;
+			toStringCategorias += categoria.name().toLowerCase();
+			if (cont != categorias.size()) {
+				toStringCategorias += ",";
+			}
+		}
+		return toStringCategorias;
     }
  
-    public void setCategorias(HashSet<CategoriasDeMedicamentos> categorias) {
+    public void setCategorias(List<CategoriasDeMedicamentos> categorias) {
         this.categorias = categorias;
     }
  
@@ -72,31 +100,26 @@ public class Medicamento implements Comparable<Medicamento> {
     
     /**
      * HashCode implementado considerando que um medicamento eh igual a outro se
-     * possuem os mesmos nomes e precos.
+     * possuem os mesmos nomes.
      */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-        long temp;
-        temp = Double.doubleToLongBits(preco);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
  
     /**
      * Equals implementado considerando que um medicamento eh igual a outro se
-     * possuem os mesmos nomes e precos.
+     * possuem os mesmos nomes.
      */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Medicamento) {
             Medicamento outroMedicamento = (Medicamento) obj;
             if (outroMedicamento.nome.equals(this.nome)) {
-                if (outroMedicamento.preco == this.preco) {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
@@ -108,7 +131,7 @@ public class Medicamento implements Comparable<Medicamento> {
     	List<CategoriasDeMedicamentos> categorias = new ArrayList<CategoriasDeMedicamentos>();
     	String categoriaString = "";
     	
-    	categorias.addAll(this.getCategorias());
+    	categorias.addAll(this.categorias);
     	
     	Collections.sort(categorias);
     	
