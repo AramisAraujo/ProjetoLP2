@@ -122,8 +122,10 @@ public class Controller {
 		List<CategoriasDeMedicamentos> categoriasMed = new ArrayList<CategoriasDeMedicamentos>();
 
 		if (!usuarioAtual.getMatricula().startsWith("3")) {
+			
 			String errorMsg = "O funcionario " + usuarioAtual.getNome()
 					+ " nao tem permissao para cadastrar medicamentos.";
+			
 			throw new CadastroException("Erro no cadastro de medicamento.",errorMsg);
 		}
 
@@ -141,18 +143,17 @@ public class Controller {
 			
 			}
 		}
-		
-		try{
-			CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos.valueOf(categorias.toUpperCase());
-			categoriasMed.add(tipoMed);
-		}catch(Exception e){
-			throw new CadastroException("Erro no cadastro do medicamento.", "Categoria invalida.");
+		else{
+			try{
+				CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos.valueOf(categorias.toUpperCase());
+				categoriasMed.add(tipoMed);
+			}catch(Exception e){
+				throw new CadastroException("Erro no cadastro do medicamento.", "Categoria invalida.");
+			}
 		}
-		
-
 		try {
-			this.farmacia.cadastraMedicamento(nome, tipo, preco, quantidade,
-					categoriasMed);
+			this.farmacia.cadastraMedicamento(nome, tipo, preco, quantidade,categoriasMed);
+			
 		} catch (Exception e) {
 			throw new CadastroException("Erro no cadastro de medicamento.",
 					e.getMessage());
