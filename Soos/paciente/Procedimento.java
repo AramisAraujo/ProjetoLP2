@@ -1,7 +1,13 @@
 package paciente;
 
-public class Procedimento {
+/**
+ * 
+ * @author dantaselton
+ *
+ */
+public interface Procedimento {
 	
-	public Procedimento () {}
-
+	public abstract void realizaProcedimento(Paciente paciente) throws Exception;
+	
+	public abstract double getPreco();
 }

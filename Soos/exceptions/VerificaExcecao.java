@@ -51,9 +51,16 @@ public class VerificaExcecao {
 		}
 	}
 	
-	public static boolean checarSexoBiologico(String sexoBiologico) throws ProntuarioException {
-		if ((!sexoBiologico.equalsIgnoreCase("masculino")) && (!sexoBiologico.equalsIgnoreCase("feminino"))) {
-			throw new ProntuarioException("Sexo biologico nao identificado.");
+	public static boolean checarSexoBiologico(String sexoBiologico) throws Exception {
+		if (!((sexoBiologico.equalsIgnoreCase("masculino")) || (sexoBiologico.equalsIgnoreCase("feminino")))) {
+			throw new Exception("Sexo biologico nao identificado.");
+		}
+		return true;
+	}
+	
+	public static boolean checarGenero(String genero) throws Exception {
+		if (!((genero.equalsIgnoreCase("masculino")) || (genero.equalsIgnoreCase("feminino")))) {
+			throw new Exception("Genero nao identificado.");
 		}
 		return true;
 	}

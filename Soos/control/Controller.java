@@ -224,7 +224,7 @@ public class Controller {
 			birthDate = stringToDate(dataNascimento);
 			VerificaExcecao.checarData(birthDate);
 		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de funcionario.", "Data invalida.");
+			throw new CadastroException("Erro no cadastro de funcionario.", e.getMessage());
 		}
 		
 		try {
@@ -265,10 +265,9 @@ public class Controller {
 		}
 		
 		try {
-			VerificaExcecao.checkEmptyString(nome, "Nome");
+			VerificaExcecao.checkEmptyString(nome, "Nome do paciente");
 		} catch (Exception e) {
-			throw new CadastroException("Nao foi possivel cadastrar o paciente.", "Nome do paciente "
-					+ "nao pode ser vazio.");
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
 		
 		LocalDate birthDate;
@@ -276,7 +275,7 @@ public class Controller {
 			birthDate = this.stringToDate(Data);
 			VerificaExcecao.checarData(birthDate);
 		} catch (Exception e) {
-			throw new CadastroException("Nao foi possivel cadastrar o paciente.", "Data invalida.");
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
 		
 		try {
@@ -287,9 +286,8 @@ public class Controller {
 		
 		try {
 			VerificaExcecao.checarSexoBiologico(sexoBio);
-		} catch (ProntuarioException e) {
-			throw new CadastroException("Nao foi possivel cadastrar o paciente.", "Sexo biologico "
-					+ "nao identificado.");
+		} catch (Exception e) {
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
 		
 		try {
