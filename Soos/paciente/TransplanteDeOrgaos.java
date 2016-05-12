@@ -5,7 +5,6 @@ public class TransplanteDeOrgaos implements Procedimento {
 	private final double PRECO = 12500.00;
 	
 	public TransplanteDeOrgaos() {
-		
 	}
 
 	
