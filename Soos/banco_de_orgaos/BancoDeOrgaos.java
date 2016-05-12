@@ -36,29 +36,14 @@ public class BancoDeOrgaos {
 	 */
 	public boolean existeOrgao(String nome, TipoSanguineo tipoSanguineo) {
 		for (Orgao orgao : bancoDeOrgaos) {
-			if (orgao.getNome().equals(nome) && orgao.getTipoSanguineo().equals(tipoSanguineo)) {
+			if (orgao.getNome().equals(nome)
+					&& orgao.getTipoSanguineo().equals(tipoSanguineo)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	/**
-	 * Metodo utilizado para verificar se determinado orgao existe.
-	 * 
-	 * @param nome
-	 *            - nome do orgao que sera verificado
-	 * @return - true, se o orgao existir ou false, caso nao exista
-	 */
-	public boolean existeOrgao(String nome) {
-		for (Orgao orgao : bancoDeOrgaos) {
-			if (orgao.getNome().equals(nome)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	/**
 	 * Metodo utilizado para retornar determinado orgao.
 	 * 
@@ -70,9 +55,11 @@ public class BancoDeOrgaos {
 	 * @throws Exception
 	 *             - excecao lancada caso o orgao nao exista
 	 */
-	public Orgao buscaOrgao(String nome, TipoSanguineo tipoSanguineo) throws Exception {
+	public Orgao buscaOrgao(String nome, TipoSanguineo tipoSanguineo)
+			throws Exception {
 		for (Orgao orgao : bancoDeOrgaos) {
-			if (orgao.getNome().equals(nome) && orgao.getTipoSanguineo().equals(tipoSanguineo)) {
+			if (orgao.getNome().equals(nome)
+					&& orgao.getTipoSanguineo().equals(tipoSanguineo)) {
 				return orgao;
 			}
 		}
@@ -89,7 +76,8 @@ public class BancoDeOrgaos {
 	 *            - tipo sanguineo do do orgao que sera criado e adicionado
 	 * @throws Exception
 	 */
-	public void addOrgao(String nome, TipoSanguineo tipoSanguineo) throws Exception {
+	public void addOrgao(String nome, TipoSanguineo tipoSanguineo)
+			throws Exception {
 		Orgao orgao = factoryOrgaos.criaOrgao(nome, tipoSanguineo);
 		bancoDeOrgaos.add(orgao);
 	}
@@ -105,7 +93,8 @@ public class BancoDeOrgaos {
 	 *             - excecao lancada caso nao exista nenhum orgao com o nome
 	 *             passado como parametro
 	 */
-	public void removeOrgao(String nome, TipoSanguineo tipoSanguineo) throws Exception {
+	public void removeOrgao(String nome, TipoSanguineo tipoSanguineo)
+			throws Exception {
 		if (!existeOrgao(nome, tipoSanguineo)) { // ajeitar as exceptions dps
 			throw new Exception("Esse orgao nao existe.");
 		}
@@ -121,16 +110,18 @@ public class BancoDeOrgaos {
 	 * @throws Exception
 	 */
 	public int qntOrgao(String nome) throws Exception {
-		if (!existeOrgao(nome)) {
-			throw new Exception("Esse orgao nao existe.");
-		}
 		int qntOrgao = 0;
 		for (Orgao orgao : bancoDeOrgaos) {
 			if (orgao.getNome().equals(nome)) {
 				qntOrgao++;
 			}
 		}
+		if (qntOrgao == 0) {
+			throw new Exception("Esse orgao nao existe."); // ajeitar exceptions
+															// dos
+		}
 		return qntOrgao;
+
 	}
 
 	/**

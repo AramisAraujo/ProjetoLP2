@@ -21,14 +21,14 @@ public class BancoDeOrgaosTest {
 	public void testExisteOrgao() {
 		// nao existe orgao
 		try {
-			assertFalse(bancoDeOrgaos.existeOrgao("coracao"));
+			assertFalse(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
 		} catch (Exception e) {
 			fail();
 		}
 		// existe orgao
 		try {
 			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
-			assertTrue(bancoDeOrgaos.existeOrgao("coracao"));
+			assertTrue(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.AB_NEG));
 		} catch (Exception e) {
 			fail();
 		}
@@ -60,7 +60,7 @@ public class BancoDeOrgaosTest {
 	public void testAddOrgao() {
 		try {
 			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
-			assertTrue(bancoDeOrgaos.existeOrgao("coracao"));
+			assertTrue(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
 		} catch (Exception e) {
 			fail();
 		}
@@ -82,7 +82,7 @@ public class BancoDeOrgaosTest {
 			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.AB_NEG);
 			bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.B_NEG);
 			bancoDeOrgaos.removeOrgao("coracao", TipoSanguineo.A_NEG);
-			assertFalse(bancoDeOrgaos.existeOrgao("coracao"));
+			assertFalse(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
 		} catch (Exception e) {
 			fail();
 		}
