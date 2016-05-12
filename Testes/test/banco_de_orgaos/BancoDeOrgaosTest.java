@@ -39,7 +39,7 @@ public class BancoDeOrgaosTest {
 	public void testBuscaOrgao() {
 		// nao existe orgao
 		try {
-			bancoDeOrgaos.buscaOrgao("rim", TipoSanguineo.B_POS);
+			bancoDeOrgaos.getOrgao("rim", TipoSanguineo.B_POS);
 			fail();
 		} catch (Exception e) {
 			assertEquals("Esse orgao nao existe.", e.getMessage());
@@ -50,7 +50,7 @@ public class BancoDeOrgaosTest {
 			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.B_POS);
 			FactoryOrgaos factory = new FactoryOrgaos();
 			Orgao rim = factory.criaOrgao("rim", TipoSanguineo.B_POS);
-			assertEquals(bancoDeOrgaos.buscaOrgao("rim", TipoSanguineo.B_POS), rim);
+			assertEquals(bancoDeOrgaos.getOrgao("rim", TipoSanguineo.B_POS), rim);
 		} catch (Exception e) {
 			fail();
 		}

@@ -17,7 +17,7 @@ import paciente.TipoSanguineo;
  */
 public class BancoDeOrgaos {
 
-	private List<Orgao> bancoDeOrgaos;
+	private static List<Orgao> bancoDeOrgaos;
 	private FactoryOrgaos factoryOrgaos;
 
 	public BancoDeOrgaos() {
@@ -34,7 +34,7 @@ public class BancoDeOrgaos {
 	 *            - tipo sanguineo do orgao que sera verificado
 	 * @return - true, se o orgao existir ou false, caso nao exista
 	 */
-	public boolean existeOrgao(String nome, TipoSanguineo tipoSanguineo) {
+	public static boolean existeOrgao(String nome, TipoSanguineo tipoSanguineo) {
 		for (Orgao orgao : bancoDeOrgaos) {
 			if (orgao.getNome().equals(nome)
 					&& orgao.getTipoSanguineo().equals(tipoSanguineo)) {
@@ -55,7 +55,7 @@ public class BancoDeOrgaos {
 	 * @throws Exception
 	 *             - excecao lancada caso o orgao nao exista
 	 */
-	public Orgao buscaOrgao(String nome, TipoSanguineo tipoSanguineo)
+	public Orgao getOrgao(String nome, TipoSanguineo tipoSanguineo)
 			throws Exception {
 		for (Orgao orgao : bancoDeOrgaos) {
 			if (orgao.getNome().equals(nome)
@@ -76,10 +76,10 @@ public class BancoDeOrgaos {
 	 *            - tipo sanguineo do do orgao que sera criado e adicionado
 	 * @throws Exception
 	 */
-	public void addOrgao(String nome, TipoSanguineo tipoSanguineo)
+	public boolean addOrgao(String nome, TipoSanguineo tipoSanguineo)
 			throws Exception {
 		Orgao orgao = factoryOrgaos.criaOrgao(nome, tipoSanguineo);
-		bancoDeOrgaos.add(orgao);
+		return bancoDeOrgaos.add(orgao);
 	}
 
 	/**
@@ -93,12 +93,23 @@ public class BancoDeOrgaos {
 	 *             - excecao lancada caso nao exista nenhum orgao com o nome
 	 *             passado como parametro
 	 */
-	public void removeOrgao(String nome, TipoSanguineo tipoSanguineo)
+	public static boolean removeOrgao(String nome, TipoSanguineo tipoSanguineo)
 			throws Exception {
 		if (!existeOrgao(nome, tipoSanguineo)) { // ajeitar as exceptions dps
 			throw new Exception("Esse orgao nao existe.");
 		}
-		bancoDeOrgaos.remove(buscaOrgao(nome, tipoSanguineo));
+		
+		Orgao orgao = null;
+		
+		for (Orgao orgaoAtual : bancoDeOrgaos) {
+			
+			if (orgaoAtual.getNome().equals(nome)
+					&& orgaoAtual.getTipoSanguineo().equals(tipoSanguineo)) {
+				
+				orgao = orgaoAtual;
+			}
+		}
+		return bancoDeOrgaos.remove(orgao);
 	}
 
 	/**
@@ -109,7 +120,7 @@ public class BancoDeOrgaos {
 	 * @return - quantidade de orgaos
 	 * @throws Exception
 	 */
-	public int qntOrgao(String nome) throws Exception {
+	public static int qntOrgao(String nome) throws Exception {
 		int qntOrgao = 0;
 		for (Orgao orgao : bancoDeOrgaos) {
 			if (orgao.getNome().equals(nome)) {
@@ -130,7 +141,7 @@ public class BancoDeOrgaos {
 	 * 
 	 * @return - quantidade total de orgao no banco de orgaos
 	 */
-	public int qntTotalOrgaos() {
+	public static int qntTotalOrgaos() {
 		return bancoDeOrgaos.size();
 	}
 
