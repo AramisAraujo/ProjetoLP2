@@ -1,5 +1,10 @@
 package paciente;
 
+/**
+ * 
+ * @author Elton Dantas
+ *
+ */
 public class TransplanteDeOrgaos implements Procedimento {
 	
 	private final double PRECO = 12500.00;
@@ -11,7 +16,6 @@ public class TransplanteDeOrgaos implements Procedimento {
 	@Override
 	public void realizaProcedimento(Paciente paciente) throws Exception {
 		paciente.somaGastos(PRECO);
-		
 	}
 
 	@Override
