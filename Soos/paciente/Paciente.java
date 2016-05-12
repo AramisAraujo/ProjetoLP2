@@ -112,7 +112,7 @@ public class Paciente implements Comparable<Paciente> {
 		return this.gastos;
 	}
 	
-	public void setGastos(double valor) {
+	public void somaGastos(double valor) {
 		this.gastos += valor;
 	}
 	

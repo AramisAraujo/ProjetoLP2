@@ -13,7 +13,7 @@ public class ConsultaClinica implements Procedimento {
 
 	@Override
 	public void realizaProcedimento(Paciente paciente) {
-		paciente.setGastos(PRECO);
+		paciente.somaGastos(PRECO);
 	}
 	
 	@Override

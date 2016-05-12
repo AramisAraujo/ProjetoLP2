@@ -19,7 +19,7 @@ public class CirurgiaBariatrica implements Procedimento {
 	public void realizaProcedimento(Paciente paciente) throws Exception {
 		double novoPeso = paciente.getPeso() - paciente.getPeso()*PERCENT;
 		paciente.setPeso(novoPeso);
-		paciente.setGastos(PRECO);
+		paciente.somaGastos(PRECO);
 	}
 	
 	@Override

@@ -17,7 +17,7 @@ public class RedesignacaoSexual implements Procedimento {
 	@Override
 	public void realizaProcedimento(Paciente paciente) throws Exception {
 		paciente.trocarGenero();
-		paciente.setGastos(PRECO);
+		paciente.somaGastos(PRECO);
 	}
 	
 	@Override
