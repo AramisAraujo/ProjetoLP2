@@ -8,9 +8,11 @@ import exceptions.ConsultaException;
 import exceptions.ExcluirCadastroException;
 import exceptions.LoginException;
 import exceptions.LogoutException;
+import exceptions.MedicamentoException;
 import exceptions.OpenSystemException;
 import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
+import farmacia.Medicamento;
 
 public class Facade {
 	
@@ -80,7 +82,7 @@ public class Facade {
 		return this.controle.getInfoFuncionario(matricula, info);
 	}
 	
-	public String getInfoMedicamento(String atributo, String medicamento) throws ConsultaException{
+	public String getInfoMedicamento(String atributo, String medicamento) throws ConsultaException, MedicamentoException{
 		return this.controle.getInfoMedicamento(atributo, medicamento);
 	}
 	
@@ -115,11 +117,11 @@ public class Facade {
 		return this.controle.consultaMedCategoria(categoria);
 	}
 	
-	public String consultaMedNome(String nome) throws ConsultaException{
+	public Medicamento consultaMedNome(String nome) throws ConsultaException{
 		return this.controle.consultaMedNome(nome);
 	}
 	
-	public String getEstoqueFarmacia(String ordenacao) throws ConsultaException{
+	public String getEstoqueFarmacia(String ordenacao) throws ConsultaException, MedicamentoException{
 		return this.controle.getEstoqueFarmacia(ordenacao);
 	}
 	

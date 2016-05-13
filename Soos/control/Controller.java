@@ -5,10 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -33,125 +31,104 @@ import usuario.Usuario;
 import usuario.TipoCargo;
 
 public class Controller {
-	
+
 	private boolean sistemaBloqueado;
 	private int cadastrosRealizados;
 	private Usuario usuarioAtual;
-	private Map<String,Usuario> bancoUsuarios;
+	private Map<String, Usuario> bancoUsuarios;
 	private List<Prontuario> bancoProntuarios;
 	private Farmacia farmacia;
 	private FactoryUsuario factoryUsuarios;
-	
-	
-	public Controller(){
+
+	public Controller() {
 		this.sistemaBloqueado = true;
 		this.cadastrosRealizados = 0;
-		this.bancoUsuarios = new HashMap<String,Usuario>();
+		this.bancoUsuarios = new HashMap<String, Usuario>();
 		this.bancoProntuarios = new ArrayList<Prontuario>();
 		this.farmacia = new Farmacia();
 		this.factoryUsuarios = new FactoryUsuario();
 		this.usuarioAtual = null;
 	}
-	
-	public void iniciaSistema() throws OpenSystemException{
-		//NYI
-		
+
+	public void iniciaSistema() throws OpenSystemException {
+		// NYI
+
 	}
-	
-	public void fechaSistema() throws SystemCloseException{
-		
-		if(this.usuarioAtual != null){
-			String errorMsg = "Um funcionario ainda esta logado: " + usuarioAtual.getNome()+".";
+
+	public void fechaSistema() throws SystemCloseException {
+
+		if (this.usuarioAtual != null) {
+			String errorMsg = "Um funcionario ainda esta logado: "
+					+ usuarioAtual.getNome() + ".";
 			throw new SystemCloseException(errorMsg);
 		}
-		//NYI
+		// NYI
 	}
-	
-	public String liberaSistema(String chave, String nome, 
-			String dataNascimento) throws Exception{
-		
-		if(sistemaBloqueado == false){
+
+	public String liberaSistema(String chave, String nome, String dataNascimento)
+			throws Exception {
+
+		if (sistemaBloqueado == false) {
 			throw new OpenSystemException("Sistema liberado anteriormente.");
 		}
-		
-		if(!(chave.equals("c041ebf8"))){
+
+		if (!(chave.equals("c041ebf8"))) {
 			throw new OpenSystemException("Chave invalida.");
 		}
 
-		String matriculaDiretor = this.cadastraFuncionario(nome, "Diretor Geral", dataNascimento);
+		String matriculaDiretor = this.cadastraFuncionario(nome,
+				"Diretor Geral", dataNascimento);
 
 		this.sistemaBloqueado = false;
-				
+
 		return matriculaDiretor;
-				
+
 	}
-	
-	public void login(String matricula, String senha) throws LoginException{
-			
+
+	public void login(String matricula, String senha) throws LoginException {
+
 		Usuario loginTarget = this.getUsuario(matricula);
-		
-		if(loginTarget == null){
+
+		if (loginTarget == null) {
 			throw new LoginException("Funcionario nao cadastrado.");
 		}
-				
-		if (!(loginTarget.getSenha().equals(senha))){
+
+		if (!(loginTarget.getSenha().equals(senha))) {
 			throw new LoginException("Senha incorreta.");
 		}
-		
-		if(usuarioAtual != null){
-			throw new LoginException("Um funcionario ainda esta logado: " + usuarioAtual.getNome()+".");
+
+		if (usuarioAtual != null) {
+			throw new LoginException("Um funcionario ainda esta logado: "
+					+ usuarioAtual.getNome() + ".");
 		}
-		
+
 		this.usuarioAtual = loginTarget;
 	}
-	
-	public void logout() throws LogoutException{
-		
-		if(this.usuarioAtual == null){
+
+	public void logout() throws LogoutException {
+
+		if (this.usuarioAtual == null) {
 			throw new LogoutException("Nao ha um funcionario logado.");
 		}
-		
-		this.usuarioAtual = null;
-		
-	}
-	
-	public String cadastraMedicamento(String nome, String tipo, double preco, 
-			int quantidade, String categorias) throws CadastroException{
-		
-		String[] categoriasSplit;
-		Set<CategoriasDeMedicamentos> categoriasMed = new HashSet<CategoriasDeMedicamentos>();		
 
-		if(!usuarioAtual.getMatricula().startsWith("3")){
-			String errorMsg = "O funcionario "+usuarioAtual.getNome()+
-  					" nao tem permissao para cadastrar medicamentos.";
-			throw new CadastroException("Erro no cadastro de medicamento.", errorMsg);
+		this.usuarioAtual = null;
+
+	}
+
+	public String cadastraMedicamento(String nome, String tipo, double preco,
+			int quantidade, String categorias) throws CadastroException {
+
+		String[] categoriasSplit;
+		List<CategoriasDeMedicamentos> categoriasMed = new ArrayList<CategoriasDeMedicamentos>();
+
+		if (!usuarioAtual.getMatricula().startsWith("3")) {
+			
+			String errorMsg = "O funcionario " + usuarioAtual.getNome()
+					+ " nao tem permissao para cadastrar medicamentos.";
+			
+			throw new CadastroException("Erro no cadastro de medicamento.",errorMsg);
 		}
-				
-		try {
-			VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");
-		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
-		}
-		
-		try {
-			VerificaExcecao.checkEmptyString(tipo, "Tipo do medicamento");
-		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
-		}
-		
-		try {
-			VerificaExcecao.checarValor(preco, "Preco do medicamento");
-		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
-		}
-		
-		
-		try {
-			VerificaExcecao.checarValor(quantidade, "Quantidade do medicamento");
-		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de medicamento.", e.getMessage());
-		}
-		
+
 		if(categorias.contains(",")){
 			
 			categoriasSplit = categorias.split(",");
@@ -161,197 +138,213 @@ public class Controller {
 					categoriasMed.add(CategoriasDeMedicamentos.valueOf(categoria.toUpperCase()));
 
 				} catch (Exception e) {
-					throw new CadastroException("Erro no cadastro do medicamento.", "Categoria invalida."+
-				categoriasMed);
+					throw new CadastroException("Erro no cadastro do medicamento.", "Categoria invalida.");
 				}
 			
 			}
 		}
-		
-		try{
-			CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos.valueOf(categorias.toUpperCase());
-			categoriasMed.add(tipoMed);
-		}catch(Exception e){
-			
+		else{
+			try{
+				CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos.valueOf(categorias.toUpperCase());
+				categoriasMed.add(tipoMed);
+			}catch(Exception e){
+				throw new CadastroException("Erro no cadastro do medicamento.", "Categoria invalida.");
+			}
 		}
-		
-
-		
-		
 		try {
-			this.farmacia.criaMedicamento(nome, preco, quantidade, categoriasMed, tipo);
-		} catch (MedicamentoException e) {
-			throw new CadastroException("Erro no cadastro do medicamento.", e.getMessage());
-		}
-		
-		return nome;
+			this.farmacia.cadastraMedicamento(nome, tipo, preco, quantidade,categoriasMed);
 			
+		} catch (Exception e) {
+			throw new CadastroException("Erro no cadastro de medicamento.",
+					e.getMessage());
+		}
+
+		return nome;
+
 	}
-	
-	public String cadastraFuncionario(String nome, String cargo, 
-			String dataNascimento) throws CadastroException{
-		
+
+	public String cadastraFuncionario(String nome, String cargo,
+			String dataNascimento) throws CadastroException {
+
 		String matricula;
 		String senha;
 		LocalDate birthDate;
 		TipoCargo targetCargo;
-		
-		if(sistemaBloqueado == false){ 
-			if(usuarioAtual == null){
+
+		if (sistemaBloqueado == false) {
+			if (usuarioAtual == null) {
 				String errorMsg = "Nenhum funcionario estah logado.";
-				
-				throw new CadastroException("Erro no cadastro de funcionario.", errorMsg);
-			}
-			else if(!usuarioAtual.getMatricula().startsWith("1")){
-			String errorMsg = "O funcionario "+usuarioAtual.getNome()+
-  					" nao tem permissao para cadastrar funcionarios.";
-			throw new CadastroException("Erro no cadastro de funcionario.", errorMsg);
+
+				throw new CadastroException("Erro no cadastro de funcionario.",
+						errorMsg);
+			} else if (!usuarioAtual.getMatricula().startsWith("1")) {
+				String errorMsg = "O funcionario " + usuarioAtual.getNome()
+						+ " nao tem permissao para cadastrar funcionarios.";
+				throw new CadastroException("Erro no cadastro de funcionario.",
+						errorMsg);
 			}
 		}
-		
+
 		try {
 			VerificaExcecao.checkEmptyString(nome, "Nome do funcionario");
 		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de funcionario.", e.getMessage());
+			throw new CadastroException("Erro no cadastro de funcionario.",
+					e.getMessage());
 		}
 		try {
 			VerificaExcecao.checkEmptyString(cargo, "Nome do cargo");
 			targetCargo = this.stringToCargo(cargo);
 		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de funcionario.", e.getMessage());
+			throw new CadastroException("Erro no cadastro de funcionario.",
+					e.getMessage());
 		}
 		try {
 			birthDate = stringToDate(dataNascimento);
 			VerificaExcecao.checarData(birthDate);
 		} catch (Exception e) {
+
 			throw new CadastroException("Erro no cadastro de funcionario.", e.getMessage());
+
 		}
-		
+
 		try {
 			matricula = this.gerarMatricula(birthDate, targetCargo);
 		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de funcionario.", e.getMessage());
+			throw new CadastroException("Erro no cadastro de funcionario.",
+					e.getMessage());
 		}
 		senha = this.gerarSenha(birthDate, matricula);
-		
-		Usuario targetUser = this.factoryUsuarios.criarUsuario(nome, birthDate, senha, matricula, targetCargo);
-		
+
+		Usuario targetUser = this.factoryUsuarios.criarUsuario(nome, birthDate,
+				senha, matricula, targetCargo);
+
 		this.bancoUsuarios.put(matricula, targetUser);
-		
+
 		this.cadastrosRealizados = this.cadastrosRealizados + 1;
-		
+
 		return matricula;
-		
+
 	}
-	
-	public String cadastraPaciente(String nome, String Data, double Peso
-			, String sexoBio, String genero, String tipoSanguineo) throws CadastroException{
-		
-		if(!this.usuarioAtual.getMatricula().startsWith("3")){
-			throw new CadastroException("Nao foi possivel cadastrar o paciente.", 
-					"O funcionario " + usuarioAtual.getNome()+" nao tem permissao para cadastrar pacientes.");
+
+	public String cadastraPaciente(String nome, String Data, double Peso,
+			String sexoBio, String genero, String tipoSanguineo)
+			throws CadastroException {
+
+		if (!this.usuarioAtual.getMatricula().startsWith("3")) {
+			throw new CadastroException(
+					"Nao foi possivel cadastrar o paciente.", "O funcionario "
+							+ usuarioAtual.getNome()
+							+ " nao tem permissao para cadastrar pacientes.");
 		}
-		
+
 		for (Prontuario prontuario : this.bancoProntuarios) {
-			
+
 			try {
-				if(prontuario.getInfoPaciente("Nome").equals(nome)){
+				if (prontuario.getInfoPaciente("Nome").equals(nome)) {
 					throw new Exception("Paciente ja cadastrado.");
 				}
 			} catch (Exception e) {
-				throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+				throw new CadastroException(
+						"Nao foi possivel cadastrar o paciente.",
+						e.getMessage());
 			}
-			
+
 		}
-		
+
 		try {
 			VerificaExcecao.checkEmptyString(nome, "Nome do paciente");
 		} catch (Exception e) {
+
 			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
-		
+
 		LocalDate birthDate;
 		try {
 			birthDate = this.stringToDate(Data);
 			VerificaExcecao.checarData(birthDate);
 		} catch (Exception e) {
+
 			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
-		
+
 		try {
+
 			VerificaExcecao.checarValor(Peso,"Peso do paciente");
 		} catch (Exception e) {
 			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+
 		}
-		
+
 		try {
 			VerificaExcecao.checarSexoBiologico(sexoBio);
+
 		} catch (Exception e) {
 			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
-		
+
 		try {
 			VerificaExcecao.checkEmptyString(genero, "Genero");
 		} catch (Exception e) {
-			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+			throw new CadastroException(
+					"Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
-		
-		
-		
+
 		UUID novoID = UUID.randomUUID();
 		TipoSanguineo tipoSangue;
 		Prontuario novoProntuario;
-		
+
 		try {
 			tipoSangue = this.stringToSanguineo(tipoSanguineo);
 		} catch (Exception e) {
-			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+			throw new CadastroException(
+					"Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
-		
+
 		try {
-			novoProntuario = new Prontuario(nome, birthDate, Peso, 
-					sexoBio, genero, tipoSangue, novoID);
+			novoProntuario = new Prontuario(nome, birthDate, Peso, sexoBio,
+					genero, tipoSangue, novoID);
 		} catch (Exception e) {
-			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+			throw new CadastroException(
+					"Nao foi possivel cadastrar o paciente.", e.getMessage());
 		}
-		
+
 		this.bancoProntuarios.add(novoProntuario);
-		
+
 		Collections.sort(this.bancoProntuarios);
-		
+
 		return novoID.toString();
-		
-		
+
 	}
 
-	public String getInfoFuncionario(String matricula, String info) throws ConsultaException{
-		
+	public String getInfoFuncionario(String matricula, String info)
+			throws ConsultaException {
+
 		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
-			throw new ConsultaException("funcionario", "A matricula nao segue o padrao.");
+			throw new ConsultaException("funcionario",
+					"A matricula nao segue o padrao.");
 		}
-		
+
 		Usuario targetUser = getUsuario(matricula);
-		
-		if(targetUser == null){
-			throw new ConsultaException("funcionario","Funcionario nao cadastrado.");
+
+		if (targetUser == null) {
+			throw new ConsultaException("funcionario",
+					"Funcionario nao cadastrado.");
 		}
-		
-		
-		if(info.equalsIgnoreCase("Nome")){
+
+		if (info.equalsIgnoreCase("Nome")) {
 			String nome = targetUser.getNome();
 			return nome;
-			
-		}
-		else if(info.equalsIgnoreCase("Cargo")){
-			
+
+		} else if (info.equalsIgnoreCase("Cargo")) {
+
 			String cargo;
-			
+
 			switch (targetUser.getCargo()) {
-			
+
 			case DIRETOR:
 				cargo = "Diretor Geral";
 				return cargo;
-				
+
 			case TECNICOADM:
 
 				cargo = "Tecnico Administrativo";
@@ -365,70 +358,63 @@ public class Controller {
 			default:
 				throw new ConsultaException("funcionario", "Cargo invalido");
 			}
-			
-		}
-		else if(info.equalsIgnoreCase("Data")){
+
+		} else if (info.equalsIgnoreCase("Data")) {
 			String data = targetUser.getDataNascimento().toString();
 			return data;
-			
-		}
-		else if(info.equalsIgnoreCase("Senha")){
-			throw new ConsultaException("funcionario", "A senha do funcionario eh protegida.");
-	
-		}
-		else{
+
+		} else if (info.equalsIgnoreCase("Senha")) {
+			throw new ConsultaException("funcionario",
+					"A senha do funcionario eh protegida.");
+
+		} else {
 			throw new ConsultaException("funcionario", "Atributo desconhecido.");
 		}
-		
 
-		
 	}
-	
-	public String getInfoPaciente(String paciente, String atributo) throws ConsultaException{
-		
+
+	public String getInfoPaciente(String paciente, String atributo)
+			throws ConsultaException {
+
 		Prontuario targetProntuario = null;
-		
+
 		for (Prontuario prontuario : this.bancoProntuarios) {
-			
-			if(prontuario.getID().equals(paciente)){
+
+			if (prontuario.getID().equals(paciente)) {
 				targetProntuario = prontuario;
 			}
-			
+
 		}
-		
-		if(targetProntuario == null){
+
+		if (targetProntuario == null) {
 			throw new ConsultaException("paciente", "Paciente nao cadastrado.");
 		}
-		
+
 		try {
 			return targetProntuario.getInfoPaciente(atributo);
 		} catch (Exception e) {
 			throw new ConsultaException("paciente", e.getMessage());
 		}
-		
+
 	}
-	
-	public String getInfoMedicamento(String atributo, String medicamento) throws ConsultaException{
-		
-		if(this.farmacia.buscaMedicamento(medicamento) == null){
-			throw new ConsultaException("medicamento", "Medicamento nao existe.");
-			
+
+	public String getInfoMedicamento(String atributo, String medicamento)
+			throws ConsultaException, MedicamentoException {
+
+		if (this.farmacia.buscaMedicamento(medicamento) == null) {
+			throw new ConsultaException("medicamento",
+					"Medicamento nao existe.");
+
 		}
-		
+
 		switch (atributo.toUpperCase()) {
-		
+
 		case "NOME":
-			
-			String nome;
-			try {
-				nome = this.farmacia.getNome(medicamento);
-			} catch (Exception e) {
-				throw new ConsultaException("medicamento", e.getMessage());
-			}
-			return nome;
+			farmacia.existeMedicamento(medicamento);
+			return medicamento;
 
 		case "PRECO":
-			
+
 			String preco;
 			try {
 				preco = String.valueOf(this.farmacia.getPreco(medicamento));
@@ -436,25 +422,26 @@ public class Controller {
 				throw new ConsultaException("medicamento", e.getMessage());
 			}
 			return preco;
-			
+
 		case "QUANTIDADE":
-			
+
 			String quantidade;
 			try {
-				quantidade = String.valueOf(this.farmacia.getQuantidade(medicamento));
+				quantidade = String.valueOf(this.farmacia
+						.getQuantidade(medicamento));
 			} catch (Exception e) {
 				throw new ConsultaException("medicamento", e.getMessage());
 			}
-			return quantidade;			
-			
+			return quantidade;
+
 		case "CATEGORIAS":
-			
-			String categorias = this.farmacia.getCategorias(medicamento);
+
+			String categorias = this.farmacia
+					.getCategoriasMedicamento(medicamento);
 			return categorias;
-			
-			
+
 		case "TIPO":
-			
+
 			String tipo;
 			try {
 				tipo = this.farmacia.getTipoMedicamento(medicamento);
@@ -462,206 +449,224 @@ public class Controller {
 				throw new ConsultaException("medicamento", e.getMessage());
 			}
 			return tipo;
-			
+
 		default:
 			throw new ConsultaException("medicamento", "Atributo invalido.");
 		}
-		
-		
-		
+
 	}
-	
-	public String getProntuario(int posicao) throws ProntuarioException{
-		
-		if(posicao < 0){
-			throw new ProntuarioException("Erro ao consultar prontuario. Indice do prontuario nao pode"
-					+ " ser negativo.");
+
+	public String getProntuario(int posicao) throws ProntuarioException {
+
+		if (posicao < 0) {
+			throw new ProntuarioException(
+					"Erro ao consultar prontuario. Indice do prontuario nao pode"
+							+ " ser negativo.");
 		}
-		if(posicao > this.bancoProntuarios.size()){
-		
-			throw new ProntuarioException("Erro ao consultar prontuario. "+
-					"Nao ha prontuarios suficientes (max = "+this.bancoProntuarios.size()+").");
+		if (posicao > this.bancoProntuarios.size()) {
+
+			throw new ProntuarioException("Erro ao consultar prontuario. "
+					+ "Nao ha prontuarios suficientes (max = "
+					+ this.bancoProntuarios.size() + ").");
 		}
-		
+
 		return this.bancoProntuarios.get(posicao).getID();
-		
+
 	}
-	
-	public void excluiFuncionario(String matricula, String senha)throws ExcluirCadastroException{
-		
+
+	public void excluiFuncionario(String matricula, String senha)
+			throws ExcluirCadastroException {
+
 		String senhaDiretor = "";
-		
-		if(!usuarioAtual.getMatricula().startsWith("1")){
-			
-			String erroMsg = "O funcionario "+usuarioAtual.getNome()
-			+" nao tem permissao para excluir funcionarios.";
-			
+
+		if (!usuarioAtual.getMatricula().startsWith("1")) {
+
+			String erroMsg = "O funcionario " + usuarioAtual.getNome()
+					+ " nao tem permissao para excluir funcionarios.";
+
 			throw new ExcluirCadastroException("funcionario", erroMsg);
 		}
-		
+
 		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
-			throw new ExcluirCadastroException("funcionario", "A matricula nao segue o padrao.");
+			throw new ExcluirCadastroException("funcionario",
+					"A matricula nao segue o padrao.");
 		}
-		
+
 		Usuario targetUser = getUsuario(matricula);
-		
-		if(targetUser == null){
-			throw new ExcluirCadastroException("funcionario", "Funcionario nao cadastrado.");
+
+		if (targetUser == null) {
+			throw new ExcluirCadastroException("funcionario",
+					"Funcionario nao cadastrado.");
 		}
-		
+
 		for (Usuario funcionario : this.bancoUsuarios.values()) {
-			if(funcionario.getMatricula().startsWith("1")){
+			if (funcionario.getMatricula().startsWith("1")) {
 				senhaDiretor = funcionario.getSenha();
 			}
-			
+
 		}
-		
-		if(!senha.equals(senhaDiretor)){
-			throw new ExcluirCadastroException("funcionario","Senha invalida.");
+
+		if (!senha.equals(senhaDiretor)) {
+			throw new ExcluirCadastroException("funcionario", "Senha invalida.");
 		}
-		
+
 		this.bancoUsuarios.remove(matricula);
-		
+
 	}
-	
-	public void atualizaInfoFuncionario(String matricula, 
-			String atributo, String novoValor) throws AtualizarInfoException{
-		
-		if(!usuarioAtual.getMatricula().startsWith("1")){
-			throw new AtualizarInfoException("funcionario", "O usuario atual nao tem permissao para"
-					+ "alterar informacoes.");
+
+	public void atualizaInfoFuncionario(String matricula, String atributo,
+			String novoValor) throws AtualizarInfoException {
+
+		if (!usuarioAtual.getMatricula().startsWith("1")) {
+			throw new AtualizarInfoException("funcionario",
+					"O usuario atual nao tem permissao para"
+							+ "alterar informacoes.");
 		}
-		
+
 		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
-			throw new AtualizarInfoException("funcionario", "A matricula nao segue o padrao.");
+			throw new AtualizarInfoException("funcionario",
+					"A matricula nao segue o padrao.");
 		}
-		
+
 		Usuario targetUser = this.getUsuario(matricula);
-		
+
 		switch (atributo.toUpperCase()) {
-		
+
 		case "NOME":
-			
+
 			try {
 				VerificaExcecao.checkEmptyString(novoValor, "Nome");
 			} catch (Exception e) {
-				throw new AtualizarInfoException("funcionario", "Nome do funcionario nao pode ser vazio.");
+				throw new AtualizarInfoException("funcionario",
+						"Nome do funcionario nao pode ser vazio.");
 			}
-			
-			if ((Pattern.matches("[a-zA-Z0-9]+", novoValor)) || novoValor.length() > 50) {
-				throw new AtualizarInfoException("funcionario", "Nome invalido.");
+
+			if ((Pattern.matches("[a-zA-Z0-9]+", novoValor))
+					|| novoValor.length() > 50) {
+				throw new AtualizarInfoException("funcionario",
+						"Nome invalido.");
 			}
-			
+
 			targetUser.setNome(novoValor);
-			
+
 			break;
 
 		case "DATA":
-			
+
 			LocalDate novaData;
-			try{
-				
-			novaData = this.stringToDate(novoValor);
-			
-			}catch(Exception e){
-				throw new AtualizarInfoException("funcionario", "Data invalida.");
+			try {
+
+				novaData = this.stringToDate(novoValor);
+
+			} catch (Exception e) {
+				throw new AtualizarInfoException("funcionario",
+						"Data invalida.");
 			}
-			
+
 			try {
 				VerificaExcecao.checarData(novaData);
 			} catch (Exception e) {
 				throw new AtualizarInfoException("funcionario", e.getMessage());
 			}
-			
+
 			targetUser.setDataNascimento(novaData);
-			
+
 			break;
-			
+
 		default:
-			throw new AtualizarInfoException("funcionario", "Atributo invalido.");
+			throw new AtualizarInfoException("funcionario",
+					"Atributo invalido.");
 		}
-				
+
 	}
-	
-	public void atualizaInfoFuncionario(String atributo, String novoValor) throws AtualizarInfoException{
-		
+
+	public void atualizaInfoFuncionario(String atributo, String novoValor)
+			throws AtualizarInfoException {
+
 		switch (atributo.toUpperCase()) {
-		
+
 		case "NOME":
-			
+
 			try {
 				VerificaExcecao.checkEmptyString(novoValor, "Nome");
 			} catch (Exception e) {
-				throw new AtualizarInfoException("funcionario", "Nome do funcionario nao pode ser vazio.");
+				throw new AtualizarInfoException("funcionario",
+						"Nome do funcionario nao pode ser vazio.");
 			}
-			
-			if ((Pattern.matches("[a-zA-Z0-9]+", novoValor)) || novoValor.length() > 50) {
-				throw new AtualizarInfoException("funcionario", "Nome invalido.");
+
+			if ((Pattern.matches("[a-zA-Z0-9]+", novoValor))
+					|| novoValor.length() > 50) {
+				throw new AtualizarInfoException("funcionario",
+						"Nome invalido.");
 			}
-			
+
 			usuarioAtual.setNome(novoValor);
-			
+
 			break;
 
 		case "DATA":
-			
+
 			LocalDate novaData;
-			try{
-				
-			novaData = this.stringToDate(novoValor);
-			
-			}catch(Exception e){
-				throw new AtualizarInfoException("funcionario", "Data invalida.");
+			try {
+
+				novaData = this.stringToDate(novoValor);
+
+			} catch (Exception e) {
+				throw new AtualizarInfoException("funcionario",
+						"Data invalida.");
 			}
-			
+
 			try {
 				VerificaExcecao.checarData(novaData);
 			} catch (Exception e) {
 				throw new AtualizarInfoException("funcionario", e.getMessage());
 			}
-			
+
 			usuarioAtual.setDataNascimento(novaData);
-			
+
 			break;
-			
+
 		default:
-			throw new AtualizarInfoException("Erro no cadastro de funcionario.", "Atributo invalido.");
+			throw new AtualizarInfoException(
+					"Erro no cadastro de funcionario.", "Atributo invalido.");
 		}
-				
+
 	}
-	
-	public void atualizaSenha(String senhaAntiga,String novaSenha) throws AtualizarInfoException{
-		
-		if(!usuarioAtual.getSenha().equals(senhaAntiga)){
+
+	public void atualizaSenha(String senhaAntiga, String novaSenha)
+			throws AtualizarInfoException {
+
+		if (!usuarioAtual.getSenha().equals(senhaAntiga)) {
 			throw new AtualizarInfoException("funcionario", "Senha invalida.");
 		}
-		
+
 		try {
 			VerificaExcecao.checkEmptyString(novaSenha, "Senha");
 		} catch (Exception e) {
 			throw new AtualizarInfoException("funcionario", e.getMessage());
 		}
-		
-		if ((Pattern.matches("[a-zA-Z0-9]+", novaSenha) == false) ||
-				novaSenha.length() < 8 || novaSenha.length() > 12) {
-			
-			throw new AtualizarInfoException("funcionario", "A nova senha deve "
-					+ "ter entre 8 - 12 caracteres alfanumericos.");
+
+		if ((Pattern.matches("[a-zA-Z0-9]+", novaSenha) == false)
+				|| novaSenha.length() < 8 || novaSenha.length() > 12) {
+
+			throw new AtualizarInfoException("funcionario",
+					"A nova senha deve "
+							+ "ter entre 8 - 12 caracteres alfanumericos.");
 		}
-		
+
 		String matricula = this.usuarioAtual.getMatricula();
-		
+
 		Usuario targetUser = this.getUsuario(matricula);
-		
+
 		targetUser.setSenha(senhaAntiga, novaSenha);
-		
+
 		this.usuarioAtual = targetUser;
-		
+
 	}
-	
+
 	public void atualizaMedicamento(String nome, String atributo,
-			String novoValor) throws AtualizarInfoException{
-		
+			String novoValor) throws AtualizarInfoException {
+
 		try {
 			this.farmacia.atualizaMedicamento(nome, atributo, novoValor);
 		} catch (Exception e) {
@@ -669,197 +674,145 @@ public class Controller {
 		}
 
 	}
-	
-	public String consultaMedCategoria(String categoria) throws ConsultaException{
-		
-		CategoriasDeMedicamentos category;
-		ArrayList<Medicamento> medicamentos;
-		
-		try {
-			category = CategoriasDeMedicamentos.valueOf(categoria.toUpperCase());
-		} catch (Exception e) {
-			throw new ConsultaException("medicamentos", "Categoria invalida.");
-		}
-		
-		medicamentos = this.farmacia.buscaMedicamentos(category);
-		
-		if (medicamentos.isEmpty()){
-			throw new ConsultaException("medicamentos", "Nao ha remedios cadastrados nessa categoria.");
-		}
-		
-		String resultado = "";
-		
-		for(int i = 0; i < medicamentos.size(); i++ ){
-			
-    		if(i == medicamentos.size() -1){
-    			
-    			resultado =  resultado + medicamentos.get(i).getNome();
-    		}
-    		else{
-    			resultado = resultado + medicamentos.get(i).getNome()+",";
-    		}
-    	}
-			
-		return resultado;
-		
-	}
 
-	public String consultaMedNome(String nome) throws ConsultaException{
-		
-		String medicamentoDesc;
-		
+	public String consultaMedCategoria(String categoria)
+			throws ConsultaException {
+
 		try {
-			medicamentoDesc = this.farmacia.getMedicamentoDesc(nome);
+			return farmacia.consultaMedCategoria(categoria);
 		} catch (Exception e) {
 			throw new ConsultaException("medicamentos", e.getMessage());
 		}
-		
-		return medicamentoDesc;
+
 	}
 
-	public String getEstoqueFarmacia(String ordenacao) throws ConsultaException{
-		
-		String medicamentos = "";
-		
-		List<Medicamento> meds;
-		switch (ordenacao.toUpperCase()) {
-		
-		case "ALFABETICA":
-			meds = this.farmacia.getMedicamentosNome();
-			
-			break;
+	public Medicamento consultaMedNome(String nome) throws ConsultaException {
 
-		case "PRECO":
-			meds = this.farmacia.getMedicamentosPreco();
-			break;
-			
-		default:
-			
-			throw new ConsultaException("medicamentos", "Tipo de ordenacao invalida.");
-
+		try {
+			return farmacia.consultaMedNome(nome);
+		} catch (Exception e) {
+			throw new ConsultaException("medicamentos", e.getMessage());
 		}
-		
-		for(int i = 0; i < meds.size(); i++ ){
-			
-    		if(i == meds.size() -1){
-    			
-    			medicamentos =  medicamentos + meds.get(i).getNome();
-    		}
-    		else{
-    			medicamentos = medicamentos + meds.get(i).getNome()+",";
-    		}
-    	}
-		
-		return medicamentos;
-		
 	}
-	
-	private String gerarSenha(LocalDate anoNascimento, String matricula){
-		
+
+	public String getEstoqueFarmacia(String ordenacao)
+			throws MedicamentoException, ConsultaException {
+		try {
+			return farmacia.getEstoqueFarmacia(ordenacao);
+		} catch (Exception e) {
+			throw new ConsultaException("medicamentos", e.getMessage());
+		}
+
+	}
+
+	private String gerarSenha(LocalDate anoNascimento, String matricula) {
+
 		String senha = "";
 		int ano = anoNascimento.getYear();
-		
+
 		senha = senha + String.valueOf(ano);
 		senha = senha + matricula.substring(0, 4);
-		
+
 		return senha;
-		
+
 	}
-	
-	private String gerarMatricula(LocalDate dataNascimento, TipoCargo cargo) throws Exception{
-		
+
+	private String gerarMatricula(LocalDate dataNascimento, TipoCargo cargo)
+			throws Exception {
+
 		String matricula = "";
 		int esteAno = LocalDate.now().getYear();
-		String parteCadastros = String.format("%03d", (this.cadastrosRealizados + 1));
+		String parteCadastros = String.format("%03d",
+				(this.cadastrosRealizados + 1));
 
-				
 		switch (cargo) {
-		
+
 		case DIRETOR:
 
 			for (Usuario usuario : this.bancoUsuarios.values()) {
-				if(usuario.getMatricula().startsWith("1")){
-					throw new Exception("Nao eh possivel criar mais de um Diretor Geral.");
+				if (usuario.getMatricula().startsWith("1")) {
+					throw new Exception(
+							"Nao eh possivel criar mais de um Diretor Geral.");
 				}
 			}
-			
+
 			matricula = matricula + "1";
 			matricula = matricula + String.valueOf(esteAno);
-			matricula = matricula + parteCadastros;	
-			
+			matricula = matricula + parteCadastros;
+
 			break;
-		
+
 		case MEDICO:
-			
+
 			matricula = matricula + "2";
 			matricula = matricula + String.valueOf(esteAno);
-			matricula = matricula + parteCadastros;	
-			
+			matricula = matricula + parteCadastros;
+
 			break;
-			
-			
+
 		case TECNICOADM:
 			matricula = matricula + "3";
 			matricula = matricula + String.valueOf(esteAno);
-			matricula = matricula + parteCadastros;	
-			
+			matricula = matricula + parteCadastros;
+
 			break;
-		
+
 		default:
 			throw new Exception("Cargo invalido.");
-			
+
 		}
 		return matricula;
-		
-	}
-	
-	private Usuario getUsuario(String matricula){
-		
-		for (Usuario usuario : this.bancoUsuarios.values()) {
-			
-			if(usuario.getMatricula().equals(matricula)){
-				return usuario;
-			}
-			
-		}
-		return null;
-		
+
 	}
 
-	private LocalDate stringToDate(String dateCandidate){
-		
-		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		
+	private Usuario getUsuario(String matricula) {
+
+		for (Usuario usuario : this.bancoUsuarios.values()) {
+
+			if (usuario.getMatricula().equals(matricula)) {
+				return usuario;
+			}
+
+		}
+		return null;
+
+	}
+
+	private LocalDate stringToDate(String dateCandidate) {
+
+		DateTimeFormatter formatador = DateTimeFormatter
+				.ofPattern("dd/MM/yyyy");
+
 		LocalDate data = LocalDate.parse(dateCandidate, formatador);
 
 		return data;
-		
 
 	}
-	
-	private TipoCargo stringToCargo(String cargo) throws Exception{
-		
-		switch (cargo.toUpperCase()){
-		
+
+	private TipoCargo stringToCargo(String cargo) throws Exception {
+
+		switch (cargo.toUpperCase()) {
+
 		case "DIRETOR GERAL":
 			return TipoCargo.DIRETOR;
-			
+
 		case "MEDICO":
 			return TipoCargo.MEDICO;
-			
+
 		case "TECNICO ADMINISTRATIVO":
 			return TipoCargo.TECNICOADM;
-		
+
 		default:
 			throw new Exception("Cargo invalido.");
 		}
-		
+
 	}
-	
-	private TipoSanguineo stringToSanguineo(String tipoSanguineo) throws Exception{
-		
+
+	private TipoSanguineo stringToSanguineo(String tipoSanguineo)
+			throws Exception {
+
 		for (TipoSanguineo sangue : TipoSanguineo.values()) {
-			if(sangue.toString().equalsIgnoreCase(tipoSanguineo)){
+			if (sangue.toString().equalsIgnoreCase(tipoSanguineo)) {
 				return sangue;
 			}
 		
@@ -867,5 +820,5 @@ public class Controller {
 		throw new Exception("Tipo sanguineo invalido.");
 		
 	}
-	
+
 }
