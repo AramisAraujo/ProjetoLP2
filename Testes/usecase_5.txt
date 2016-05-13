@@ -1,0 +1,108 @@
+#################
+# Caso de Uso 5 #
+#################
+
+#iniciaSistema e fechaSistema serao usados para carregar/armazenar os dados do sistema nos arquivos de dados.
+iniciaSistema
+
+#Logar com Ada Lovelace  que eh medica
+login matricula="22016005" senha="19752201"
+
+####################
+#  Cadastro de Orgaos  #
+####################
+
+cadastraOrgao nome="Pulmao" tipoSanguineo="A+" 
+cadastraOrgao nome="Pulmao" tipoSanguineo="AB+" 
+cadastraOrgao nome="Rim" tipoSanguineo="B-" 
+cadastraOrgao nome="Coracao" tipoSanguineo="O-"
+cadastraOrgao nome="Figado" tipoSanguineo="O+" 
+cadastraOrgao nome="Figado" tipoSanguineo="B+" 
+cadastraOrgao nome="Pancreas" tipoSanguineo="A-"
+cadastraOrgao nome="Intestino" tipoSanguineo="A+" 
+cadastraOrgao nome="Rim" tipoSanguineo="B-" 
+cadastraOrgao nome="Figado" tipoSanguineo="B+" 
+
+
+expectError "O banco de orgaos apresentou um erro. Nome do orgao nao pode ser vazio." cadastraOrgao nome="" tipoSanguineo="A+" 
+expectError "O banco de orgaos apresentou um erro. Nome do orgao nao pode ser vazio." cadastraOrgao nome=" " tipoSanguineo="A+"
+expectError "O banco de orgaos apresentou um erro. Tipo sanguineo invalido." cadastraOrgao nome="Coracao" tipoSanguineo="H-"
+
+
+##################################################
+#     Busca de orgaos por tipo sanguineo         #
+##################################################
+# Importante: Eh considerada a ordem de insercao do orgao no cadastro.
+expect "Pulmao,Intestino" buscaOrgPorSangue tipoSanguineo="A+"
+expect "Pancreas" buscaOrgPorSangue tipoSanguineo="A-"
+expect "Figado" buscaOrgPorSangue tipoSanguineo="B+"
+expect "Rim" buscaOrgPorSangue tipoSanguineo="B-"
+expect "Pulmao" buscaOrgPorSangue tipoSanguineo="AB+"
+expect "Figado" buscaOrgPorSangue tipoSanguineo="O+"
+expect "Coracao" buscaOrgPorSangue tipoSanguineo="O-"
+
+expectError "O banco de orgaos apresentou um erro. Tipo sanguineo invalido." buscaOrgPorSangue tipoSanguineo="ABCD+"
+
+
+# Efetua adicao de orgao do tipo AB-
+expectError "O banco de orgaos apresentou um erro. Nao ha orgaos cadastrados para esse tipo sanguineo." buscaOrgPorSangue tipoSanguineo="AB-"
+cadastraOrgao nome="Intestino" tipoSanguineo="AB-" 
+expect "Intestino" buscaOrgPorSangue tipoSanguineo="AB-"
+
+###############################
+#     Busca de orgaos pelo nome     #
+###############################
+
+expect "A+,AB-" buscaOrgPorNome nome="Intestino"
+expect "A-" buscaOrgPorNome nome="Pancreas"
+expect "O+,B+,B+" buscaOrgPorNome nome="Figado"
+expect "B-,B-" buscaOrgPorNome nome="Rim"
+expect "A+,AB+" buscaOrgPorNome nome="Pulmao"
+expect "O-" buscaOrgPorNome nome="Coracao"
+
+expectError "O banco de orgaos apresentou um erro. Orgao nao cadastrado." buscaOrgPorNome nome="Branquias"
+
+##################################
+#  Busca por nome e tipo sanguineo      #
+##################################
+
+expect true buscaOrgao nome="Pulmao" tipoSanguineo="A+"
+expect true buscaOrgao nome="Figado" tipoSanguineo="B+"
+expect true buscaOrgao nome="Rim" tipoSanguineo="B-" 
+expect true buscaOrgao nome="Rim" tipoSanguineo="B-" 
+expect false buscaOrgao nome="Pulmao" tipoSanguineo="B-" 
+expect false buscaOrgao nome="Pancreas" tipoSanguineo="AB-" 
+expect false buscaOrgao nome="Rim" tipoSanguineo="B+"
+expect false buscaOrgao nome="Coracao" tipoSanguineo="A+"
+expect false buscaOrgao nome="Branquias" tipoSangunieo="AB-" 
+
+expectError "O banco de orgaos apresentou um erro. Tipo sanguineo invalido." buscaOrgao nome="Pulmao" tipoSangunieo="Z+"
+expectError "Erro na retirada de orgaos. Orgao nao cadastrado." retiraOrgao nome="Coracao" tipoSanguineo="AB-"
+
+#################################
+#  Buscar a quantidade de orgaos#
+#################################
+
+expect 2 qtdOrgaos nome="Pulmao"
+expect 2 qtdOrgaos nome="Rim"
+expect 1 qtdOrgaos nome="Coracao"
+expect 3 qtdOrgaos nome="Figado"
+expect 1 qtdOrgaos nome="Pancreas"
+expect 2 qtdOrgaos nome="Intestino"
+
+expectError "O banco de orgaos apresentou um erro. Orgao nao cadastrado." qtdOrgaos nome="Branquias"
+
+expect 11 totalOrgaosDisponiveis
+retiraOrgao nome="Pulmao" tipoSanguineo="A+"
+expect 10 totalOrgaosDisponiveis
+retiraOrgao nome="Pancreas" tipoSanguineo="A-"
+expect 9 totalOrgaosDisponiveis
+
+
+expectError "Erro na retirada de orgaos. Orgao nao cadastrado." retiraOrgao nome="Nadadeira" tipoSanguineo="O-"
+expectError "Erro na retirada de orgaos. Tipo sanguineo invalido." retiraOrgao nome="Pancreas" tipoSanguineo="X-"
+expectError "Erro na retirada de orgaos. Orgao nao cadastrado." retiraOrgao nome="Pancreas" tipoSanguineo="AB+"
+expectError "Erro na retirada de orgaos. Orgao nao cadastrado." retiraOrgao nome="Pancreas" tipoSanguineo="A-"
+
+logout
+fechaSistema

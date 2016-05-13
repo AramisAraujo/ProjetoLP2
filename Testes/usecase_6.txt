@@ -1,0 +1,79 @@
+﻿#################
+# Caso de Uso 6     #
+#################
+
+
+#iniciaSistema e fechaSistema serao usados para carregar/armazenar os dados do sistema nos arquivos de dados.
+iniciaSistema
+
+
+#Logar com Ada Lovelace  que eh medica
+login matricula="22016005" senha="19752201"
+
+
+#########################################
+#  Recupera ID de um paciente por nome  #
+#########################################
+# - Para simplificar o teste, se existem dois pacientes com o mesmo nome, retorne a primeira ocorrencia.
+
+
+id1=getPacienteID nome="Hedwig"
+id2=getPacienteID nome="Mitridates"
+id3=getPacienteID nome="Plutarco"
+id4=getPacienteID nome="Safo"
+
+
+###########################
+# Realizacao de Procedimentos#
+###########################
+expectError "Erro na realizacao de procedimentos. Medicamento nao cadastrado." realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id4} medicamentos="Valium,Harvoni"
+expectError "Erro na realizacao de procedimentos. Nome do paciente nao pode ser vazio." realizaProcedimento procedimento="Consulta clinica" nomePaciente="" medicamentos="Valium,Harvoni"
+expectError "Erro na realizacao de procedimentos. Nome do paciente nao pode ser vazio." realizaProcedimento procedimento="Consulta clinica" nomePaciente=" " medicamentos="Valium,Harvoni"
+expectError "Erro na realizacao de procedimentos. Banco nao possui o orgao especificado." realizaProcedimento procedimento="Transplante de orgaos" nomePaciente=${id2} orgao="Coracao" medicamentos="Nimesulida,Morfina"
+expectError "Erro na realizacao de procedimentos. Nome do orgao nao pode ser vazio." realizaProcedimento procedimento="Transplante de orgaos" nomePaciente=${id2} orgao="" medicamentos="Nimesulida,Morfina"
+expectError "Erro na realizacao de procedimentos. Medicamento nao cadastrado." realizaProcedimento procedimento="Redesignacao sexual" nomePaciente=${id3} medicamentos="Duraston,Morfina,Skooma"
+expectError "Erro na realizacao de procedimentos. Nome do medicamento nao pode ser vazio." realizaProcedimento procedimento="Redesignacao sexual" nomePaciente=${id3} medicamentos=""
+expectError "Erro na realizacao de procedimentos. Nome do medicamento nao pode ser vazio." realizaProcedimento procedimento="Redesignacao sexual" nomePaciente=${id3} medicamentos=" "
+expectError "Erro na realizacao de procedimentos. Procedimento invalido." realizaProcedimento procedimento="Lavagem cerebral" nomePaciente=${id4} orgao="Pulmao" medicamentos="Metamizol,Morfina,Valium" 
+
+
+realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id4} medicamentos="Valium,Morfina"
+realizaProcedimento procedimento="Redesignacao sexual" nomePaciente=${id1} medicamentos="Duraston,Morfina,Medroxyprogesterona"
+realizaProcedimento procedimento="Transplante de orgaos" nomePaciente=${id3} orgao="Coracao" medicamentos="Nimesulida,Morfina"
+realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id1} medicamentos="Valium,Metamizol,Nimesulida"
+realizaProcedimento procedimento="Cirurgia bariatrica" nomePaciente=${id2} medicamentos="Morfina,Nimesulida"
+realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id2} medicamentos="Penicilina,Valium"
+realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id1} medicamentos="Metamizol,Nimesulida"
+
+
+# Hedwig teria 230 pontos, deveria 10669.02
+# Mitridates teria 150 pontos, deveria  8214
+
+
+expect "Hedwig" getInfoPaciente paciente=${id1} atributo="Nome" 
+expect "1985-01-02" getInfoPaciente paciente=${id1} atributo="Data" 
+expect "masculino" getInfoPaciente paciente=${id1} atributo="Sexo" 
+expect "masculino" getInfoPaciente paciente=${id1} atributo="Genero"
+expect "B-" getInfoPaciente paciente=${id1} atributo="TipoSanguineo"
+expect 60.0 getInfoPaciente paciente=${id1}  atributo="Peso"
+
+
+expect "Mitridates" getInfoPaciente paciente=${id2} atributo="Nome" 
+expect "1987-12-05"  getInfoPaciente paciente=${id2} atributo="Data" 
+expect "feminino" getInfoPaciente paciente=${id2} atributo="Sexo" 
+expect "masculino" getInfoPaciente paciente=${id2} atributo="Genero" 
+expect "AB+" getInfoPaciente paciente=${id2} atributo="TipoSanguineo" 
+expect 64.8 getInfoPaciente paciente=${id2} atributo="Peso"
+
+
+expect 3 getTotalProcedimento nomePaciente=${id1}
+expect 2 getTotalProcedimento nomePaciente=${id2}
+expect 1 getTotalProcedimento nomePaciente=${id3}
+expect 1 getTotalProcedimento nomePaciente=${id4}
+
+
+logout
+
+
+fechaSistema
+quit
