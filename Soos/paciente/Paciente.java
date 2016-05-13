@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.UUID;
 
-import exceptions.ProntuarioException;
 import exceptions.VerificaExcecao;
 
 /**
@@ -20,9 +19,11 @@ public class Paciente implements Comparable<Paciente> {
 	private LocalDate dataNascimento;
 	private double peso;
 	private UUID ID;
+	private double gastos;
 	
 	private final String NOME = "Nome", DATA = "Data", SEXO = "Sexo", GENERO = "Genero",
-			TIPO_SANGUINEO =  "TipoSanguineo", PESO = "Peso", IDADE = "Idade";
+			TIPO_SANGUINEO =  "TipoSanguineo", PESO = "Peso", IDADE = "Idade",
+			GENERO_MASCULINO = "masculino", GENERO_FEMININO = "feminino";
 	
 	public Paciente(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 					String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
@@ -39,6 +40,7 @@ public class Paciente implements Comparable<Paciente> {
 		this.sexoBiologico = sexoBiologico;
 		this.genero = genero;
 		this.tipoSanguineo = tipoSanguineo;
+		this.gastos = 0;
 	}
 
 	public UUID getID(){
@@ -72,7 +74,7 @@ public class Paciente implements Comparable<Paciente> {
 		return peso;
 	}
 
-	public void setPeso(int peso) throws Exception {
+	public void setPeso(double peso) throws Exception {
 		VerificaExcecao.checarValor(peso, "Peso");
 		this.peso = peso;
 	}
@@ -89,14 +91,29 @@ public class Paciente implements Comparable<Paciente> {
 	public String getGenero() {
 		return genero;
 	}
-
-	public void setGenero(String genero) throws Exception {
-		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Genero");
-		this.genero = genero;
+	
+	/**
+	 * Realiza troca de genero
+	 */
+	public void trocarGenero() {
+		if (this.genero.equalsIgnoreCase(GENERO_FEMININO)) {
+			this.genero = GENERO_MASCULINO;
+		}
+		if (this.genero.equalsIgnoreCase(GENERO_MASCULINO)) {
+			this.genero = GENERO_FEMININO;
+		}
 	}
 
 	public String getTipoSanguineo() {
 		return this.tipoSanguineo.toString();
+	}
+	
+	public double getGastos() {
+		return this.gastos;
+	}
+	
+	public void somaGastos(double valor) {
+		this.gastos += valor;
 	}
 	
 	public String getInfoPaciente(String atributo) throws Exception {
@@ -166,10 +183,9 @@ public class Paciente implements Comparable<Paciente> {
 		return this.nome.compareTo(outroPaciente.getNome());
 	}
 
-	private void validaParametros(String nome, LocalDate dataNascimento,
-			double peso, String sexoBiologico, String genero,
-			TipoSanguineo tipoSanguineo, UUID ID) throws Exception,
-			ProntuarioException {
+	private void validaParametros(String nome, LocalDate dataNascimento, double peso,
+		String sexoBiologico, String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
+		
 		VerificaExcecao.checkEmptyParameter(nome, "Nome do paciente");
 		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
 		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
@@ -180,5 +196,6 @@ public class Paciente implements Comparable<Paciente> {
 		VerificaExcecao.checarData(dataNascimento);
 		VerificaExcecao.checarValor(peso, "Peso do paciente");
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
+		VerificaExcecao.checarGenero(genero);
 	}
 }
