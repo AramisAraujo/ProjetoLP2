@@ -169,14 +169,14 @@ public class Facade {
 	}
 	
 	public void realizaProcedimento(String nomeProcedimento, String nomePaciente,
-			String... medicamentos) throws ProcedimentoException {
+			String medicamentos) throws ProcedimentoException {
 		
 		this.controle.realizaProcedimento(nomeProcedimento, nomePaciente, medicamentos);
 	}
-	public void realizaProcedimento(String nomeProcedimento,String nomeOrgao, String nomePaciente,
-			String... medicamentos) throws ProcedimentoException {
+	public void realizaProcedimento(String nomeProcedimento, String nomePaciente, String orgao,
+			String medicamentos) throws ProcedimentoException {
 		
-		this.controle.realizaProcedimento(nomeProcedimento, nomeOrgao, nomePaciente, medicamentos);
+		this.controle.realizaProcedimento(nomeProcedimento, nomePaciente, orgao, medicamentos);;
 	}
 	
 }

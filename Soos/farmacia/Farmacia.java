@@ -89,8 +89,11 @@ public class Farmacia {
 	 * @return - medicamento com o nome especificado ou null se tal nao existir.
 	 */
 	public Medicamento buscaMedicamento(String nome) {
+		
 		for (Medicamento medicamento : medicamentos) {
+			
 			if (medicamento.getNome().equals(nome)) {
+				
 				return medicamento;
 			}
 		}
@@ -159,11 +162,14 @@ public class Farmacia {
 	 *             nome especificado
 	 */
 	public double getPreco(String nomeMedicamento) throws MedicamentoException {
+		
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
+		
 		if (medicamento == null) {
-			throw new MedicamentoException(
-					"Erro na consulta de medicamentos. Medicamento inexistente.");
+			
+			throw new MedicamentoException("Medicamento nao cadastrado.");
 		}
+		
 		return medicamento.getPreco();
 
 	}

@@ -1,7 +1,6 @@
 ﻿#################
-# Caso de Uso 7     #
+# Caso de Uso 7 #
 #################
-
 
 #iniciaSistema e fechaSistema serao usados para carregar/armazenar os dados do sistema nos arquivos de dados.
 iniciaSistema
@@ -11,9 +10,9 @@ iniciaSistema
 login matricula="32016004" senha="paralembrar"
 
 
-##########################################
+##################################################
 # Cadastrando pacientes necessarios para o teste #
-##########################################
+##################################################
 
 
 id1=cadastraPaciente Nome="Impaciente da Vida" Data="05/04/1963" peso=76 Sexo="feminino" Genero="feminino" tipoSanguineo="A+" 
@@ -22,9 +21,9 @@ id2=cadastraPaciente Nome="Tom Riddle" Data="02/01/1985" peso=83 Sexo="masculino
 
 
 
-##############################################
+#####################################################
 # Cadastrando medicamentos necessarios para o teste #
-##############################################
+#####################################################
 
 
 cadastraMedicamento nome="Morfina" tipo="referencia" preco=150 quantidade=600 categorias="analgesico"
@@ -50,9 +49,9 @@ logout
 login matricula="22016005" senha="19752201"
 
 
-########################################
+################################################
 # Cadastrando orgaos necessarios para o teste  #
-########################################
+################################################
 
 
 cadastraOrgao nome="Coracao" tipoSanguineo="B-"
@@ -68,29 +67,29 @@ cadastraOrgao nome="Pulmao" tipoSanguineo="A+"
 
 
 realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id1}
-expect 350.0 getGastosPaciente  paciente=${id1}
+expect 350.00 getGastosPaciente  paciente=${id1}
 expect 50 getPontosFidelidade paciente=${id1}
 
 
 realizaProcedimento procedimento="Redesignacao sexual" nomePaciente=${id1} medicamentos="Duraston,Morfina,Medroxyprogesterona"
-expect 10198 getGastosPaciente  paciente=${id1}
+expect 10038.80 getGastosPaciente  paciente=${id1}
 expect 180 getPontosFidelidade paciente=${id1}
 
 
 realizaProcedimento procedimento="Transplante de orgaos" nomePaciente=${id1} orgao="Pulmao" medicamentos="Nimesulida,Morfina" 
-expect 20961.1 getGastosPaciente  paciente=${id1}
+expect 20804.05 getGastosPaciente  paciente=${id1}
 expect 340 getPontosFidelidade paciente=${id1}
 
 
 
 
 realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id1}
-expect 21258.6 getGastosPaciente  paciente=${id1}
+expect 21101.55 getGastosPaciente  paciente=${id1}
 expect 390 getPontosFidelidade paciente=${id1}
 
 
 realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id1}
-expect 21503.6 getGastosPaciente  paciente=${id1}
+expect 21346.55 getGastosPaciente  paciente=${id1}
 expect 440 getPontosFidelidade paciente=${id1}
 
 
@@ -98,27 +97,26 @@ expect 440 getPontosFidelidade paciente=${id1}
 
 
 realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id2}
-expect 350.0 getGastosPaciente  paciente=${id2}
+expect 350.00 getGastosPaciente  paciente=${id2}
 expect 50 getPontosFidelidade paciente=${id2}
 
 
 realizaProcedimento procedimento="Transplante de orgaos" nomePaciente=${id2} orgao="Coracao" medicamentos="Nimesulida,Morfina"
-expect 13012.5 getGastosPaciente paciente=${id2}
+expect 13015.00 getGastosPaciente paciente=${id2}
 expect 210 getPontosFidelidade paciente=${id2}
 
 
 realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id2} 
-expect 13310 getGastosPaciente paciente=${id2}
+expect 13312.50 getGastosPaciente paciente=${id2}
 expect 260 getPontosFidelidade paciente=${id2}
 
 
-realizaProcedimento procedimento="Cirurgia bariatrica" nomePaciente=${id2}
-medicamentos="Valium,Morfina,Nimesulida"
-expect 19926.4 getGastosPaciente paciente=${id2}
+realizaProcedimento procedimento="Cirurgia bariatrica" nomePaciente=${id2} medicamentos="Valium,Morfina,Nimesulida"
+expect 19922.95 getGastosPaciente paciente=${id2}
 expect 360 getPontosFidelidade paciente=${id2}
         
 realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id2} 
-expect 20171.4 getGastosPaciente paciente=${id2}
+expect 20167.95 getGastosPaciente paciente=${id2}
 expect 410 getPontosFidelidade paciente=${id2}
 
 

@@ -2,6 +2,10 @@ package exceptions;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import procedimento.TipoProcedimento;
 
 /**
  * A classe LancaExcecao contem metodos que verificam a validade dos parametros passados aos outros
@@ -62,5 +66,20 @@ public class VerificaExcecao {
 		return true;
 	}
 
+	public static void checarProcedimento(String nomeProcedimento) throws Exception{
+		
+		List<String> nomeProcedimentos = new ArrayList<String>();
+		
+		for (TipoProcedimento procedure : TipoProcedimento.values()) {
+			
+			nomeProcedimentos.add(procedure.toString());
+		}
+		
+		if(!nomeProcedimentos.contains(nomeProcedimento)){
+			throw new Exception("Procedimento invalido.");
+		}
+		
+		
+	}
 
 }

@@ -1,19 +1,22 @@
 ﻿#################
-# Caso de Uso 6     #
+# Caso de Uso 6 #
 #################
 
 
-#iniciaSistema e fechaSistema serao usados para carregar/armazenar os dados do sistema nos arquivos de dados.
+# iniciaSistema e fechaSistema serao usados para carregar/armazenar os dados do sistema nos arquivos de dados.
+
 iniciaSistema
 
 
-#Logar com Ada Lovelace  que eh medica
+# Logar com Ada Lovelace  que eh medica
+
 login matricula="22016005" senha="19752201"
 
 
 #########################################
 #  Recupera ID de um paciente por nome  #
 #########################################
+
 # - Para simplificar o teste, se existem dois pacientes com o mesmo nome, retorne a primeira ocorrencia.
 
 
@@ -23,12 +26,12 @@ id3=getPacienteID nome="Plutarco"
 id4=getPacienteID nome="Safo"
 
 
-###########################
-# Realizacao de Procedimentos#
-###########################
+###############################
+# Realizacao de Procedimentos #
+###############################
 expectError "Erro na realizacao de procedimentos. Medicamento nao cadastrado." realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id4} medicamentos="Valium,Harvoni"
-expectError "Erro na realizacao de procedimentos. Nome do paciente nao pode ser vazio." realizaProcedimento procedimento="Consulta clinica" nomePaciente="" medicamentos="Valium,Harvoni"
-expectError "Erro na realizacao de procedimentos. Nome do paciente nao pode ser vazio." realizaProcedimento procedimento="Consulta clinica" nomePaciente=" " medicamentos="Valium,Harvoni"
+expectError "Erro na realizacao de procedimentos. ID do paciente nao pode ser vazio." realizaProcedimento procedimento="Consulta clinica" nomePaciente="" medicamentos="Valium,Harvoni"
+expectError "Erro na realizacao de procedimentos. ID do paciente nao pode ser vazio." realizaProcedimento procedimento="Consulta clinica" nomePaciente=" " medicamentos="Valium,Harvoni"
 expectError "Erro na realizacao de procedimentos. Banco nao possui o orgao especificado." realizaProcedimento procedimento="Transplante de orgaos" nomePaciente=${id2} orgao="Coracao" medicamentos="Nimesulida,Morfina"
 expectError "Erro na realizacao de procedimentos. Nome do orgao nao pode ser vazio." realizaProcedimento procedimento="Transplante de orgaos" nomePaciente=${id2} orgao="" medicamentos="Nimesulida,Morfina"
 expectError "Erro na realizacao de procedimentos. Medicamento nao cadastrado." realizaProcedimento procedimento="Redesignacao sexual" nomePaciente=${id3} medicamentos="Duraston,Morfina,Skooma"
@@ -44,10 +47,6 @@ realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id1} medicame
 realizaProcedimento procedimento="Cirurgia bariatrica" nomePaciente=${id2} medicamentos="Morfina,Nimesulida"
 realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id2} medicamentos="Penicilina,Valium"
 realizaProcedimento procedimento="Consulta clinica" nomePaciente=${id1} medicamentos="Metamizol,Nimesulida"
-
-
-# Hedwig teria 230 pontos, deveria 10669.02
-# Mitridates teria 150 pontos, deveria  8214
 
 
 expect "Hedwig" getInfoPaciente paciente=${id1} atributo="Nome" 

@@ -72,11 +72,11 @@ public class BancoDeOrgaos {
 		VerificaExcecao.checkEmptyParameter(tipoSanguineo, "TipoSanguineo");
 				
 		if (!existeOrgao(nome)) {
-			throw new Exception("O banco de orgaos nao possui o orgao especificado.");
+			throw new Exception("Banco nao possui o orgao especificado.");
 		}
 		
 		if (!existeOrgao(nome, tipoSanguineo)) {
-			throw new Exception("O paciente nao eh compativel com o orgao disponivel no banco.");	
+			throw new Exception("Banco nao possui o orgao especificado.");	
 		}
 		
 		return true;
