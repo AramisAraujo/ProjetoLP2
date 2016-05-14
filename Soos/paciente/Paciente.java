@@ -19,7 +19,7 @@ public class Paciente implements Comparable<Paciente> {
 	private LocalDate dataNascimento;
 	private double peso;
 	private UUID ID;
-	private double gastos;
+	private double gastoTotal;
 	
 	private final String NOME = "Nome", DATA = "Data", SEXO = "Sexo", GENERO = "Genero",
 			TIPO_SANGUINEO =  "TipoSanguineo", PESO = "Peso", IDADE = "Idade",
@@ -40,7 +40,7 @@ public class Paciente implements Comparable<Paciente> {
 		this.sexoBiologico = sexoBiologico;
 		this.genero = genero;
 		this.tipoSanguineo = tipoSanguineo;
-		this.gastos = 0;
+		this.gastoTotal = 0;
 	}
 
 	public UUID getID(){
@@ -108,12 +108,16 @@ public class Paciente implements Comparable<Paciente> {
 		return this.tipoSanguineo.toString();
 	}
 	
-	public double getGastos() {
-		return this.gastos;
+	public TipoSanguineo consultaTipoSanguineo() {
+		return this.tipoSanguineo;
+	}
+	
+	public double  getTotalProcedimento() {
+		return this.gastoTotal;
 	}
 	
 	public void somaGastos(double valor) {
-		this.gastos += valor;
+		this.gastoTotal += valor;
 	}
 	
 	public String getInfoPaciente(String atributo) throws Exception {

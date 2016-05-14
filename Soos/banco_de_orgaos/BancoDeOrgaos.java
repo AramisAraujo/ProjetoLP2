@@ -3,7 +3,9 @@ package banco_de_orgaos;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import exceptions.BancoOrgaoException;
+import exceptions.VerificaExcecao;
 import factories.FactoryOrgaos;
 import paciente.TipoSanguineo;
 
@@ -18,7 +20,7 @@ import paciente.TipoSanguineo;
  */
 public class BancoDeOrgaos {
 
-	private static List<Orgao> bancoDeOrgaos;
+	private List<Orgao> bancoDeOrgaos;
 	private FactoryOrgaos factoryOrgaos;
 
 	public BancoDeOrgaos() {
@@ -27,6 +29,7 @@ public class BancoDeOrgaos {
 	}
 
 	/**
+
 	 * Metodo utilizado para verificar se determinado orgao existe apenas
 	 * informando o nome do mesmo.
 	 * 
@@ -46,12 +49,12 @@ public class BancoDeOrgaos {
 
 	/**
 	 * Metodo utilizado para verificar se determinado orgao existe.
+	 * Checa se um orgao existe e se eh compativel com o sangue especificado
 	 * 
 	 * @param nome
 	 *            - nome do orgao que sera verificado
 	 * @param tipoSanguineo
 	 *            - tipo sanguineo do orgao que sera verificado
-	 * @return - true, se o orgao existir ou false, caso nao exista
 	 */
 	public Boolean existeOrgao(String nome, TipoSanguineo tipoSanguineo) {
 
@@ -61,6 +64,22 @@ public class BancoDeOrgaos {
 			}
 		}
 		return false;
+	}
+			
+	public boolean checarOrgaoCompativel(String nome, TipoSanguineo tipoSanguineo) throws Exception {
+		
+		VerificaExcecao.checkEmptyParameter(nome, "Nome do orgao");
+		VerificaExcecao.checkEmptyParameter(tipoSanguineo, "TipoSanguineo");
+				
+		if (!existeOrgao(nome)) {
+			throw new Exception("O banco de orgaos nao possui o orgao especificado.");
+		}
+		
+		if (!existeOrgao(nome, tipoSanguineo)) {
+			throw new Exception("O paciente nao eh compativel com o orgao disponivel no banco.");	
+		}
+		
+		return true;
 	}
 
 	/**
@@ -76,7 +95,8 @@ public class BancoDeOrgaos {
 
 		List<String> orgaosEncontrados = new ArrayList<String>();
 
-		for (Orgao orgao : bancoDeOrgaos) {
+		for (Orgao orgao : this.bancoDeOrgaos) {
+			
 			if (orgao.getTipoSanguineo().equals(tipoSanguineo)) {
 
 				String nomeOrgao = orgao.getNome();
@@ -148,6 +168,7 @@ public class BancoDeOrgaos {
 	 *             - excecao lancada caso nao exista nenhum orgao com as
 	 *             informacoes passadas como parametro
 	 */
+
 	public boolean removeOrgao(String nome, TipoSanguineo tipoSanguineo) throws Exception {
 
 		if (!this.existeOrgao(nome, tipoSanguineo)) {
@@ -164,7 +185,7 @@ public class BancoDeOrgaos {
 			}
 		}
 
-		return bancoDeOrgaos.remove(orgaoProcurado);
+		return this.bancoDeOrgaos.remove(orgaoProcurado);
 	}
 
 	/**

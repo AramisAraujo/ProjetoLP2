@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exceptions.BancoOrgaoException;
-import factories.FactoryOrgaos;
 import paciente.TipoSanguineo;
 
 public class BancoDeOrgaosTest {

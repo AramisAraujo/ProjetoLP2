@@ -20,6 +20,7 @@ import exceptions.LoginException;
 import exceptions.LogoutException;
 import exceptions.MedicamentoException;
 import exceptions.OpenSystemException;
+import exceptions.ProcedimentoException;
 import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
 import exceptions.VerificaExcecao;
@@ -27,8 +28,14 @@ import factories.FactoryUsuario;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Farmacia;
 import farmacia.Medicamento;
+import paciente.Paciente;
 import paciente.Prontuario;
 import paciente.TipoSanguineo;
+import procedimento.CirurgiaBariatrica;
+import procedimento.ConsultaClinica;
+import procedimento.Procedimento;
+import procedimento.RedesignacaoSexual;
+import procedimento.TransplanteDeOrgaos;
 import usuario.Usuario;
 import usuario.TipoCargo;
 
@@ -42,7 +49,13 @@ public class Controller {
 	private Farmacia farmacia;
 	private BancoDeOrgaos bancoDeOrgaos;
 	private FactoryUsuario factoryUsuarios;
-
+	private Procedimento procedimento;
+	
+	private final String CONSULTA = "Consulta clinica", CIRURGIA_BARIATRICA = "Cirurgia bariatrica",
+			REDESIGNACAO_SEXUAL = "Redesignacao sexual", TRANSPLANTE = "Transplante de orgao",
+			NOME = "NOME", PRECO = "PRECO", TIPO = "TIPO", QUANTIDADE = "QUANTIDADE",
+			CATEGORIAS = "CATEGORIAS", DATA = "DATA";
+	
 	public Controller() {
 		this.sistemaBloqueado = true;
 		this.cadastrosRealizados = 0;
@@ -390,15 +403,22 @@ public class Controller {
 		}
 
 	}
-
-	public String getInfoPaciente(String paciente, String atributo)
+	
+	/**
+	 * Obtem informacoes do paciente conforme o atributo especificado
+	 * @param pacienteID
+	 * @param atributo
+	 * @return
+	 * @throws ConsultaException
+	 */
+	public String getInfoPaciente(String pacienteID, String atributo)
 			throws ConsultaException {
 
 		Prontuario targetProntuario = null;
 
 		for (Prontuario prontuario : this.bancoProntuarios) {
 
-			if (prontuario.getID().equals(paciente)) {
+			if (prontuario.getID().equals(pacienteID)) {
 				targetProntuario = prontuario;
 			}
 
@@ -424,14 +444,14 @@ public class Controller {
 					"Medicamento nao existe.");
 
 		}
-
+		
 		switch (atributo.toUpperCase()) {
 
-		case "NOME":
+		case NOME:
 			farmacia.existeMedicamento(medicamento);
 			return medicamento;
 
-		case "PRECO":
+		case PRECO:
 
 			String preco;
 			try {
@@ -441,7 +461,7 @@ public class Controller {
 			}
 			return preco;
 
-		case "QUANTIDADE":
+		case QUANTIDADE:
 
 			String quantidade;
 			try {
@@ -452,13 +472,13 @@ public class Controller {
 			}
 			return quantidade;
 
-		case "CATEGORIAS":
+		case CATEGORIAS:
 
 			String categorias = this.farmacia
 					.getCategoriasMedicamento(medicamento);
 			return categorias;
 
-		case "TIPO":
+		case TIPO:
 
 			String tipo;
 			try {
@@ -474,6 +494,12 @@ public class Controller {
 
 	}
 
+	/**
+	 * Acessa um prontuario a partir de sua posicao na colecao
+	 * @param posicao
+	 * @return
+	 * @throws ProntuarioException
+	 */
 	public String getProntuario(int posicao) throws ProntuarioException {
 
 		if (posicao < 0) {
@@ -582,6 +608,32 @@ public class Controller {
 	}
 	
 
+	/**
+	 * Acessa um prontuario a partir do nome do paciente
+	 * @param nomePaciente
+	 * @return
+	 * @throws Exception
+	 */
+	public Prontuario getProntuario(String nomePaciente) throws Exception {
+		try {
+			VerificaExcecao.checkEmptyParameter(nomePaciente, "Nome do paciente");
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+		try {
+			Prontuario prontuarioProcurado = null;
+			for (Prontuario prontuario : this.bancoProntuarios) {
+				if (prontuario.getInfoPaciente("Nome").equals(nomePaciente)) {
+					prontuarioProcurado = prontuario;
+					return prontuarioProcurado;
+				}
+			}
+			throw new Exception("Prontuario nao encontrado.");
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+
 	public void excluiFuncionario(String matricula, String senha)
 			throws ExcluirCadastroException {
 
@@ -641,7 +693,7 @@ public class Controller {
 
 		switch (atributo.toUpperCase()) {
 
-		case "NOME":
+		case NOME:
 
 			try {
 				VerificaExcecao.checkEmptyString(novoValor, "Nome");
@@ -660,7 +712,7 @@ public class Controller {
 
 			break;
 
-		case "DATA":
+		case DATA:
 
 			LocalDate novaData;
 			try {
@@ -694,7 +746,7 @@ public class Controller {
 
 		switch (atributo.toUpperCase()) {
 
-		case "NOME":
+		case NOME:
 
 			try {
 				VerificaExcecao.checkEmptyString(novoValor, "Nome");
@@ -713,7 +765,7 @@ public class Controller {
 
 			break;
 
-		case "DATA":
+		case DATA:
 
 			LocalDate novaData;
 			try {
@@ -939,6 +991,190 @@ public class Controller {
 		}
 		throw new Exception("Tipo sanguineo invalido.");
 		
+	}
+	
+	/**
+	 * Acessa o id de um paciente pelo seu nome
+	 * @param nomePaciente
+	 * @return
+	 * @throws Exception
+	 */
+	public String getPacienteID(String nomePaciente) throws Exception {
+		try {
+			VerificaExcecao.checkEmptyParameter(nomePaciente, "Nome do paciente");
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+		
+		try {
+			String idProcurado = null;
+			for (Prontuario prontuario : this.bancoProntuarios) {
+				if (prontuario.getInfoPaciente("Nome").equals(nomePaciente)) {
+					idProcurado = prontuario.getID();
+					return idProcurado;
+				}
+			}
+			throw new Exception("Paciente nao encontrado.");
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Acessa um paciente pelo seu nome
+	 * @param nomePaciente
+	 * @return
+	 * @throws Exception
+	 */
+	public Paciente getPaciente(String nomePaciente) throws Exception {
+		try {
+			VerificaExcecao.checkEmptyParameter(nomePaciente, "Nome do paciente");
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+		
+		try {
+			Paciente pacienteProcurado = null;
+			for (Prontuario prontuario : this.bancoProntuarios) {
+				if (prontuario.getInfoPaciente("Nome").equalsIgnoreCase(nomePaciente)) {
+					pacienteProcurado = prontuario.getPaciente();
+					return pacienteProcurado;
+				}
+			}
+			throw new Exception("Paciente nao encontrado.");
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+		
+	}
+	
+	/**
+	 * Realiza procedimento sem orgao
+	 * 
+	 * @param nomeProcedimento
+	 * @param nomePaciente
+	 * @param medicamentos
+	 * @throws Exception
+	 */
+	public void realizaProcedimento(String nomeProcedimento, String nomePaciente,
+									String... medicamentos) throws Exception {
+		try {
+			
+			VerificaExcecao.checkEmptyParameter(nomeProcedimento, "Nome do procedimento");
+			VerificaExcecao.checkEmptyParameter(nomePaciente, "Nome do paciente");
+			VerificaExcecao.checkEmptyParameter(medicamentos, "Nome do medicamento"); // se medicamentos for null
+			for (String nome : medicamentos) {
+				VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");	// se medicamentos for String[]
+			}
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+		
+		Paciente paciente = this.getPaciente(nomePaciente);
+		Prontuario prontuario = this.getProntuario(nomePaciente);
+		
+		try {
+			
+			double custoMedicamentos = 0;
+			for (String medicamento : medicamentos) {
+				custoMedicamentos += this.farmacia.getPreco(medicamento);
+			}
+			paciente.somaGastos(custoMedicamentos);
+			
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+		
+		try {	
+			switch (nomeProcedimento) {
+			
+			case CONSULTA:
+				this.procedimento = new ConsultaClinica();
+				this.procedimento.realizaProcedimento(paciente);
+				prontuario.registraProcedimento(procedimento);
+				
+			case CIRURGIA_BARIATRICA:
+				procedimento = new CirurgiaBariatrica();
+				this.procedimento.realizaProcedimento(paciente);
+				prontuario.registraProcedimento(procedimento);
+				
+			case REDESIGNACAO_SEXUAL:
+				procedimento = new RedesignacaoSexual();
+				this.procedimento.realizaProcedimento(paciente);
+				prontuario.registraProcedimento(procedimento);
+				
+			default:
+				throw new Exception("Procedimento invalido.");
+			}
+			
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Realiza procedimento com orgao
+	 * @param nomeProcedimento
+	 * @param nomeOrgao
+	 * @param nomePaciente
+	 * @param medicamentos
+	 * @throws Exception
+	 */
+	public void realizaProcedimento(String nomeProcedimento, String nomeOrgao,
+									String nomePaciente, String... medicamentos) throws Exception {
+		
+		try {
+			
+			VerificaExcecao.checkEmptyParameter(nomeProcedimento, "Nome do procedimento");
+			VerificaExcecao.checkEmptyParameter(nomeOrgao, "Nome do orgao");
+			VerificaExcecao.checkEmptyParameter(nomePaciente, "Nome do paciente");
+			VerificaExcecao.checkEmptyParameter(medicamentos, "Nome do medicamento"); // se medicamentos for null
+			for (String nome : medicamentos) {
+				VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");	// se medicamentos for String[]
+			}
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+		
+		Paciente paciente = this.getPaciente(nomePaciente);
+		Prontuario prontuario = this.getProntuario(nomePaciente);
+		TipoSanguineo sangue = paciente.consultaTipoSanguineo();
+		
+		try {
+			this.bancoDeOrgaos.checarOrgaoCompativel(nomeOrgao, sangue);
+			
+		}catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+		
+		// registra o custo com medicamentos, somando aos gastos do paciente
+		try {
+			
+			double custoMedicamentos = 0;
+			for (String medicamento : medicamentos) {
+				custoMedicamentos += this.farmacia.getPreco(medicamento);
+			}
+			paciente.somaGastos(custoMedicamentos);
+			
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+		
+		try {
+			if (nomeProcedimento.equalsIgnoreCase(TRANSPLANTE)) {
+				
+				this.bancoDeOrgaos.removeOrgao(nomeOrgao, sangue);
+				procedimento = new TransplanteDeOrgaos();
+				this.procedimento.realizaProcedimento(paciente);
+				prontuario.registraProcedimento(procedimento);
+				
+			} else {
+				throw new Exception("Procedimento invalido.");
+			}
+			
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
 	}
 
 }
