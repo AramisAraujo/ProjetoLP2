@@ -18,19 +18,21 @@ public class BancoDeOrgaosTest {
 	}
 
 	@Test
-	public void testExisteOrgao() {
-		// nao existe orgao
+	public void testChecarOrgaoCompativel() {
+
 		try {
-			assertFalse(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
-		} catch (Exception e) {
+			BancoDeOrgaos.checarOrgaoCompativel("coracao", TipoSanguineo.A_NEG);
 			fail();
+		} catch (Exception e) {
+			assertEquals("O banco de orgaos nao possui o orgao especificado.", e.getMessage());
 		}
-		// existe orgao
+
 		try {
 			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
-			assertTrue(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.AB_NEG));
-		} catch (Exception e) {
+			BancoDeOrgaos.checarOrgaoCompativel("coracao", TipoSanguineo.A_NEG);
 			fail();
+		} catch (Exception e) {
+			assertEquals("O paciente nao eh compativel com o orgao disponivel no banco.", e.getMessage());
 		}
 
 	}
@@ -60,7 +62,7 @@ public class BancoDeOrgaosTest {
 	public void testAddOrgao() {
 		try {
 			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
-			assertTrue(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
+			assertTrue(BancoDeOrgaos.checarOrgaoCompativel("coracao", TipoSanguineo.A_NEG));
 		} catch (Exception e) {
 			fail();
 		}
@@ -68,23 +70,22 @@ public class BancoDeOrgaosTest {
 
 	@Test
 	public void testRemoveOrgao() {
-		// nao existe orgao
 		try {
 			bancoDeOrgaos.removeOrgao("coracao", TipoSanguineo.A_NEG);
 			fail();
 		} catch (Exception e) {
-			assertEquals("Esse orgao nao existe.", e.getMessage());
+			assertEquals("O banco de orgaos nao possui o orgao especificado.", e.getMessage());
 		}
 		
-		// existe orgao
 		try {
 			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
 			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.AB_NEG);
 			bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.B_NEG);
 			bancoDeOrgaos.removeOrgao("coracao", TipoSanguineo.A_NEG);
-			assertFalse(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
-		} catch (Exception e) {
+			BancoDeOrgaos.checarOrgaoCompativel("coracao", TipoSanguineo.A_NEG);
 			fail();
+		} catch (Exception e) {
+			assertEquals("O banco de orgaos nao possui o orgao especificado.", e.getMessage());
 		}
 	}
 

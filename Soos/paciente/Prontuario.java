@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import exceptions.ProntuarioException;
 import exceptions.VerificaExcecao;
+import procedimento.Procedimento;
 
 /**
  * A classe Prontuario é composta de um objeto paciente e um conjunto de procedimentos.
@@ -39,6 +40,14 @@ public class Prontuario implements Comparable<Prontuario> {
 	
 	public int getQntProcedimentos() {
 		return this.procedimentos.size();
+	}
+	
+	public Paciente getPaciente() {
+		return this.paciente;
+	}
+	
+	public boolean registraProcedimento(Procedimento procedimento) {
+		return this.procedimentos.add(procedimento);
 	}
 	
 	/**

@@ -73,8 +73,8 @@ public class Facade {
 		return this.controle.getProntuario(posicao);
 	}
 	
-	public String getInfoPaciente(String paciente, String atributo) throws ConsultaException{
-		return this.controle.getInfoPaciente(paciente, atributo);
+	public String getInfoPaciente(String pacienteID, String atributo) throws ConsultaException{
+		return this.controle.getInfoPaciente(pacienteID, atributo);
 	}
 	
 	public String getInfoFuncionario(String matricula, String info) throws ConsultaException{

@@ -1,4 +1,6 @@
-package paciente;
+package procedimento;
+
+import paciente.Paciente;
 
 /**
  * 
@@ -9,8 +11,7 @@ public class TransplanteDeOrgaos implements Procedimento {
 	
 	private final double PRECO = 12500.00;
 	
-	public TransplanteDeOrgaos() {
-	}
+	public TransplanteDeOrgaos() {}
 
 	
 	@Override

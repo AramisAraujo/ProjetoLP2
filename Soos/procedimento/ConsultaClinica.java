@@ -1,4 +1,6 @@
-package paciente;
+package procedimento;
+
+import paciente.Paciente;
 
 /**
  * 
@@ -11,6 +13,9 @@ public class ConsultaClinica implements Procedimento {
 	
 	public ConsultaClinica() {}
 
+	/**
+	 * Consulta clinica apenas eh cobrado o procedimento
+	 */
 	@Override
 	public void realizaProcedimento(Paciente paciente) {
 		paciente.somaGastos(PRECO);

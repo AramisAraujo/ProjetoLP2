@@ -1,4 +1,6 @@
-package paciente;
+package procedimento;
+
+import paciente.Paciente;
 
 /**
  * 
