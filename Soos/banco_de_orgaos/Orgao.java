@@ -23,11 +23,19 @@ public class Orgao {
 		} catch (Exception e) {
 			throw new BancoOrgaoException(e.getMessage());
 		}
-		
+
 		this.nome = nome;
 		this.tipoSanguineo = tipoSanguineo;
 	}
 
+	/**
+	 * Metodo utilizado para verificar se o tipo sanguineo eh valido.
+	 * 
+	 * @param tipoSanguineo
+	 *            - tipo sanguineo que sera verificado
+	 * @throws Exception
+	 *             - excecao lancada caso o login nao seja valido
+	 */
 	public void verificaTipoSanguineo(TipoSanguineo tipoSanguineo) throws Exception {
 		if (tipoSanguineo == null) {
 			throw new Exception("Tipo sanguineo invalido.");
@@ -62,13 +70,13 @@ public class Orgao {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Orgao) {
-            Orgao outroOrgao = (Orgao) obj;
-            if (outroOrgao.nome.equals(this.nome)) {
-                if (outroOrgao.tipoSanguineo.equals(this.tipoSanguineo)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+			Orgao outroOrgao = (Orgao) obj;
+			if (outroOrgao.nome.equals(this.nome)) {
+				if (outroOrgao.tipoSanguineo.equals(this.tipoSanguineo)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

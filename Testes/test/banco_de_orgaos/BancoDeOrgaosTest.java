@@ -2,9 +2,13 @@ package banco_de_orgaos;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import exceptions.BancoOrgaoException;
 import factories.FactoryOrgaos;
 import paciente.TipoSanguineo;
 
@@ -18,7 +22,25 @@ public class BancoDeOrgaosTest {
 	}
 
 	@Test
-	public void testExisteOrgao() {
+	public void testExisteOrgaoString() {
+		// nao existe orgao
+		try {
+			assertFalse(bancoDeOrgaos.existeOrgao("coracao"));
+		} catch (Exception e) {
+			fail();
+		}
+
+		// existe orgao
+		try {
+			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_POS);
+			assertTrue(bancoDeOrgaos.existeOrgao("coracao"));
+		} catch (Exception e) {
+			fail();
+		}
+	}
+
+	@Test
+	public void testExisteOrgaoStringTipoSanguineo() {
 		// nao existe orgao
 		try {
 			assertFalse(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
@@ -32,25 +54,33 @@ public class BancoDeOrgaosTest {
 		} catch (Exception e) {
 			fail();
 		}
-
 	}
 
 	@Test
-	public void testBuscaOrgao() {
-		// nao existe orgao
+	public void testGetOrgaoPorSangue() {
 		try {
-			bancoDeOrgaos.getOrgao("rim", TipoSanguineo.B_POS);
-			fail();
+			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
+			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.A_NEG);
+			bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.AB_NEG);
+			List<String> orgaos = new ArrayList<String>();
+			orgaos.add("coracao");
+			orgaos.add("rim");
+			assertEquals(bancoDeOrgaos.getOrgaoPorSangue(TipoSanguineo.A_NEG), orgaos);
 		} catch (Exception e) {
-			assertEquals("Esse orgao nao existe.", e.getMessage());
+			fail();
 		}
-		
-		// existe orgao
+	}
+
+	@Test
+	public void testGetOrgaoPorNome() {
 		try {
-			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.B_POS);
-			FactoryOrgaos factory = new FactoryOrgaos();
-			Orgao rim = factory.criaOrgao("rim", TipoSanguineo.B_POS);
-			assertEquals(bancoDeOrgaos.getOrgao("rim", TipoSanguineo.B_POS), rim);
+			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
+			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.A_NEG);
+			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
+			List<String> tipos = new ArrayList<String>();
+			tipos.add("A-");
+			tipos.add("AB-");
+			assertEquals(bancoDeOrgaos.getOrgaoPorNome("coracao"), tipos);
 		} catch (Exception e) {
 			fail();
 		}
@@ -67,15 +97,14 @@ public class BancoDeOrgaosTest {
 	}
 
 	@Test
-	public void testRemoveOrgao() {
-		// nao existe orgao
+	public void testRemoveOrgao() { // nao existe orgao
 		try {
 			bancoDeOrgaos.removeOrgao("coracao", TipoSanguineo.A_NEG);
 			fail();
 		} catch (Exception e) {
-			assertEquals("Esse orgao nao existe.", e.getMessage());
+			assertEquals("Orgao nao cadastrado.", e.getMessage());
 		}
-		
+
 		// existe orgao
 		try {
 			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
@@ -94,10 +123,10 @@ public class BancoDeOrgaosTest {
 		try {
 			bancoDeOrgaos.qntOrgao("coracao");
 			fail();
-		} catch (Exception e) {
-			assertEquals("Esse orgao nao existe.", e.getMessage());
+		} catch (BancoOrgaoException e) {
+			assertEquals("O banco de orgaos apresentou um erro. Orgao nao cadastrado.", e.getMessage());
 		}
-		
+
 		// existe orgao
 		try {
 			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
@@ -109,18 +138,13 @@ public class BancoDeOrgaosTest {
 			fail();
 		}
 	}
-
-	@Test
-	public void testQntTotalOrgaos() {
-		try {
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
-			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.AB_NEG);
-			bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.B_NEG);
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
-			assertEquals(bancoDeOrgaos.qntTotalOrgaos(), 4);
-		} catch (Exception e) {
-			fail();
-		}
-	}
-
+	/*
+	 * @Test public void testQntTotalOrgaos() { try {
+	 * bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
+	 * bancoDeOrgaos.addOrgao("rim", TipoSanguineo.AB_NEG);
+	 * bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.B_NEG);
+	 * bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
+	 * assertEquals(bancoDeOrgaos.qntTotalOrgaos(), 4); } catch (Exception e) {
+	 * fail(); } }
+	 */
 }

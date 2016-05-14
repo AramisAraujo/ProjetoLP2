@@ -14,7 +14,7 @@ public class FactoryOrgaos {
 	 * @param tipoSanguineo
 	 *            - tipo sanguineo do orgao que sera criado
 	 * @return - orgao que foi criado
-	 * @throws Exception - excecao lancada caso ocorra algum erro
+	 * @throws BancoOrgaoException - excecao lancada caso ocorra algum erro
 	 */
 	public Orgao criaOrgao(String nome, TipoSanguineo tipoSanguineo) throws BancoOrgaoException {
 		

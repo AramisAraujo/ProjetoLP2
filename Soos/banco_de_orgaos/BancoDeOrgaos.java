@@ -8,7 +8,7 @@ import factories.FactoryOrgaos;
 import paciente.TipoSanguineo;
 
 /**
- * Classe utilizada para armazenar e gerenciar órgãos fornecidos por doadores.
+ * Classe utilizada para armazenar e gerenciar orgaos fornecidos por doadores.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -27,16 +27,15 @@ public class BancoDeOrgaos {
 	}
 
 	/**
-	 * Metodo utilizado para verificar se determinado orgao existe.
+	 * Metodo utilizado para verificar se determinado orgao existe apenas
+	 * informando o nome do mesmo.
 	 * 
 	 * @param nome
 	 *            - nome do orgao que sera verificado
-	 * @param tipoSanguineo
-	 *            - tipo sanguineo do orgao que sera verificado
 	 * @return - true, se o orgao existir ou false, caso nao exista
 	 */
 	public boolean existeOrgao(String nome) {
-		
+
 		for (Orgao orgao : bancoDeOrgaos) {
 			if (orgao.getNome().equals(nome)) {
 				return true;
@@ -45,56 +44,79 @@ public class BancoDeOrgaos {
 		return false;
 	}
 
+	/**
+	 * Metodo utilizado para verificar se determinado orgao existe.
+	 * 
+	 * @param nome
+	 *            - nome do orgao que sera verificado
+	 * @param tipoSanguineo
+	 *            - tipo sanguineo do orgao que sera verificado
+	 * @return - true, se o orgao existir ou false, caso nao exista
+	 */
+	public Boolean existeOrgao(String nome, TipoSanguineo tipoSanguineo) {
 
-	public Boolean existeOrgao(String nome, TipoSanguineo tipoSanguineo){
-		
 		for (Orgao orgao : bancoDeOrgaos) {
-			if (orgao.getNome().equals(nome) && 
-					orgao.getTipoSanguineo().equals(tipoSanguineo)) {
+			if (orgao.getNome().equals(nome) && orgao.getTipoSanguineo().equals(tipoSanguineo)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public List<String> getOrgaoPorSangue(TipoSanguineo tipoSanguineo){
-		
+
+	/**
+	 * Metodo utilizado para retornar todos os orgaos que sao de um determinado
+	 * tipo sanguineo.
+	 * 
+	 * @param tipoSanguineo
+	 *            - tipo sanguineo informado
+	 * @return - lista com todos os orgaos que pertencem ao tipo sanguineo
+	 *         especificado
+	 */
+	public List<String> getOrgaoPorSangue(TipoSanguineo tipoSanguineo) {
+
 		List<String> orgaosEncontrados = new ArrayList<String>();
-		
+
 		for (Orgao orgao : bancoDeOrgaos) {
-			if (orgao.getTipoSanguineo().equals(tipoSanguineo)){
-				
+			if (orgao.getTipoSanguineo().equals(tipoSanguineo)) {
+
 				String nomeOrgao = orgao.getNome();
-				
-				if(!orgaosEncontrados.contains(nomeOrgao)){
+
+				if (!orgaosEncontrados.contains(nomeOrgao)) {
 					orgaosEncontrados.add(nomeOrgao);
 
 				}
 			}
 		}
-		
+
 		return orgaosEncontrados;
 	}
-	
-	public List<String> getOrgaoPorNome (String nome){
-		
+
+	/**
+	 * Metodo utilizado para retornar todos os orgaos que possuem o nome igual
+	 * ao informado como parametro.
+	 * 
+	 * @param nome
+	 *            - nome do orgao
+	 * @return - lista com todos os orgaos que possuem o mesmo nome do informado
+	 *         como parametro
+	 */
+	public List<String> getOrgaoPorNome(String nome) {
+
 		List<String> tiposDisponiveis = new ArrayList<String>();
-		
+
 		for (Orgao orgao : bancoDeOrgaos) {
-			if (orgao.getNome().equals(nome)){
-				
+			if (orgao.getNome().equals(nome)) {
+
 				String tipo = orgao.getTipoSanguineo().toString();
 
 				tiposDisponiveis.add(tipo);
 			}
-			
+
 		}
-		
+
 		return tiposDisponiveis;
-		
+
 	}
-	
-	
 
 	/**
 	 * Metodo utilizado para criar e adicionar orgaos ao banco de orgaos.
@@ -103,33 +125,45 @@ public class BancoDeOrgaos {
 	 *            - nome do orgao que sera criado e adicionado
 	 * @param tipoSanguineo
 	 *            - tipo sanguineo do do orgao que sera criado e adicionado
-	 * @throws Exception
+	 * @throws BancoOrgaoException
+	 *             - excecao lancada caso ocorra algum erro
 	 */
-	public boolean addOrgao(String nome, TipoSanguineo tipoSanguineo)throws BancoOrgaoException {
-		
+	public boolean addOrgao(String nome, TipoSanguineo tipoSanguineo) throws BancoOrgaoException {
+
 		Orgao orgao = factoryOrgaos.criaOrgao(nome, tipoSanguineo);
 		
+
 		return bancoDeOrgaos.add(orgao);
 	}
 
+	/**
+	 * Metodo utilizado para remover determinado orgao.
+	 * 
+	 * @param nome
+	 *            - nome do orgao que sera removido
+	 * @param tipoSanguineo
+	 *            - tipo sanguineo do orgao que sera removido
+	 * @return - true, se o orgao foi removido e nao ocorreu nenhum erro
+	 * @throws Exception
+	 *             - excecao lancada caso nao exista nenhum orgao com as
+	 *             informacoes passadas como parametro
+	 */
+	public boolean removeOrgao(String nome, TipoSanguineo tipoSanguineo) throws Exception {
 
-	public boolean removeOrgao(String nome, TipoSanguineo tipoSanguineo)throws Exception {
-		
-		if (!this.existeOrgao(nome, tipoSanguineo)) { 
+		if (!this.existeOrgao(nome, tipoSanguineo)) {
 			throw new Exception("Orgao nao cadastrado.");
 		}
-		
+
 		Orgao orgaoProcurado = null;
-		
+
 		for (Orgao orgaoAtual : bancoDeOrgaos) {
-			
-			if (orgaoAtual.getNome().equals(nome) && 
-					orgaoAtual.getTipoSanguineo().equals(tipoSanguineo)) {
-				
+
+			if (orgaoAtual.getNome().equals(nome) && orgaoAtual.getTipoSanguineo().equals(tipoSanguineo)) {
+
 				orgaoProcurado = orgaoAtual;
 			}
 		}
-		
+
 		return bancoDeOrgaos.remove(orgaoProcurado);
 	}
 
@@ -139,23 +173,25 @@ public class BancoDeOrgaos {
 	 * @param nome
 	 *            - nome do orgao
 	 * @return - quantidade de orgaos
-	 * @throws Exception
+	 * @throws BancoOrgaoException
+	 *             - execao lancada caso nao exista nenhum orgao com o nome
+	 *             passado como parametro cadastrado
 	 */
 	public int qntOrgao(String nome) throws BancoOrgaoException {
-		
+
 		int qntOrgao = 0;
-		
+
 		for (Orgao orgao : bancoDeOrgaos) {
-			
+
 			if (orgao.getNome().equals(nome)) {
-				
+
 				qntOrgao++;
 			}
 		}
 		if (qntOrgao == 0) {
-			
-			throw new BancoOrgaoException("Orgao nao cadastrado."); 
-															
+
+			throw new BancoOrgaoException("Orgao nao cadastrado.");
+
 		}
 		return qntOrgao;
 
@@ -163,7 +199,7 @@ public class BancoDeOrgaos {
 
 	/**
 	 * Metodo utilizado para informar a quantidade total de orgaos no banco de
-	 * orgoas.
+	 * orgaos.
 	 * 
 	 * @return - quantidade total de orgao no banco de orgaos
 	 */
