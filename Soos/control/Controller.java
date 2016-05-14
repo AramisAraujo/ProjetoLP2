@@ -633,6 +633,7 @@ public class Controller {
 			throw new Exception(e.getMessage());
 		}
 	}
+	
 
 	public void excluiFuncionario(String matricula, String senha)
 			throws ExcluirCadastroException {
@@ -999,11 +1000,11 @@ public class Controller {
 	 * @return
 	 * @throws Exception
 	 */
-	public String getPacienteID(String nomePaciente) throws Exception {
+	public String getPacienteID(String nomePaciente) throws ProntuarioException {
 		try {
 			VerificaExcecao.checkEmptyParameter(nomePaciente, "Nome do paciente");
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			throw new ProntuarioException(e.getMessage());
 		}
 		
 		try {
@@ -1014,9 +1015,9 @@ public class Controller {
 					return idProcurado;
 				}
 			}
-			throw new Exception("Paciente nao encontrado.");
+			throw new ProntuarioException("Paciente nao encontrado.");
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			throw new ProntuarioException(e.getMessage());
 		}
 	}
 	
@@ -1057,21 +1058,35 @@ public class Controller {
 	 * @throws Exception
 	 */
 	public void realizaProcedimento(String nomeProcedimento, String nomePaciente,
-									String... medicamentos) throws Exception {
+									String... medicamentos) throws ProcedimentoException {
 		try {
 			
 			VerificaExcecao.checkEmptyParameter(nomeProcedimento, "Nome do procedimento");
 			VerificaExcecao.checkEmptyParameter(nomePaciente, "Nome do paciente");
 			VerificaExcecao.checkEmptyParameter(medicamentos, "Nome do medicamento"); // se medicamentos for null
+			
 			for (String nome : medicamentos) {
 				VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");	// se medicamentos for String[]
+				
 			}
 		} catch (Exception e) {
 			throw new ProcedimentoException(e.getMessage());
 		}
 		
-		Paciente paciente = this.getPaciente(nomePaciente);
-		Prontuario prontuario = this.getProntuario(nomePaciente);
+		Paciente paciente;
+		Prontuario prontuario;
+
+		try {
+			paciente = this.getPaciente(nomePaciente);
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+		
+		try {
+			prontuario = this.getProntuario(nomePaciente);
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
 		
 		try {
 			
@@ -1082,7 +1097,7 @@ public class Controller {
 			paciente.somaGastos(custoMedicamentos);
 			
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			throw new ProcedimentoException(e.getMessage());
 		}
 		
 		try {	
@@ -1121,7 +1136,8 @@ public class Controller {
 	 * @throws Exception
 	 */
 	public void realizaProcedimento(String nomeProcedimento, String nomeOrgao,
-									String nomePaciente, String... medicamentos) throws Exception {
+									String nomePaciente, 
+									String... medicamentos) throws ProcedimentoException {
 		
 		try {
 			
@@ -1129,6 +1145,7 @@ public class Controller {
 			VerificaExcecao.checkEmptyParameter(nomeOrgao, "Nome do orgao");
 			VerificaExcecao.checkEmptyParameter(nomePaciente, "Nome do paciente");
 			VerificaExcecao.checkEmptyParameter(medicamentos, "Nome do medicamento"); // se medicamentos for null
+			
 			for (String nome : medicamentos) {
 				VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");	// se medicamentos for String[]
 			}
@@ -1136,8 +1153,21 @@ public class Controller {
 			throw new ProcedimentoException(e.getMessage());
 		}
 		
-		Paciente paciente = this.getPaciente(nomePaciente);
-		Prontuario prontuario = this.getProntuario(nomePaciente);
+		Paciente paciente;
+		Prontuario prontuario;
+
+		try {
+			paciente = this.getPaciente(nomePaciente);
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+		
+		try {
+			prontuario = this.getProntuario(nomePaciente);
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+		
 		TipoSanguineo sangue = paciente.consultaTipoSanguineo();
 		
 		try {
@@ -1157,7 +1187,7 @@ public class Controller {
 			paciente.somaGastos(custoMedicamentos);
 			
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			throw new ProcedimentoException(e.getMessage());
 		}
 		
 		try {
@@ -1169,7 +1199,7 @@ public class Controller {
 				prontuario.registraProcedimento(procedimento);
 				
 			} else {
-				throw new Exception("Procedimento invalido.");
+				throw new ProcedimentoException("Procedimento invalido.");
 			}
 			
 		} catch (Exception e) {

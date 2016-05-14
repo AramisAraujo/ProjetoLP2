@@ -11,6 +11,7 @@ import exceptions.LoginException;
 import exceptions.LogoutException;
 import exceptions.MedicamentoException;
 import exceptions.OpenSystemException;
+import exceptions.ProcedimentoException;
 import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
 import farmacia.Medicamento;
@@ -77,6 +78,11 @@ public class Facade {
 	
 	public String getProntuario(int posicao) throws ProntuarioException{
 		return this.controle.getProntuario(posicao);
+	}
+	
+	public String getPacienteID(String nome) throws ProntuarioException{
+		
+		return this.controle.getPacienteID(nome);
 	}
 	
 	public String getInfoPaciente(String pacienteID, String atributo) throws ConsultaException{
@@ -160,6 +166,17 @@ public class Facade {
 	public int totalOrgaosDisponiveis(){
 		
 		return this.controle.totalOrgaosDisponiveis();
+	}
+	
+	public void realizaProcedimento(String nomeProcedimento, String nomePaciente,
+			String... medicamentos) throws ProcedimentoException {
+		
+		this.controle.realizaProcedimento(nomeProcedimento, nomePaciente, medicamentos);
+	}
+	public void realizaProcedimento(String nomeProcedimento,String nomeOrgao, String nomePaciente,
+			String... medicamentos) throws ProcedimentoException {
+		
+		this.controle.realizaProcedimento(nomeProcedimento, nomeOrgao, nomePaciente, medicamentos);
 	}
 	
 }
