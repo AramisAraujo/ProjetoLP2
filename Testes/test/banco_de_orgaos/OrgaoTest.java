@@ -24,7 +24,7 @@ public class OrgaoTest {
 			Orgao vazio = new Orgao("", TipoSanguineo.AB_NEG);
 			fail();
 		} catch (Exception e) {
-			assertEquals("O nome do orgao nao pode ser vazio.", e.getMessage());
+			assertEquals("O banco de orgaos apresentou um erro. Nome do orgao nao pode ser vazio.", e.getMessage());
 		}
 
 		// nome nulo
@@ -32,7 +32,7 @@ public class OrgaoTest {
 			Orgao mulo = new Orgao(null, TipoSanguineo.AB_NEG);
 			fail();
 		} catch (Exception e) {
-			assertEquals("O nome do orgao nao pode ser vazio.", e.getMessage());
+			assertEquals("O banco de orgaos apresentou um erro. Nome do orgao nao pode ser vazio.", e.getMessage());
 		}
 
 		// tipo sanguineo nulo
@@ -40,7 +40,7 @@ public class OrgaoTest {
 			Orgao pulmao = new Orgao("Pulmao", null);
 			fail();
 		} catch (Exception e) {
-			assertEquals("O tipo sanguineo nao pode ser nulo.", e.getMessage());
+			assertEquals("O banco de orgaos apresentou um erro. Tipo sanguineo invalido.", e.getMessage());
 		}
 	}
 

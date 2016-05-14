@@ -138,13 +138,18 @@ public class BancoDeOrgaosTest {
 			fail();
 		}
 	}
-	/*
-	 * @Test public void testQntTotalOrgaos() { try {
-	 * bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
-	 * bancoDeOrgaos.addOrgao("rim", TipoSanguineo.AB_NEG);
-	 * bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.B_NEG);
-	 * bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
-	 * assertEquals(bancoDeOrgaos.qntTotalOrgaos(), 4); } catch (Exception e) {
-	 * fail(); } }
-	 */
+
+	@Test
+	public void testQntTotalOrgaos() {
+		try {
+			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
+			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.AB_NEG);
+			bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.B_NEG);
+			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
+			assertEquals(bancoDeOrgaos.qntTotalOrgaos(), 4);
+		} catch (Exception e) {
+			fail();
+		}
+	}
+
 }
