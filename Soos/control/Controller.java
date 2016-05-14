@@ -10,7 +10,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import banco_de_orgaos.BancoDeOrgaos;
 import exceptions.AtualizarInfoException;
+import exceptions.BancoOrgaoException;
 import exceptions.CadastroException;
 import exceptions.ConsultaException;
 import exceptions.ExcluirCadastroException;
@@ -38,6 +40,7 @@ public class Controller {
 	private Map<String, Usuario> bancoUsuarios;
 	private List<Prontuario> bancoProntuarios;
 	private Farmacia farmacia;
+	private BancoDeOrgaos bancoDeOrgaos;
 	private FactoryUsuario factoryUsuarios;
 
 	public Controller() {
@@ -46,6 +49,7 @@ public class Controller {
 		this.bancoUsuarios = new HashMap<String, Usuario>();
 		this.bancoProntuarios = new ArrayList<Prontuario>();
 		this.farmacia = new Farmacia();
+		this.bancoDeOrgaos = new BancoDeOrgaos();
 		this.factoryUsuarios = new FactoryUsuario();
 		this.usuarioAtual = null;
 	}
@@ -203,7 +207,7 @@ public class Controller {
 			VerificaExcecao.checarData(birthDate);
 		} catch (Exception e) {
 
-			throw new CadastroException("Erro no cadastro de funcionario.", e.getMessage());
+			throw new CadastroException("Erro no cadastro de funcionario.", "Data invalida.");
 
 		}
 
@@ -264,7 +268,7 @@ public class Controller {
 			VerificaExcecao.checarData(birthDate);
 		} catch (Exception e) {
 
-			throw new CadastroException("Nao foi possivel cadastrar o paciente.", e.getMessage());
+			throw new CadastroException("Nao foi possivel cadastrar o paciente.", "Data invalida.");
 		}
 
 		try {
@@ -316,6 +320,20 @@ public class Controller {
 
 	}
 
+	public void cadastraOrgao(String nome, String tipoSanguineo) throws BancoOrgaoException{
+		
+		TipoSanguineo sanguineo;
+		
+		try {
+			sanguineo = this.stringToSanguineo(tipoSanguineo);
+		} catch (Exception e) {
+			throw new BancoOrgaoException(e.getMessage());
+		}
+				
+		this.bancoDeOrgaos.addOrgao(nome, sanguineo);
+		
+	}
+	
 	public String getInfoFuncionario(String matricula, String info)
 			throws ConsultaException {
 
@@ -473,6 +491,96 @@ public class Controller {
 		return this.bancoProntuarios.get(posicao).getID();
 
 	}
+	
+	public String buscaOrgPorSangue(String tipoSanguineo) throws BancoOrgaoException{
+		
+		TipoSanguineo sanguineo;
+		
+		String nomesOrgaos = "";
+		
+		try {
+			sanguineo = this.stringToSanguineo(tipoSanguineo);
+			
+		} catch (Exception e) {
+			
+			throw new BancoOrgaoException(e.getMessage());
+		}
+		
+		List<String> orgaosEncontrados = this.bancoDeOrgaos.getOrgaoPorSangue(sanguineo);
+		
+		if(orgaosEncontrados.isEmpty()){
+			throw new BancoOrgaoException("Nao ha orgaos cadastrados para esse tipo sanguineo.");
+		}
+		
+		for (String nomeOrgao : orgaosEncontrados) {
+			
+			nomesOrgaos = nomesOrgaos + nomeOrgao + ",";
+			
+		}
+		
+		nomesOrgaos = nomesOrgaos.substring(0,nomesOrgaos.length() -1);
+		
+		return nomesOrgaos;
+		
+	}
+	
+	public String buscaOrgPorNome(String nome) throws BancoOrgaoException{
+		
+		String sangueOrgaos = "";
+		
+		if(!this.bancoDeOrgaos.existeOrgao(nome)){
+			throw new BancoOrgaoException("Orgao nao cadastrado.");
+		}
+		
+		List<String> tiposDisp = this.bancoDeOrgaos.getOrgaoPorNome(nome);
+		
+		for (String tipoSangue : tiposDisp) {
+			
+			sangueOrgaos = sangueOrgaos + tipoSangue + ",";
+			
+		}
+		
+		sangueOrgaos = sangueOrgaos.substring(0,sangueOrgaos.length() - 1);
+		
+		return sangueOrgaos;	
+		
+	}
+	
+	public boolean buscaOrgao(String nome, String tipoSanguineo) throws BancoOrgaoException{
+		
+		TipoSanguineo sangue;
+		try {
+			sangue = stringToSanguineo(tipoSanguineo);
+		} catch (Exception e) {
+			throw new BancoOrgaoException("Tipo sanguineo invalido.");
+		}
+		
+		boolean orgaoExiste;
+		
+		orgaoExiste = this.bancoDeOrgaos.existeOrgao(nome, sangue);
+		
+		return orgaoExiste;
+	}
+	
+	
+	public void retiraOrgao(String nome, String tipoSanguineo) throws ExcluirCadastroException{
+		
+		TipoSanguineo sangue;
+		
+		try {
+			sangue = stringToSanguineo(tipoSanguineo);
+		} catch (Exception e) {
+			throw new ExcluirCadastroException("Erro na retirada de orgaos. "+ e.getMessage());
+		}
+				
+		try {
+			this.bancoDeOrgaos.removeOrgao(nome, sangue);
+		} catch (Exception e) {
+			throw new ExcluirCadastroException("Erro na retirada de orgaos. "+e.getMessage());
+		}
+	
+	}
+	
 
 	public void excluiFuncionario(String matricula, String senha)
 			throws ExcluirCadastroException {
@@ -481,21 +589,21 @@ public class Controller {
 
 		if (!usuarioAtual.getMatricula().startsWith("1")) {
 
-			String erroMsg = "O funcionario " + usuarioAtual.getNome()
+			String erroMsg = " O funcionario " + usuarioAtual.getNome()
 					+ " nao tem permissao para excluir funcionarios.";
 
-			throw new ExcluirCadastroException("funcionario", erroMsg);
+			throw new ExcluirCadastroException("Erro ao excluir funcionario." + erroMsg);
 		}
 
 		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
-			throw new ExcluirCadastroException("funcionario",
-					"A matricula nao segue o padrao.");
+			throw new ExcluirCadastroException("Erro ao excluir funcionario."
+					+ " A matricula nao segue o padrao.");
 		}
 
 		Usuario targetUser = getUsuario(matricula);
 
 		if (targetUser == null) {
-			throw new ExcluirCadastroException("funcionario",
+			throw new ExcluirCadastroException("Erro ao excluir funcionario. "+
 					"Funcionario nao cadastrado.");
 		}
 
@@ -507,7 +615,8 @@ public class Controller {
 		}
 
 		if (!senha.equals(senhaDiretor)) {
-			throw new ExcluirCadastroException("funcionario", "Senha invalida.");
+			throw new ExcluirCadastroException("Erro ao excluir funcionario. "+
+					"Senha invalida.");
 		}
 
 		this.bancoUsuarios.remove(matricula);
@@ -703,6 +812,17 @@ public class Controller {
 			throw new ConsultaException("medicamentos", e.getMessage());
 		}
 
+	}
+	
+	public int qtdOrgaos(String nome) throws BancoOrgaoException{
+		
+		return this.bancoDeOrgaos.qntOrgao(nome);
+		
+	}
+	
+	public int totalOrgaosDisponiveis(){
+		
+		return this.bancoDeOrgaos.qntTotalOrgaos();
 	}
 
 	private String gerarSenha(LocalDate anoNascimento, String matricula) {

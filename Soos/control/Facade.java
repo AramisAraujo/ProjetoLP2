@@ -3,6 +3,7 @@ package control;
 import java.io.IOException;
 
 import exceptions.AtualizarInfoException;
+import exceptions.BancoOrgaoException;
 import exceptions.CadastroException;
 import exceptions.ConsultaException;
 import exceptions.ExcluirCadastroException;
@@ -69,6 +70,11 @@ public class Facade {
 		return this.controle.cadastraMedicamento(nome, tipo, preco, quantidade, categorias);
 	}
 	
+	public void cadastraOrgao (String nome, String tipoSanguineo) throws BancoOrgaoException{
+		
+		this.controle.cadastraOrgao(nome, tipoSanguineo);
+	}
+	
 	public String getProntuario(int posicao) throws ProntuarioException{
 		return this.controle.getProntuario(posicao);
 	}
@@ -86,9 +92,30 @@ public class Facade {
 		return this.controle.getInfoMedicamento(atributo, medicamento);
 	}
 	
+	public String buscaOrgPorSangue(String tipoSanguineo) throws BancoOrgaoException{
+		
+		return this.controle.buscaOrgPorSangue(tipoSanguineo);
+	}
+	
+	public String buscaOrgPorNome(String nome) throws BancoOrgaoException{
+		
+		return this.controle.buscaOrgPorNome(nome);
+	}
+	
+	public boolean buscaOrgao(String nome, String tipoSanguineo) throws BancoOrgaoException{
+		
+		return this.controle.buscaOrgao(nome, tipoSanguineo);
+		
+	}
+	
 	public void excluiFuncionario(String matricula, String senha) throws ExcluirCadastroException{
 		this.controle.excluiFuncionario(matricula, senha);
 		
+	}
+	
+	public void retiraOrgao(String nome, String tipoSanguineo) throws ExcluirCadastroException{
+		
+		this.controle.retiraOrgao(nome, tipoSanguineo);
 	}
 	
 	public void atualizaInfoFuncionario(String matricula, 
@@ -123,6 +150,16 @@ public class Facade {
 	
 	public String getEstoqueFarmacia(String ordenacao) throws ConsultaException, MedicamentoException{
 		return this.controle.getEstoqueFarmacia(ordenacao);
+	}
+	
+	public int qtdOrgaos(String nome) throws BancoOrgaoException{
+		
+		return this.controle.qtdOrgaos(nome);
+	}
+	
+	public int totalOrgaosDisponiveis(){
+		
+		return this.controle.totalOrgaosDisponiveis();
 	}
 	
 }

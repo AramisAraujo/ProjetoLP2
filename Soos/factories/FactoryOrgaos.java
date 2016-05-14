@@ -1,6 +1,7 @@
 package factories;
 
 import banco_de_orgaos.Orgao;
+import exceptions.BancoOrgaoException;
 import paciente.TipoSanguineo;
 
 public class FactoryOrgaos {
@@ -15,8 +16,10 @@ public class FactoryOrgaos {
 	 * @return - orgao que foi criado
 	 * @throws Exception - excecao lancada caso ocorra algum erro
 	 */
-	public Orgao criaOrgao(String nome, TipoSanguineo tipoSanguineo) throws Exception {
+	public Orgao criaOrgao(String nome, TipoSanguineo tipoSanguineo) throws BancoOrgaoException {
+		
 		Orgao orgao = new Orgao(nome, tipoSanguineo);
+		
 		return orgao;
 	}
 }

@@ -1,7 +1,7 @@
 package banco_de_orgaos;
 
+import exceptions.BancoOrgaoException;
 import exceptions.VerificaExcecao;
-import farmacia.Medicamento;
 import paciente.TipoSanguineo;
 
 /**
@@ -16,16 +16,21 @@ public class Orgao {
 	private String nome;
 	private TipoSanguineo tipoSanguineo;
 
-	public Orgao(String nome, TipoSanguineo tipoSanguineo) throws Exception {
-		VerificaExcecao.checkEmptyString(nome, "O nome do orgao");
-		verificaTipoSanguineo(tipoSanguineo);
+	public Orgao(String nome, TipoSanguineo tipoSanguineo) throws BancoOrgaoException {
+		try {
+			VerificaExcecao.checkEmptyString(nome, "Nome do orgao");
+			verificaTipoSanguineo(tipoSanguineo);
+		} catch (Exception e) {
+			throw new BancoOrgaoException(e.getMessage());
+		}
+		
 		this.nome = nome;
 		this.tipoSanguineo = tipoSanguineo;
 	}
 
 	public void verificaTipoSanguineo(TipoSanguineo tipoSanguineo) throws Exception {
 		if (tipoSanguineo == null) {
-			throw new Exception("O tipo sanguineo nao pode ser nulo.");
+			throw new Exception("Tipo sanguineo invalido.");
 		}
 	}
 
