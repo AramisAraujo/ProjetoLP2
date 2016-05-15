@@ -50,6 +50,11 @@ public class Prontuario implements Comparable<Prontuario> {
 		return this.procedimentos.add(procedimento);
 	}
 	
+	public int getTotalProcedimento(){
+		
+		return this.procedimentos.size();
+	}
+	
 	/**
 	 * Prontuarios sao comparados pelos nomes de seus pacientes.
 	 */

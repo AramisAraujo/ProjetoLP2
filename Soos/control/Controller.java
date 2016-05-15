@@ -623,7 +623,7 @@ public class Controller {
 				}
 		}
 		
-		throw new ProntuarioException("Prontuario nao cadastrado.");
+		throw new Exception("Prontuario nao cadastrado.");
 	}
 
 	public void excluiFuncionario(String matricula, String senha)
@@ -1256,6 +1256,21 @@ public class Controller {
 		} catch (Exception e) {
 			throw new ProcedimentoException(e.getMessage());
 		}
+	}
+	
+	public int getTotalProcedimento(String ID) throws Exception{
+		
+		Prontuario prontuario = this.getProntuario(ID);
+		
+		return prontuario.getTotalProcedimento();
+		
+	}
+	
+	public int getPontosFidelidade(String ID) throws Exception{
+		
+		Paciente paciente = this.getPaciente(ID);
+		
+		return paciente.getPontos();
 	}
 
 }

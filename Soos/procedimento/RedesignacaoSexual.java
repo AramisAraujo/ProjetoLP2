@@ -10,16 +10,20 @@ import paciente.Paciente;
 public class RedesignacaoSexual implements Procedimento {
 	
 	private final double PRECO = 9300.00;
+	private final int PONTOS = 130;
 	
-	public RedesignacaoSexual() {}
+	public RedesignacaoSexual() {
+		
+	}
 	
 	/**
 	 * A redesignacao sexual troca o genero do paciente.
 	 */
 	@Override
-	public void realizaProcedimento(Paciente paciente) throws Exception {
+	public void realizaProcedimento(Paciente paciente){
 		paciente.trocarGenero();
 		paciente.somaGastos(PRECO);
+		paciente.somaPontos(PONTOS);
 	}
 	
 	@Override

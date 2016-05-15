@@ -179,4 +179,13 @@ public class Facade {
 		this.controle.realizaProcedimento(nomeProcedimento, nomePaciente, orgao, medicamentos);;
 	}
 	
+	public int getTotalProcedimento(String ID) throws Exception{
+		
+		return this.controle.getTotalProcedimento(ID);
+	}
+	
+	public int getPontosFidelidade(String ID) throws Exception{
+		
+		return this.controle.getPontosFidelidade(ID);
+	}
 }

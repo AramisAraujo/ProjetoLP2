@@ -10,6 +10,7 @@ import paciente.Paciente;
 public class CirurgiaBariatrica implements Procedimento {
 	
 	private final double PRECO = 7600.00;
+	private final int PONTOS = 100;
 	private final double PERCENT = 0.15;
 	
 	public CirurgiaBariatrica() {}
@@ -22,6 +23,7 @@ public class CirurgiaBariatrica implements Procedimento {
 		double novoPeso = paciente.getPeso() - paciente.getPeso()*PERCENT;
 		paciente.setPeso(novoPeso);
 		paciente.somaGastos(PRECO);
+		paciente.somaPontos(PONTOS);
 	}
 	
 	@Override

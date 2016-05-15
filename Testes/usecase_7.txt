@@ -25,10 +25,10 @@ id2=cadastraPaciente Nome="Tom Riddle" Data="02/01/1985" peso=83 Sexo="masculino
 # Cadastrando medicamentos necessarios para o teste #
 #####################################################
 
-
-cadastraMedicamento nome="Morfina" tipo="referencia" preco=150 quantidade=600 categorias="analgesico"
-cadastraMedicamento nome="Nimesulida" tipo="referencia" preco=12.50 quantidade=150 categorias="antiinflamatorio,antitermico,analgesico"
-cadastraMedicamento nome="Duraston" tipo="generico" preco=112.50 quantidade=150 categorias="hormonal"
+#ja foram cadastrados! incoerencia do teste
+#cadastraMedicamento nome="Morfina" tipo="referencia" preco=150 quantidade=600 categorias="analgesico"
+#cadastraMedicamento nome="Nimesulida" tipo="referencia" preco=12.50 quantidade=150 categorias="antiinflamatorio,antitermico,analgesico"
+#cadastraMedicamento nome="Duraston" tipo="generico" preco=112.50 quantidade=150 categorias="hormonal"
 
 
 
