@@ -1,6 +1,6 @@
 package procedimento;
 
-import paciente.Paciente;
+import paciente.Prontuario;
 
 /**
  * 
@@ -10,6 +10,7 @@ import paciente.Paciente;
 public class CirurgiaBariatrica implements Procedimento {
 	
 	private final double PRECO = 7600.00;
+	private final int PONTOS = 100;
 	private final double PERCENT = 0.15;
 	
 	public CirurgiaBariatrica() {}
@@ -18,10 +19,11 @@ public class CirurgiaBariatrica implements Procedimento {
 	 * A cirurgia bariatrica reduz o peso do paciente em 15%.
 	 */
 	@Override
-	public void realizaProcedimento(Paciente paciente) throws Exception {
-		double novoPeso = paciente.getPeso() - paciente.getPeso()*PERCENT;
-		paciente.setPeso(novoPeso);
-		paciente.somaGastos(PRECO);
+	public void realizaProcedimento(Prontuario prontuario) throws Exception {
+		double novoPeso = prontuario.getPeso() - prontuario.getPeso()*PERCENT;
+		prontuario.setPeso(novoPeso);
+		prontuario.somaGastos(PRECO);
+		prontuario.somaPontos(PONTOS);
 	}
 	
 	@Override

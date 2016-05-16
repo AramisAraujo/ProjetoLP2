@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.UUID;
 
+import cartao.CartaoFidelidade;
 import exceptions.VerificaExcecao;
 
 /**
@@ -19,6 +20,7 @@ public class Paciente implements Comparable<Paciente> {
 	private LocalDate dataNascimento;
 	private double peso;
 	private UUID ID;
+	private CartaoFidelidade carteirinhaSoos;
 	private double gastoTotal;
 	
 	private final String NOME = "Nome", DATA = "Data", SEXO = "Sexo", GENERO = "Genero",
@@ -41,6 +43,7 @@ public class Paciente implements Comparable<Paciente> {
 		this.genero = genero;
 		this.tipoSanguineo = tipoSanguineo;
 		this.gastoTotal = 0;
+		this.carteirinhaSoos = new CartaoFidelidade();
 	}
 
 	public UUID getID(){
@@ -112,12 +115,25 @@ public class Paciente implements Comparable<Paciente> {
 		return this.tipoSanguineo;
 	}
 	
-	public double  getTotalProcedimento() {
+	public double getGastoTotal() {
 		return this.gastoTotal;
 	}
 	
-	public void somaGastos(double valor) {
+	public void somaGastos(double valor){
+		
+		valor = this.carteirinhaSoos.aplicarDisconto(valor);
+		
 		this.gastoTotal += valor;
+	}
+	
+	public void somaPontos(int pontos){
+		
+		this.carteirinhaSoos.addPontos(pontos);
+		
+	}
+	
+	public int getPontos(){
+		return this.carteirinhaSoos.getPontos();
 	}
 	
 	public String getInfoPaciente(String atributo) throws Exception {
@@ -202,4 +218,6 @@ public class Paciente implements Comparable<Paciente> {
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 		VerificaExcecao.checarGenero(genero);
 	}
+
+
 }

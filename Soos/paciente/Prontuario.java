@@ -41,13 +41,62 @@ public class Prontuario implements Comparable<Prontuario> {
 	public int getQntProcedimentos() {
 		return this.procedimentos.size();
 	}
-	
-	public Paciente getPaciente() {
-		return this.paciente;
+
+	public double getPeso() {
+		return this.paciente.getPeso();
 	}
+	
+	public int getPontos(){
+		return this.paciente.getPontos();
+	}
+	
+	public double getGastoTotal() {
+		return this.paciente.getGastoTotal();
+	}
+	
+	public TipoSanguineo consultaTipoSanguineo() {
+		return this.paciente.consultaTipoSanguineo();
+	}
+	
+	public void somaGastos(double valor){
+		this.paciente.somaGastos(valor);
+	}
+	
+	public void somaPontos(int pontos){
+		this.paciente.somaPontos(pontos);
+	}
+	
+	public void setNome(String nome) {
+		this.paciente.setNome(nome);
+	}
+	
+	public void setDataNascimento(LocalDate dataNascimento) throws Exception {
+		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
+		this.paciente.setDataNascimento(dataNascimento);
+	}
+	
+	public void setPeso(double peso) throws Exception {
+		VerificaExcecao.checarValor(peso, "Peso");
+		this.paciente.setPeso(peso);
+	}
+	
+	public void setSexoBiologico(String sexoBiologico) throws Exception {
+		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
+		this.paciente.setSexoBiologico(sexoBiologico);
+	}
+	
+	public void trocarGenero() {
+		this.paciente.trocarGenero();
+	}
+
 	
 	public boolean registraProcedimento(Procedimento procedimento) {
 		return this.procedimentos.add(procedimento);
+	}
+	
+	public int getTotalProcedimento(){
+		
+		return this.procedimentos.size();
 	}
 	
 	/**
