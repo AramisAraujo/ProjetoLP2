@@ -1,6 +1,6 @@
 package procedimento;
 
-import paciente.Paciente;
+import paciente.Prontuario;
 
 /**
  * 
@@ -20,10 +20,10 @@ public class RedesignacaoSexual implements Procedimento {
 	 * A redesignacao sexual troca o genero do paciente.
 	 */
 	@Override
-	public void realizaProcedimento(Paciente paciente){
-		paciente.trocarGenero();
-		paciente.somaGastos(PRECO);
-		paciente.somaPontos(PONTOS);
+	public void realizaProcedimento(Prontuario prontuario){
+		prontuario.trocarGenero();
+		prontuario.somaGastos(PRECO);
+		prontuario.somaPontos(PONTOS);
 	}
 	
 	@Override

@@ -115,6 +115,10 @@ public class Paciente implements Comparable<Paciente> {
 		return this.tipoSanguineo;
 	}
 	
+	public double getGastoTotal() {
+		return this.gastoTotal;
+	}
+	
 	public void somaGastos(double valor){
 		
 		valor = this.carteirinhaSoos.aplicarDisconto(valor);
@@ -129,7 +133,6 @@ public class Paciente implements Comparable<Paciente> {
 	}
 	
 	public int getPontos(){
-		
 		return this.carteirinhaSoos.getPontos();
 	}
 	

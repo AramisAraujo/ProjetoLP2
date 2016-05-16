@@ -1,6 +1,6 @@
 package procedimento;
 
-import paciente.Paciente;
+import paciente.Prontuario;
 
 /**
  * 
@@ -21,10 +21,10 @@ public class ConsultaClinica implements Procedimento {
 	 * @throws Exception 
 	 */
 	@Override
-	public void realizaProcedimento(Paciente paciente){
+	public void realizaProcedimento(Prontuario prontuario){
 		
-		paciente.somaGastos(PRECO);
-		paciente.somaPontos(PONTOS);
+		prontuario.somaGastos(PRECO);
+		prontuario.somaPontos(PONTOS);
 	}
 	
 	@Override

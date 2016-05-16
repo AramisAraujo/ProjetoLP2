@@ -1,6 +1,6 @@
 package procedimento;
 
-import paciente.Paciente;
+import paciente.Prontuario;
 
 /**
  * 
@@ -18,10 +18,9 @@ public class TransplanteDeOrgaos implements Procedimento {
 
 	
 	@Override
-	public void realizaProcedimento(Paciente paciente) throws Exception {
-		
-		paciente.somaGastos(PRECO);
-		paciente.somaPontos(PONTOS);
+	public void realizaProcedimento(Prontuario prontuario) throws Exception {
+		prontuario.somaGastos(PRECO);
+		prontuario.somaPontos(PONTOS);
 	}
 
 	@Override

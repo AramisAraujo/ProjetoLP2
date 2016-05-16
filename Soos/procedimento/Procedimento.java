@@ -1,6 +1,6 @@
 package procedimento;
 
-import paciente.Paciente;
+import paciente.Prontuario;
 
 /**
  * 
@@ -9,7 +9,7 @@ import paciente.Paciente;
  */
 public interface Procedimento {
 	
-	public abstract void realizaProcedimento(Paciente paciente) throws Exception;
+	public abstract void realizaProcedimento(Prontuario prontuario) throws Exception;
 	
 	public abstract double getPreco();
 }

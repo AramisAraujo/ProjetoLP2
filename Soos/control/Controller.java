@@ -28,7 +28,6 @@ import factories.FactoryUsuario;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Farmacia;
 import farmacia.Medicamento;
-import paciente.Paciente;
 import paciente.Prontuario;
 import paciente.TipoSanguineo;
 import procedimento.CirurgiaBariatrica;
@@ -1024,23 +1023,7 @@ public class Controller {
 			throw new ProntuarioException(e.getMessage());
 		}
 	}
-	
-	/**
-	 * Acessa um paciente pelo seu nome
-	 * @param nomePaciente
-	 * @return
-	 * @throws Exception
-	 */
-	public Paciente getPaciente(String ID) throws Exception {
 
-		for (Prontuario prontuario : this.bancoProntuarios) {
-			if (prontuario.getID().equals(ID)) {
-				return prontuario.getPaciente();
-			}
-		}
-		
-		throw new ProntuarioException("Paciente nao cadastrado.");
-	}
 	
 	/**
 	 * Realiza procedimento sem orgao
@@ -1079,14 +1062,14 @@ public class Controller {
 			throw new ProcedimentoException(e.getMessage());
 		}
 		
-		Paciente paciente;
+//		Paciente paciente;
 		Prontuario prontuario;
 
-		try {
-			paciente = this.getPaciente(nomePaciente);
-		} catch (Exception e) {
-			throw new ProcedimentoException(e.getMessage());
-		}
+//		try {
+//			paciente = this.getPaciente(nomePaciente);
+//		} catch (Exception e) {
+//			throw new ProcedimentoException(e.getMessage());
+//		}
 		
 		try {
 			prontuario = this.getProntuario(nomePaciente);
@@ -1100,7 +1083,7 @@ public class Controller {
 			for (String medicamento : medicamentosUsados) {
 				custoMedicamentos += this.farmacia.getPreco(medicamento);
 			}
-			paciente.somaGastos(custoMedicamentos);
+			prontuario.somaGastos(custoMedicamentos);
 			
 		} catch (Exception e) {
 			throw new ProcedimentoException(e.getMessage());
@@ -1122,21 +1105,21 @@ public class Controller {
 			case CONSULTACLINICA:
 				
 				this.procedimento = new ConsultaClinica();
-				this.procedimento.realizaProcedimento(paciente);
+				this.procedimento.realizaProcedimento(prontuario);
 				prontuario.registraProcedimento(procedimento);
 				break;
 				
 			case CIRURGIABARIATRICA:
 				
 				procedimento = new CirurgiaBariatrica();
-				this.procedimento.realizaProcedimento(paciente);
+				this.procedimento.realizaProcedimento(prontuario);
 				prontuario.registraProcedimento(procedimento);
 				break;
 				
 			case REDESIGNACAOSEXUAL:
 				
 				procedimento = new RedesignacaoSexual();
-				procedimento.realizaProcedimento(paciente);
+				procedimento.realizaProcedimento(prontuario);
 				prontuario.registraProcedimento(procedimento);
 				break;
 				
@@ -1194,15 +1177,7 @@ public class Controller {
 			throw new ProcedimentoException(e.getMessage());
 		}
 		
-		Paciente paciente;
 		Prontuario prontuario;
-		
-
-		try {
-			paciente = this.getPaciente(nomePaciente);
-		} catch (Exception e) {
-			throw new ProcedimentoException(e.getMessage());
-		}
 		
 		try {
 			prontuario = this.getProntuario(nomePaciente);
@@ -1210,7 +1185,7 @@ public class Controller {
 			throw new ProcedimentoException(e.getMessage());
 		}
 		
-		TipoSanguineo sangue = paciente.consultaTipoSanguineo();
+		TipoSanguineo sangue = prontuario.consultaTipoSanguineo();
 		
 		try {
 			this.bancoDeOrgaos.checarOrgaoCompativel(nomeOrgao, sangue);
@@ -1226,7 +1201,7 @@ public class Controller {
 			for (String medicamento : medicamentosUsados) {
 				custoMedicamentos += this.farmacia.getPreco(medicamento);
 			}
-			paciente.somaGastos(custoMedicamentos);
+			prontuario.somaGastos(custoMedicamentos);
 			
 		} catch (Exception e) {
 			throw new ProcedimentoException(e.getMessage());
@@ -1246,7 +1221,7 @@ public class Controller {
 				
 				this.bancoDeOrgaos.removeOrgao(nomeOrgao, sangue);
 				procedimento = new TransplanteDeOrgaos();
-				this.procedimento.realizaProcedimento(paciente);
+				this.procedimento.realizaProcedimento(prontuario);
 				prontuario.registraProcedimento(procedimento);
 				
 			} else {
@@ -1268,9 +1243,9 @@ public class Controller {
 	
 	public int getPontosFidelidade(String ID) throws Exception{
 		
-		Paciente paciente = this.getPaciente(ID);
+		Prontuario prontuario = this.getProntuario(ID);
 		
-		return paciente.getPontos();
+		return prontuario.getPontos();
 	}
 
 }
