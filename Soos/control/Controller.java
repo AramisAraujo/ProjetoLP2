@@ -421,7 +421,8 @@ public class Controller {
 			}
 
 		}
-
+		//TODO
+		// Abstrair para metodo a fim de melhorar legibilidade.
 		if (targetProntuario == null) {
 			throw new ConsultaException("paciente", "Paciente nao cadastrado.");
 		}

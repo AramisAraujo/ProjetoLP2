@@ -19,6 +19,8 @@ public class Prontuario implements Comparable<Prontuario> {
 	private Paciente paciente;
 	private List<Procedimento> procedimentos;
 	
+	// TODO
+	// Delegar para a controller construir o objeto paciente e receber como parametro nesse construtor.
 	public Prontuario(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 						String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
 		
@@ -70,6 +72,8 @@ public class Prontuario implements Comparable<Prontuario> {
 		this.paciente.setNome(nome);
 	}
 	
+	//TODO
+	// Verificar nome do metodo, melhorar legibilidade.
 	public void setDataNascimento(LocalDate dataNascimento) throws Exception {
 		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
 		this.paciente.setDataNascimento(dataNascimento);

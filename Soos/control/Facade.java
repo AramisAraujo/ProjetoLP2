@@ -18,7 +18,7 @@ import farmacia.Medicamento;
 
 public class Facade {
 	
-	Controller controle;
+	private Controller controle;
 	
 	public Facade(){
 		
@@ -188,4 +188,6 @@ public class Facade {
 		
 		return this.controle.getPontosFidelidade(ID);
 	}
+	
+	
 }

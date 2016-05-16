@@ -99,10 +99,10 @@ public class Paciente implements Comparable<Paciente> {
 	 * Realiza troca de genero
 	 */
 	public void trocarGenero() {
-		if (this.genero.equalsIgnoreCase(GENERO_FEMININO)) {
+		if (this.genero.equals(GENERO_FEMININO)) {
 			this.genero = GENERO_MASCULINO;
 		}
-		if (this.genero.equalsIgnoreCase(GENERO_MASCULINO)) {
+		else {
 			this.genero = GENERO_FEMININO;
 		}
 	}
