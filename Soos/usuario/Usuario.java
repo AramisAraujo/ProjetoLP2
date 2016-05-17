@@ -3,10 +3,18 @@ package usuario;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * Classe implementada para criar um usuario e obter ou mudar informacoes do
+ * mesmo.
+ * 
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
+ *
+ */
 public abstract class Usuario implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -1015234438916494007L;
 	private String nome;
 	private LocalDate dataNascimento;

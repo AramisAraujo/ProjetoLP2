@@ -2,11 +2,17 @@ package procedimento;
 
 import paciente.Prontuario;
 
+
 /**
- * 
- * @author dantaselton
- *
- */
+* Classe utilizada para implementar os procedimentos relacionados a
+* Redesignacao Sexual.
+* 
+* @author Aramis Sales Araujo
+* @author Elton Dantas de Oliveira Mesquita
+* @author Gabriel de Araujo Coutinho
+* @author Mainara Cavalcanti de Farias
+*
+*/
 public class RedesignacaoSexual implements Procedimento {
 	
 	private final double PRECO = 9300.00;
@@ -16,9 +22,11 @@ public class RedesignacaoSexual implements Procedimento {
 		
 	}
 	
-	/**
-	 * A redesignacao sexual troca o genero do paciente.
-	 */
+
+    /**
+     * Metodo utilizado para realizar os procedimentos de uma redeseginacao
+     * sexual (trocar o genero do paciente).
+     */
 	@Override
 	public void realizaProcedimento(Prontuario prontuario){
 		prontuario.trocarGenero();

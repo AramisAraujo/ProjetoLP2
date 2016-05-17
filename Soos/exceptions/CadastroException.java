@@ -1,13 +1,21 @@
 package exceptions;
-
+ 
+ 
+/**
+ * Classe implementada para criar Exceptions quando existe algum erro
+ * relacionado ao cadastro de algo.
+ * 
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
+ *
+ */
+@SuppressWarnings("serial")
 public class CadastroException extends Exception{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3748305381163668071L;
-
-	public CadastroException(String pessoa,String msg) {
-		super(pessoa+" "+msg);
-	}
-
+ 
+    public CadastroException(String pessoa,String msg) {
+        super(pessoa+" "+msg);
+    }
+ 
 }

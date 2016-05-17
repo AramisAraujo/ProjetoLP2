@@ -12,7 +12,10 @@ import procedimento.Procedimento;
 /**
  * A classe Prontuario é composta de um objeto paciente e um conjunto de procedimentos.
  * 
- * @author Elton Dantas
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
  */
 public class Prontuario implements Comparable<Prontuario> {
 	
@@ -139,6 +142,25 @@ public class Prontuario implements Comparable<Prontuario> {
 		return true;
 	}
 
+	/**
+     * Metodo utilizado para chegar os dados antes de criar o paciente com os mesmos.
+     * @param nome
+     *            - nome que sera validado
+     * @param dataNascimento
+     *            - data de nascimento que sera validada
+     * @param peso
+     *            - peso que sera validado
+     * @param sexoBiologico
+     *            - sexo biologico que sera validado
+     * @param genero
+     *            - genero que sera validado
+     * @param tipoSanguineo
+     *            - tipo sanguineo que sera validado
+     * @param ID
+     *            - ID que sera validado
+     * @throws Exception
+     *             - excecao lancada caso ocorra algum erro
+     */
 	private void validaParametro(String nome, LocalDate dataNascimento,
 			double peso, String sexoBiologico, String genero,
 			TipoSanguineo tipoSanguineo, UUID ID) throws Exception,

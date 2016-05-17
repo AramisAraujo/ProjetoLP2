@@ -3,8 +3,13 @@ package procedimento;
 import paciente.Prontuario;
 
 /**
+ * Classe utilizada para implementar os procedimentos relacionados a Consulta
+ * Clinica.
  * 
- * @author dantaselton
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
  *
  */
 public class ConsultaClinica implements Procedimento {
@@ -17,9 +22,9 @@ public class ConsultaClinica implements Procedimento {
 	}
 
 	/**
-	 * Consulta clinica apenas eh cobrado o procedimento
-	 * @throws Exception 
-	 */
+     * Metodo utilizado para realizar os procedimentos de uma consulta clinica
+     * (somar os gastos e os pontos do paciente).
+     */
 	@Override
 	public void realizaProcedimento(Prontuario prontuario){
 		
