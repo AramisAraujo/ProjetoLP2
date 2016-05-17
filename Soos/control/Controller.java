@@ -1062,15 +1062,8 @@ public class Controller {
 		} catch (Exception e) {
 			throw new ProcedimentoException(e.getMessage());
 		}
-		
-//		Paciente paciente;
-		Prontuario prontuario;
 
-//		try {
-//			paciente = this.getPaciente(nomePaciente);
-//		} catch (Exception e) {
-//			throw new ProcedimentoException(e.getMessage());
-//		}
+		Prontuario prontuario;
 		
 		try {
 			prontuario = this.getProntuario(nomePaciente);
@@ -1234,7 +1227,46 @@ public class Controller {
 		}
 	}
 	
+	public void realizaProcedimento(String nomeProcedimento, String ID) throws Exception {
+		
+		VerificaExcecao.checkEmptyParameter(nomeProcedimento, "Nome do procedimento");
+		VerificaExcecao.checkEmptyParameter(ID, "ID");
+		
+		TipoProcedimento procedure;
+		
+		try {
+			procedure = this.stringToProcedure(nomeProcedimento);
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+		
+		Prontuario prontuario;
+		
+		try {
+			prontuario = this.getProntuario(ID);
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+		
+		try {
+			if (procedure.equals(TipoProcedimento.CONSULTACLINICA)) {
+				
+				procedimento = new ConsultaClinica();
+				this.procedimento.realizaProcedimento(prontuario);
+				prontuario.registraProcedimento(procedimento);
+				
+			} else {
+				throw new ProcedimentoException("Procedimento invalido.");
+			}
+			
+		} catch (Exception e) {
+			throw new ProcedimentoException(e.getMessage());
+		}
+	}
+	
 	public int getTotalProcedimento(String ID) throws Exception{
+		
+		VerificaExcecao.checkEmptyParameter(ID, "ID");
 		
 		Prontuario prontuario = this.getProntuario(ID);
 		
@@ -1244,9 +1276,20 @@ public class Controller {
 	
 	public int getPontosFidelidade(String ID) throws Exception{
 		
+		VerificaExcecao.checkEmptyParameter(ID, "ID");
+		
 		Prontuario prontuario = this.getProntuario(ID);
 		
 		return prontuario.getPontos();
+	}
+	
+	public double getGastosPaciente(String ID) throws Exception {
+		
+		VerificaExcecao.checkEmptyParameter(ID, "ID");
+		
+		Prontuario prontuario = this.getProntuario(ID);
+		
+		return prontuario.getGastosPaciente();
 	}
 
 }

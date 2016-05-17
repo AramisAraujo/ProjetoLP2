@@ -14,7 +14,9 @@ import exceptions.OpenSystemException;
 import exceptions.ProcedimentoException;
 import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
+import exceptions.VerificaExcecao;
 import farmacia.Medicamento;
+import paciente.Prontuario;
 
 public class Facade {
 	
@@ -173,10 +175,15 @@ public class Facade {
 		
 		this.controle.realizaProcedimento(nomeProcedimento, nomePaciente, medicamentos);
 	}
+	
 	public void realizaProcedimento(String nomeProcedimento, String nomePaciente, String orgao,
 			String medicamentos) throws ProcedimentoException {
 		
 		this.controle.realizaProcedimento(nomeProcedimento, nomePaciente, orgao, medicamentos);;
+	}
+	
+	public void realizaProcedimento(String nomeProcedimento, String ID) throws Exception {
+		this.controle.realizaProcedimento(nomeProcedimento, ID);
 	}
 	
 	public int getTotalProcedimento(String ID) throws Exception{
@@ -187,6 +194,11 @@ public class Facade {
 	public int getPontosFidelidade(String ID) throws Exception{
 		
 		return this.controle.getPontosFidelidade(ID);
+	}
+	
+	public double getGastosPaciente(String ID) throws Exception {
+		
+		return this.controle.getGastosPaciente(ID);
 	}
 	
 	

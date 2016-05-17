@@ -88,6 +88,7 @@ public class Paciente implements Comparable<Paciente> {
 
 	public void setSexoBiologico(String sexoBiologico) throws Exception {
 		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
+		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 		this.sexoBiologico = sexoBiologico;
 	}
 
@@ -117,6 +118,10 @@ public class Paciente implements Comparable<Paciente> {
 	
 	public double getGastoTotal() {
 		return this.gastoTotal;
+	}
+	
+	public double getGastosPaciente() {
+		return this.getGastoTotal();
 	}
 	
 	public void somaGastos(double valor){

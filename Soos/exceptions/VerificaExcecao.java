@@ -15,16 +15,34 @@ import procedimento.TipoProcedimento;
  */
 public class VerificaExcecao {
 	
+	/**
+	 * Verifica se uma String eh vazia.
+	 * @param umaString
+	 * @param atributo
+	 * @throws Exception
+	 */
 	public static void checkEmptyString(String umaString,String atributo) throws Exception {
 		if (umaString == null || umaString.trim().isEmpty()) {
 			throw new Exception(atributo+" nao pode ser vazio.");
-
 		}
 	}
 	
+	/**
+	 * Verifica se o objeto eh null
+	 * Se o objeto nao for null e for String, verifica se eh uma string vazia.
+	 * @param object
+	 * @param atributo
+	 * @throws Exception
+	 */
 	public static void checkEmptyParameter(Object object,String atributo) throws Exception {
 		if (object == null) {
 			throw new Exception(atributo+" nao pode ser vazio.");
+		}
+		if (object instanceof String) {
+			String palavra = (String) object;
+			if (palavra.trim().isEmpty()) {
+				throw new Exception(atributo+" nao pode ser vazio.");
+			}
 		}
 	}
 

@@ -35,7 +35,7 @@ public class ProntuarioTest {
 		try {
 			UUID id = UUID.randomUUID();
 			prontuario = new Prontuario("Elton", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
-			assertTrue(prontuario.getQntProcedimentos() == 0);
+			assertTrue(prontuario.getTotalProcedimento() == 0);
 		} catch (Exception e) {
 			fail();
 		}

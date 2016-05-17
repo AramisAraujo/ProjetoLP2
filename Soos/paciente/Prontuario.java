@@ -19,8 +19,7 @@ public class Prontuario implements Comparable<Prontuario> {
 	private Paciente paciente;
 	private List<Procedimento> procedimentos;
 	
-	// TODO
-	// Delegar para a controller construir o objeto paciente e receber como parametro nesse construtor.
+	
 	public Prontuario(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 						String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
 		
@@ -40,7 +39,7 @@ public class Prontuario implements Comparable<Prontuario> {
 		return this.paciente.getInfoPaciente(atributo);
 	}
 	
-	public int getQntProcedimentos() {
+	public int getTotalProcedimento(){	
 		return this.procedimentos.size();
 	}
 
@@ -54,6 +53,10 @@ public class Prontuario implements Comparable<Prontuario> {
 	
 	public double getGastoTotal() {
 		return this.paciente.getGastoTotal();
+	}
+	
+	public double getGastosPaciente() {
+		return this.paciente.getGastosPaciente();
 	}
 	
 	public TipoSanguineo consultaTipoSanguineo() {
@@ -98,10 +101,6 @@ public class Prontuario implements Comparable<Prontuario> {
 		return this.procedimentos.add(procedimento);
 	}
 	
-	public int getTotalProcedimento(){
-		
-		return this.procedimentos.size();
-	}
 	
 	/**
 	 * Prontuarios sao comparados pelos nomes de seus pacientes.
