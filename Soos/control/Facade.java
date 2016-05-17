@@ -196,7 +196,7 @@ public class Facade {
 		return this.controle.getPontosFidelidade(ID);
 	}
 	
-	public double getGastosPaciente(String ID) throws Exception {
+	public String getGastosPaciente(String ID) throws Exception {
 		
 		return this.controle.getGastosPaciente(ID);
 	}
