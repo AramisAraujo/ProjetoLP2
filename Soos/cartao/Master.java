@@ -8,7 +8,7 @@ public class Master implements Fidelidade{
 	@Override
 	public int calcularPontos(int pontos) {
 		
-		pontos = (int) (pontos*BONUS_PONTOS);
+		//pontos = (int) (pontos*BONUS_PONTOS);
 		
 		return pontos;
 		
