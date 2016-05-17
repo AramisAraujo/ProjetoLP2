@@ -21,7 +21,7 @@ public class CartaoFidelidade {
 		
 		pontos = this.nivelFidelidade.calcularPontos(pontos);
 		
-		this.pontos = pontos;
+		this.pontos = this.pontos + pontos;
 		
 		this.checarFidelidade();
 		
