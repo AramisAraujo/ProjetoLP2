@@ -47,6 +47,7 @@ public class PacienteTest {
 		
 		try {
 			paciente = new Paciente("", dataNascimento, 60.0, "masculino", "masculino", sangue, id);
+			System.out.println(paciente.getNome());
 			fail();
 		} catch (Exception e) {
 			assertEquals("Nome do paciente nao pode ser vazio.", e.getMessage());

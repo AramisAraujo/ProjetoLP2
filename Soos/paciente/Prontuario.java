@@ -19,6 +19,7 @@ public class Prontuario implements Comparable<Prontuario> {
 	private Paciente paciente;
 	private List<Procedimento> procedimentos;
 	
+	
 	public Prontuario(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
 						String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
 		
@@ -38,7 +39,7 @@ public class Prontuario implements Comparable<Prontuario> {
 		return this.paciente.getInfoPaciente(atributo);
 	}
 	
-	public int getQntProcedimentos() {
+	public int getTotalProcedimento(){	
 		return this.procedimentos.size();
 	}
 
@@ -52,6 +53,10 @@ public class Prontuario implements Comparable<Prontuario> {
 	
 	public double getGastoTotal() {
 		return this.paciente.getGastoTotal();
+	}
+	
+	public double getGastosPaciente() {
+		return this.paciente.getGastosPaciente();
 	}
 	
 	public TipoSanguineo consultaTipoSanguineo() {
@@ -70,6 +75,8 @@ public class Prontuario implements Comparable<Prontuario> {
 		this.paciente.setNome(nome);
 	}
 	
+	//TODO
+	// Verificar nome do metodo, melhorar legibilidade.
 	public void setDataNascimento(LocalDate dataNascimento) throws Exception {
 		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
 		this.paciente.setDataNascimento(dataNascimento);
@@ -94,10 +101,6 @@ public class Prontuario implements Comparable<Prontuario> {
 		return this.procedimentos.add(procedimento);
 	}
 	
-	public int getTotalProcedimento(){
-		
-		return this.procedimentos.size();
-	}
 	
 	/**
 	 * Prontuarios sao comparados pelos nomes de seus pacientes.
