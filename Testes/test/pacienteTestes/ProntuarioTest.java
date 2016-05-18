@@ -142,6 +142,7 @@ public class ProntuarioTest {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	@Test
 	public void testGetInfoPaciente() {
 		try {

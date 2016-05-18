@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import paciente.Paciente;
-import paciente.Prontuario;
 import paciente.TipoSanguineo;
 
 public class PacienteTest {
@@ -194,6 +193,7 @@ public class PacienteTest {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	@Test
 	public void testGetInfoPaciente() {
 		try {

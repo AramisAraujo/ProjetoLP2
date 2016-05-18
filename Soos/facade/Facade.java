@@ -1,7 +1,8 @@
-package control;
+package facade;
 
 import java.io.IOException;
 
+import control.Controller;
 import exceptions.AtualizarInfoException;
 import exceptions.BancoOrgaoException;
 import exceptions.CadastroException;
@@ -14,9 +15,7 @@ import exceptions.OpenSystemException;
 import exceptions.ProcedimentoException;
 import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
-import exceptions.VerificaExcecao;
 import farmacia.Medicamento;
-import paciente.Prontuario;
 
 public class Facade {
 	

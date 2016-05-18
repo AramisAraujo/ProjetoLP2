@@ -8,6 +8,7 @@ import paciente.TipoSanguineo;
 
 public class OrgaoTest {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testOrgao() {
 		// caso normal
