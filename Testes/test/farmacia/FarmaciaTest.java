@@ -12,11 +12,11 @@ import exceptions.MedicamentoException;
 import factories.FactoryDeMedicamentos;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Farmacia;
-import farmacia.Medicamento;
 
 public class FarmaciaTest {
 	private Farmacia farmacia;
 	private List<CategoriasDeMedicamentos> categorias;
+	@SuppressWarnings("unused")
 	private FactoryDeMedicamentos factory;
 
 	@Before

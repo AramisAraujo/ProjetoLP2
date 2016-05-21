@@ -9,13 +9,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import exceptions.MedicamentoException;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Farmacia;
 import farmacia.Medicamento;
 
 public class MedicamentoTest {
 
+	@SuppressWarnings("unused")
 	private Farmacia farmacia;
 	private List<CategoriasDeMedicamentos> categorias;
 
@@ -26,6 +26,7 @@ public class MedicamentoTest {
 		categorias.add(CategoriasDeMedicamentos.ANTIBIOTICO);
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testMedicamento() {
 		// caso normal

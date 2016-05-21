@@ -1,10 +1,7 @@
 package farmacia;
  
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import exceptions.MedicamentoException;
 import farmacia.CategoriasDeMedicamentos;
  
 /**
@@ -36,7 +33,6 @@ public class MedicamentoGenerico extends Medicamento {
     @Override
     public String toString() {
     	
-    	List<CategoriasDeMedicamentos> categorias = new ArrayList<CategoriasDeMedicamentos>();
     	String categoriaString = super.getCategorias();	
     	
         String formatacao = String.format("Medicamento Generico: %s - ", this.getNome());

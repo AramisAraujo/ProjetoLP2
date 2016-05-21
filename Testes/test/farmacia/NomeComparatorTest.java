@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
  
 import comparators.NomeComparator;
-import exceptions.MedicamentoException;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Medicamento;
  

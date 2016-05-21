@@ -82,7 +82,7 @@ public class FactoryDeMedicamentos {
      * @throws EntradaException 
      */
     public Medicamento criaMedicamento(String nome, double preco,
-            int quantidade, List categorias,
+            int quantidade, List<CategoriasDeMedicamentos> categorias,
             String tipo) throws Exception {
         if (tipo.equalsIgnoreCase("generico")) {
             return criaMedicamentoGenerico(nome, preco, quantidade, categorias);

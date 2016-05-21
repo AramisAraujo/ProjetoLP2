@@ -17,8 +17,8 @@ public class VIP implements Fidelidade {
 
 	@Override
 	public int calcularPontos(int pontos) {
-
-		pontos = (int) (pontos * BONUS_PONTOS);
+		
+		//pontos = (int) (pontos*BONUS_PONTOS);  //Bonificacao ignorada
 
 		return pontos;
 

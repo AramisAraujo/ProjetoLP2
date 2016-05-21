@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -1161,10 +1162,19 @@ public class Controller {
 	 * @param medicamentos
 	 * @throws Exception
 	 */
-	public void realizaProcedimento(String nomeProcedimento,
-			String nomePaciente, String medicamentos)
-			throws ProcedimentoException {
 
+	public void realizaProcedimento(String nomeProcedimento, String nomePaciente,
+									String medicamentos) throws ProcedimentoException {
+		
+		
+		if (!usuarioAtual.getMatricula().startsWith("2")) {
+			
+			String errorMsg = "O funcionario " + usuarioAtual.getNome()
+					+ " nao tem permissao para realizar procedimentos.";
+			
+			throw new ProcedimentoException(errorMsg);
+		}
+		
 		String[] medicamentosUsados = medicamentos.split(",");
 
 		try {
@@ -1265,10 +1275,18 @@ public class Controller {
 	 * @param medicamentos
 	 * @throws Exception
 	 */
-	public void realizaProcedimento(String nomeProcedimento,
-			String nomePaciente, String nomeOrgao, String medicamentos)
-			throws ProcedimentoException {
 
+	public void realizaProcedimento(String nomeProcedimento, String nomePaciente,
+			String nomeOrgao, String medicamentos) throws ProcedimentoException {
+		
+		if (!usuarioAtual.getMatricula().startsWith("2")) {
+			
+			String errorMsg = "O funcionario " + usuarioAtual.getNome()
+					+ " nao tem permissao para realizar procedimentos.";
+			
+			throw new ProcedimentoException(errorMsg);
+		}
+		
 		String[] medicamentosUsados = medicamentos.split(",");
 
 		try {
@@ -1358,12 +1376,18 @@ public class Controller {
 			throw new ProcedimentoException(e.getMessage());
 		}
 	}
-
-	public void realizaProcedimento(String nomeProcedimento, String ID)
-			throws Exception {
-
-		VerificaExcecao.checkEmptyParameter(nomeProcedimento,
-				"Nome do procedimento");
+	
+	public void realizaProcedimento(String nomeProcedimento, String ID) throws Exception {
+		
+		if (!usuarioAtual.getMatricula().startsWith("2")) {
+			
+			String errorMsg = "O funcionario " + usuarioAtual.getNome()
+					+ " nao tem permissao para realizar procedimentos.";
+			
+			throw new ProcedimentoException(errorMsg);
+		}
+		
+		VerificaExcecao.checkEmptyParameter(nomeProcedimento, "Nome do procedimento");
 		VerificaExcecao.checkEmptyParameter(ID, "ID");
 
 		TipoProcedimento procedure;
@@ -1416,14 +1440,16 @@ public class Controller {
 
 		return prontuario.getPontos();
 	}
-
-	public double getGastosPaciente(String ID) throws Exception {
-
+	
+	public String getGastosPaciente(String ID) throws Exception {
+		
 		VerificaExcecao.checkEmptyParameter(ID, "ID");
 
 		Prontuario prontuario = this.getProntuario(ID);
-
-		return prontuario.getGastosPaciente();
+		
+		String gastos = String.format(Locale.US,"%.2f", prontuario.getGastosPaciente());
+		
+		return gastos;
 	}
 
 }
