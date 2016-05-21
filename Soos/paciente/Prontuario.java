@@ -47,12 +47,12 @@ public class Prontuario implements Comparable<Prontuario> {
 		return this.paciente.getPeso();
 	}
 	
-	public int getPontos(){
-		return this.paciente.getPontos();
+	public String getTipoSanguineo() {
+		return this.paciente.getTipoSanguineo();
 	}
 	
-	public double getGastoTotal() {
-		return this.paciente.getGastoTotal();
+	public int getPontos(){
+		return this.paciente.getPontos();
 	}
 	
 	public double getGastosPaciente() {
@@ -71,25 +71,35 @@ public class Prontuario implements Comparable<Prontuario> {
 		this.paciente.somaPontos(pontos);
 	}
 	
-	public void setNome(String nome) {
-		this.paciente.setNome(nome);
+	public String getNome() {
+		return this.paciente.getNome();
 	}
 	
-	//TODO
-	// Verificar nome do metodo, melhorar legibilidade.
-	public void setDataNascimento(LocalDate dataNascimento) throws Exception {
+	public String getSexoBiologico() {
+		return this.getSexoBiologico();
+	}
+	
+	public String getGenero() {
+		return this.getGenero();
+	}
+	
+	public void corrigeNome(String nome) {
+		this.paciente.corrigeNome(nome);
+	}
+	
+	public void corrigeDataNascimento(LocalDate dataNascimento) throws Exception {
 		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
-		this.paciente.setDataNascimento(dataNascimento);
+		this.paciente.corrigeDataNascimento(dataNascimento);
 	}
 	
-	public void setPeso(double peso) throws Exception {
+	public void corrigePeso(double peso) throws Exception {
 		VerificaExcecao.checarValor(peso, "Peso");
-		this.paciente.setPeso(peso);
+		this.paciente.corrigePeso(peso);
 	}
 	
-	public void setSexoBiologico(String sexoBiologico) throws Exception {
+	public void corrigeSexoBiologico(String sexoBiologico) throws Exception {
 		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
-		this.paciente.setSexoBiologico(sexoBiologico);
+		this.paciente.corrigeSexoBiologico(sexoBiologico);
 	}
 	
 	public void trocarGenero() {
@@ -153,6 +163,34 @@ public class Prontuario implements Comparable<Prontuario> {
 		VerificaExcecao.checarData(dataNascimento);
 		VerificaExcecao.checarValor(peso, "Peso do paciente");
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
+	}
+	
+	public String getResumoProcedimentos() {
+		
+		String procedures = "";
+		
+		for (int i = 0; i < this.procedimentos.size() - 1; i++) {
+			if (i < this.procedimentos.size() - 1) {
+				procedures += this.procedimentos.get(i).toString();
+				procedures += "\n";
+			} else {
+				procedures += this.procedimentos.toString();
+			}
+		}
+		
+		return "Resumo de Procedimentos: "+this.getTotalProcedimento()+" procedimento(s)\n"+procedures;
+	}
+	
+	public String getFichaPaciente() {
+		
+		String ficha = String.format("Paciente: %s\n", this.getNome());
+			   ficha+= String.format("Peso: %d kg Tipo Sanguíneo: %s\n", this.getPeso(), this.getTipoSanguineo());
+			   ficha+= String.format("Sexo: %s Genero: %s\n", this.getSexoBiologico(), this.getGenero());
+			   ficha+= String.format("Gasto total: R$ %.2f Pontos acumulados: %d\n", this.getGastosPaciente(),
+					   this.getPontos());
+			   ficha+= this.getResumoProcedimentos();
+		
+		return ficha;
 	}
 
 }

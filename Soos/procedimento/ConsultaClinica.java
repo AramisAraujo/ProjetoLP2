@@ -1,5 +1,7 @@
 package procedimento;
 
+import java.time.LocalDate;
+
 import paciente.Prontuario;
 
 /**
@@ -12,7 +14,13 @@ public class ConsultaClinica implements Procedimento {
 	private final double PRECO = 350.00;
 	private final int PONTOS = 50;
 	
-	public ConsultaClinica() {
+	private String nomeMedico;
+	private LocalDate dataDaConsulta;
+	
+	public ConsultaClinica(String nomeMedico, LocalDate dataRealizacao) {
+		
+		this.nomeMedico = nomeMedico;
+		this.dataDaConsulta = dataRealizacao;
 		
 	}
 
@@ -33,7 +41,8 @@ public class ConsultaClinica implements Procedimento {
 	}
 	
 	public String toString() {
-		return "Consulta clinica";
+		return "--> Consulta clinica:\n"+
+				"....... Data: "+this.dataDaConsulta.toString()+" Medico: "+this.nomeMedico;
 	}
 
 }

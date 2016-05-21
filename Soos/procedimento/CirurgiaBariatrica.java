@@ -1,5 +1,7 @@
 package procedimento;
 
+import java.time.LocalDate;
+
 import paciente.Prontuario;
 
 /**
@@ -13,7 +15,13 @@ public class CirurgiaBariatrica implements Procedimento {
 	private final int PONTOS = 100;
 	private final double PERCENT = 0.15;
 	
-	public CirurgiaBariatrica() {}
+	private String nomeMedico;
+	private LocalDate dataDaConsulta;
+	
+	public CirurgiaBariatrica(String nomeMedico, LocalDate dataRealizacao) {
+		this.nomeMedico = nomeMedico;
+		this.dataDaConsulta = dataRealizacao;
+	}
 	
 	/**
 	 * A cirurgia bariatrica reduz o peso do paciente em 15%.
@@ -21,7 +29,7 @@ public class CirurgiaBariatrica implements Procedimento {
 	@Override
 	public void realizaProcedimento(Prontuario prontuario) throws Exception {
 		double novoPeso = prontuario.getPeso() - prontuario.getPeso()*PERCENT;
-		prontuario.setPeso(novoPeso);
+		prontuario.corrigePeso(novoPeso);
 		prontuario.somaGastos(PRECO);
 		prontuario.somaPontos(PONTOS);
 	}
@@ -32,7 +40,8 @@ public class CirurgiaBariatrica implements Procedimento {
 	}
 	
 	public String toString() {
-		return "Cirurgia bariatrica";
+		return "--> Cirurgia bariatrica:\n"+
+				"....... Data: "+this.dataDaConsulta.toString()+" Medico: "+this.nomeMedico;
 	}
 
 }
