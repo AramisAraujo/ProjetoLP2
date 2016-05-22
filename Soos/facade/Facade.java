@@ -8,6 +8,7 @@ import exceptions.BancoOrgaoException;
 import exceptions.CadastroException;
 import exceptions.ConsultaException;
 import exceptions.ExcluirCadastroException;
+import exceptions.ExportacaoException;
 import exceptions.LoginException;
 import exceptions.LogoutException;
 import exceptions.MedicamentoException;
@@ -15,9 +16,7 @@ import exceptions.OpenSystemException;
 import exceptions.ProcedimentoException;
 import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
-import exceptions.VerificaExcecao;
 import farmacia.Medicamento;
-import paciente.Prontuario;
 
 public class Facade {
 	
@@ -207,5 +206,8 @@ public class Facade {
 		return this.controle.getFichaPaciente(ID);
 	}
 	
-	
+	public void exportaFichaPaciente(String ID) throws ExportacaoException{
+		
+		this.controle.exportaFichaPaciente(ID);
+	}
 }

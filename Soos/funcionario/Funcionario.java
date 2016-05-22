@@ -17,8 +17,6 @@ import java.time.LocalDate;
  */
 
 public  class Funcionario implements Serializable{
-
-	private static final long serialVersionUID = -1015234438916494007L;
 	
 	private String nome;
 	private LocalDate dataNascimento;

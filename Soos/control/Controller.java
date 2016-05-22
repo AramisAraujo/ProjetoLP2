@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import banco_de_orgaos.BancoDeOrgaos;
+import control.filemannager.FileMannager;
 import exceptions.*;
 import factories.FactoryFuncionario;
 import farmacia.CategoriasDeMedicamentos;
@@ -1472,6 +1473,28 @@ public String cadastraPaciente(String nome, String data, double peso,
 		Prontuario prontuario = this.getProntuario(ID);
 		
 		return prontuario.getFichaPaciente();
+		
+	}
+	
+	public void exportaFichaPaciente(String idPaciente) throws ExportacaoException{
+		
+		Prontuario prontuarioDoPaciente;
+		
+		try {
+			prontuarioDoPaciente = this.getProntuario(idPaciente);
+		} catch (Exception e) {
+			throw new 	ExportacaoException("Erro ao exportar ficha do paciente. "+ e.getMessage());
+		}
+		
+		String nomePaciente = prontuarioDoPaciente.getNome();
+		String fichaDoPaciente = prontuarioDoPaciente.getFichaPaciente();
+		String dataHoje = LocalDate.now().toString();
+		
+		try {
+			FileMannager.exportarFichaPaciente(nomePaciente, fichaDoPaciente, dataHoje);
+		} catch (Exception e) {
+			throw new ExportacaoException("Erro ao exportar ficha do paciente. " +e.getMessage());
+		}
 		
 	}
 

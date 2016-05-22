@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import facade.Facade;
 import paciente.Prontuario;
 import paciente.TipoSanguineo;
 
@@ -228,4 +229,34 @@ public class ProntuarioTest {
 			fail();
 		}
 	}
+	
+	@Test
+	public void testExportaFicha() {
+		
+		Facade facade = new Facade();
+		
+		try {
+			String diretoraGeral = facade.liberaSistema("c041ebf8", "Marie Curie", "07/11/1967");
+			
+			facade.login(diretoraGeral, "19671201");
+			
+			String tecnicaADM = facade.cadastraFuncionario("Mary Shelley", "Tecnico Administrativo", "25/07/1988");
+			
+			facade.logout();
+			
+			facade.login(tecnicaADM, "19883201");
+			
+			String idElton = facade.cadastraPaciente("Elton", "31/12/2000", 60.0, "masculino", "masculino", "O-");
+			facade.exportaFichaPaciente(idElton);
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			fail();
+		}
+		
+	}
+	
+	
+	
 }

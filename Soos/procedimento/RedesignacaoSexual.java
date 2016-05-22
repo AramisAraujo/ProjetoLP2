@@ -23,11 +23,11 @@ public class RedesignacaoSexual implements Procedimento {
 	private final double PRECO = 9300.00;
 	private final int PONTOS = 130;
 	
-	private String nomeMedico;
+	private String medicoResponsavel;
 	private LocalDate dataDaConsulta;
 	
 	public RedesignacaoSexual(String nomeMedico, LocalDate dataRealizacao) {
-		this.nomeMedico = nomeMedico;
+		this.medicoResponsavel = nomeMedico;
 		this.dataDaConsulta = dataRealizacao;
 	}
 	
@@ -50,9 +50,15 @@ public class RedesignacaoSexual implements Procedimento {
 		return this.PRECO;
 	}
 	
-	public String toString() {
-		return "--> Redesignacao sexual:\n"+
-				"....... Data: "+this.dataDaConsulta.toString()+" Medico: "+this.nomeMedico;
+public String toString() {
+		
+		String desc = "";
+		
+		 desc += String.format("--> Redesignacao sexual %n");
+		 desc += String.format("....... Data: %s ", this.dataDaConsulta.toString());
+		 desc += String.format("Medico: %s", this.medicoResponsavel);
+			
+		return desc;
 	}
 
 }

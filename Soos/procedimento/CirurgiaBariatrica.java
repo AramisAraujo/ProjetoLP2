@@ -1,5 +1,6 @@
 package procedimento;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import paciente.Prontuario;
@@ -17,24 +18,24 @@ import paciente.Prontuario;
  *
  */
 
-public class CirurgiaBariatrica implements Procedimento {
+public class CirurgiaBariatrica implements Procedimento{
 	
 	private final double PRECO = 7600.00;
 	private final int PONTOS = 100;
-	private final double PERCENT = 0.15;
+	private final double PERCENT = 0.10;
 	
-	private String nomeMedico;
+	private String medicoResponsavel;
 	private LocalDate dataDaConsulta;
 	
 	public CirurgiaBariatrica(String nomeMedico, LocalDate dataRealizacao) {
-		this.nomeMedico = nomeMedico;
+		this.medicoResponsavel = nomeMedico;
 		this.dataDaConsulta = dataRealizacao;
 	}
 	
 	/**
 	 * RealizaProcedimento
      * Metodo que realiza  o procedimentos de uma cirurgia bariatrica
-     *  a qual reduz o peso do paciente em 15%.
+     *  a qual reduz o peso do paciente em 10%.
      */
 	
 	@Override
@@ -51,8 +52,14 @@ public class CirurgiaBariatrica implements Procedimento {
 	}
 	
 	public String toString() {
-		return "--> Cirurgia bariatrica:\n"+
-				"....... Data: "+this.dataDaConsulta.toString()+" Medico: "+this.nomeMedico;
+		
+		String desc = "";
+		
+		 desc += String.format("--> Cirurgia bariatrica: %n");
+		 desc += String.format("....... Data: %s ", this.dataDaConsulta.toString());
+		 desc += String.format("Medico: %s", this.medicoResponsavel);
+			
+		return desc;
 	}
 
 }

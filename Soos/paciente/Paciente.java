@@ -1,5 +1,6 @@
 package paciente;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import exceptions.VerificaExcecao;
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
-public class Paciente implements Comparable<Paciente> {
+public class Paciente implements Comparable<Paciente>,Serializable {
 
 	private String nome, sexoBiologico, genero;
 	private TipoSanguineo tipoSanguineo;

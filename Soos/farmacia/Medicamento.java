@@ -1,5 +1,6 @@
 package farmacia;
  
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +20,7 @@ import farmacia.CategoriasDeMedicamentos;
  * @author Mainara Cavalcanti de Farias
  */
 
-public class Medicamento implements Comparable<Medicamento> {
+public class Medicamento implements Comparable<Medicamento>,Serializable {
  
     private String nome;
     private double preco;

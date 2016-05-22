@@ -22,11 +22,11 @@ public class TransplanteDeOrgaos implements Procedimento {
 	private final double PRECO = 12500.00;
 	private final int PONTOS = 160;
 	
-	private String nomeMedico, nomeOrgao;
+	private String medicoResponsavel, nomeOrgao;
 	private LocalDate dataDaConsulta;
 	
 	public TransplanteDeOrgaos(String nomeMedico, LocalDate dataRealizacao, String nomeOrgao) {
-		this.nomeMedico = nomeMedico;
+		this.medicoResponsavel = nomeMedico;
 		this.dataDaConsulta = dataRealizacao;
 		this.nomeOrgao = nomeOrgao;
 	}
@@ -42,10 +42,15 @@ public class TransplanteDeOrgaos implements Procedimento {
 		return this.PRECO;
 	}
 	
-	public String toString() {
-		return "--> Transplante de orgaos:\n"+
-				"....... Data: "+this.dataDaConsulta.toString()+" Medico: "+this.nomeMedico+"\n"+
-				"....... Orgao transplantado: "+this.nomeOrgao;
+public String toString() {
+		
+		String desc = "";
+		
+		 desc += String.format("--> Transplante de orgaos: %n");
+		 desc += String.format("....... Data: %s ", this.dataDaConsulta.toString());
+		 desc += String.format("Medico: %s", this.medicoResponsavel);
+			
+		return desc;
 	}
 
 

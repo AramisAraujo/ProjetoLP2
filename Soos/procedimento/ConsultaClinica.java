@@ -23,12 +23,12 @@ public class ConsultaClinica implements Procedimento {
 	private final double PRECO = 350.00;
 	private final int PONTOS = 50;
 	
-	private String nomeMedico;
+	private String medicoResponsavel;
 	private LocalDate dataDaConsulta;
 	
 	public ConsultaClinica(String nomeMedico, LocalDate dataRealizacao) {
 		
-		this.nomeMedico = nomeMedico;
+		this.medicoResponsavel = nomeMedico;
 		this.dataDaConsulta = dataRealizacao;
 		
 	}
@@ -50,9 +50,15 @@ public class ConsultaClinica implements Procedimento {
 		return this.PRECO;
 	}
 	
-	public String toString() {
-		return "--> Consulta clinica:\n"+
-				"....... Data: "+this.dataDaConsulta.toString()+" Medico: "+this.nomeMedico;
+public String toString() {
+		
+		String desc = "";
+		
+		 desc += String.format("--> Consulta clinica: %n");
+		 desc += String.format("....... Data: %s ", this.dataDaConsulta.toString());
+		 desc += String.format("Medico: %s", this.medicoResponsavel);
+			
+		return desc;
 	}
 
 }

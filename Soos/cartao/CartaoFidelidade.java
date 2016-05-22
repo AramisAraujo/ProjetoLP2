@@ -1,5 +1,7 @@
 package cartao;
 
+import java.io.Serializable;
+
 /**
  * CartaoFidelidade
  * Classe que representa um cartao fidelidade qual 
@@ -12,7 +14,7 @@ package cartao;
  *
  */
 
-public class CartaoFidelidade {
+public class CartaoFidelidade implements Serializable{
 
 	private int pontos;
 	private Fidelidade nivelFidelidade;

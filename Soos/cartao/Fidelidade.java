@@ -1,5 +1,7 @@
 package cartao;
 
+import java.io.Serializable;
+
 /**
  * Fidelidade
  * Interface que define os metodos que um nivel de fidelidade deve
@@ -11,7 +13,7 @@ package cartao;
  * @author Mainara Cavalcanti de Farias
  *
  */
-public interface Fidelidade {
+public interface Fidelidade extends Serializable{
 
 	/**
 	 * CalcularPontos

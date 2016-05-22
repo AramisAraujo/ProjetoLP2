@@ -1,5 +1,6 @@
 package banco_de_orgaos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import paciente.TipoSanguineo;
  *
  */
 
-public class BancoDeOrgaos {
+public class BancoDeOrgaos implements Serializable{
 
 	private List<Orgao> bancoDeOrgaos;
 	private FactoryOrgaos factoryOrgaos;

@@ -1,5 +1,6 @@
 package cartao;
 
+
 /**
  * Padrao
  * Classe que representa um nivel basico de fidelidade de um cartao

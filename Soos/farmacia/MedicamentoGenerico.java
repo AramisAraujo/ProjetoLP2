@@ -1,5 +1,6 @@
 package farmacia;
  
+import java.io.Serializable;
 import java.util.List;
 
 import farmacia.CategoriasDeMedicamentos;
@@ -13,7 +14,7 @@ import farmacia.CategoriasDeMedicamentos;
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
-public class MedicamentoGenerico extends Medicamento {
+public class MedicamentoGenerico extends Medicamento implements Serializable {
  
     public MedicamentoGenerico(String nome, double preco, int quantidade,
             List<CategoriasDeMedicamentos> categorias) throws Exception {

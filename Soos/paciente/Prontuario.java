@@ -1,5 +1,6 @@
 package paciente;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import procedimento.Procedimento;
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
-public class Prontuario implements Comparable<Prontuario> {
+public class Prontuario implements Comparable<Prontuario>,Serializable {
 	
 	private Paciente paciente;
 	private List<Procedimento> procedimentos;
@@ -79,11 +80,11 @@ public class Prontuario implements Comparable<Prontuario> {
 	}
 	
 	public String getSexoBiologico() {
-		return this.getSexoBiologico();
+		return this.paciente.getSexoBiologico();
 	}
 	
 	public String getGenero() {
-		return this.getGenero();
+		return this.paciente.getGenero();
 	}
 	
 	public void corrigeNome(String nome) {
@@ -187,29 +188,50 @@ public class Prontuario implements Comparable<Prontuario> {
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 	}
 	
+	/**
+	 * GetResumoProcedimentos
+	 * Metodo que expressa um resumo de todos os procedimentos realizados
+	 * em um paciente.
+	 * @return String representando um resumo de todos os procedimentos.
+	 * 
+	 */
+	
 	public String getResumoProcedimentos() {
 		
 		String procedures = "";
 		
-		for (int i = 0; i < this.procedimentos.size() - 1; i++) {
-			if (i < this.procedimentos.size() - 1) {
-				procedures += this.procedimentos.get(i).toString();
-				procedures += "\n";
-			} else {
-				procedures += this.procedimentos.toString();
-			}
+		for (Procedimento procedimento : this.procedimentos) {
+			
+			procedures = procedures + procedimento.toString();
+			
 		}
 		
-		return "Resumo de Procedimentos: "+this.getTotalProcedimento()+" procedimento(s)\n"+procedures;
+		String resumo = String.format("Resumo de Procedimentos: %d "
+				+ "procedimento(s)%n", this.getTotalProcedimento());
+		
+		resumo = resumo + procedures;
+		
+		return resumo;	
+		
 	}
+	
+	/**
+	 * GetFichaPaciente
+	 * Metodo que expressa uma ficha que possui todas as informacoes de um
+	 * paciente.
+	 * 
+	 * @return String que representa uma ficha geral de um paciente.
+	 */
 	
 	public String getFichaPaciente() {
 		
-		String ficha = String.format("Paciente: %s\n", this.getNome());
-			   ficha+= String.format("Peso: %d kg Tipo Sanguíneo: %s\n", this.getPeso(), this.getTipoSanguineo());
-			   ficha+= String.format("Sexo: %s Genero: %s\n", this.getSexoBiologico(), this.getGenero());
-			   ficha+= String.format("Gasto total: R$ %.2f Pontos acumulados: %d\n", this.getGastosPaciente(),
-					   this.getPontos());
+		String ficha = String.format("Paciente: %s%n", this.getNome());
+			   ficha +=  String.format("Peso: %.2f kg ", this.getPeso());
+			   ficha += String.format("Tipo Sanguíneo: %s%n", this.getTipoSanguineo());
+			   ficha += String.format("Sexo: %s ", this.getSexoBiologico());
+			   ficha += String.format("Genero: %s%n",  this.getGenero());
+			   ficha += String.format("Gasto total: R$ %.2f ", this.getGastosPaciente());
+			   ficha += String.format("Pontos acumulados: %d%n", this.getPontos());
 			   ficha+= this.getResumoProcedimentos();
 		
 		return ficha;

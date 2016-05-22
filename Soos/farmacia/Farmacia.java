@@ -1,5 +1,6 @@
 package farmacia;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ import factories.FactoryDeMedicamentos;
  * @author Mainara Cavalcanti de Farias
  */
 
-public class Farmacia {
+public class Farmacia implements Serializable{
 
 	private FactoryDeMedicamentos factoryDeMedicamentos;
 	private Set<Medicamento> medicamentos;

@@ -1,5 +1,7 @@
 package banco_de_orgaos;
 
+import java.io.Serializable;
+
 import exceptions.BancoOrgaoException;
 import exceptions.VerificaExcecao;
 import paciente.TipoSanguineo;
@@ -15,7 +17,7 @@ import paciente.TipoSanguineo;
  * @author Mainara Cavalcanti de Farias
  */
 
-public class Orgao {
+public class Orgao implements Serializable{
 	
 	private String nome;
 	private TipoSanguineo tipoSanguineo;
