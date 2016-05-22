@@ -1,14 +1,23 @@
 package exceptions;
+ 
+ 
+/**
+ * LoginException
+ * Classe que encapsula uma situacao de excecao relacionada  ao Login no sistema.
+ * 
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
+ *
+ */
 
+@SuppressWarnings("serial")
 public class LoginException extends Exception{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1195597153228578649L;
-
-	public LoginException(String msg) {
-		super("Nao foi possivel realizar o login. "+msg);
-	}
-	
-
+ 
+    public LoginException(String msg) {
+        super("Nao foi possivel realizar o login. "+msg);
+    }
+     
+ 
 }

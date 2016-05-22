@@ -3,10 +3,18 @@ package procedimento;
 import paciente.Prontuario;
 
 /**
+ * CirurgiaBariatrica
+ * Classe que representa um procedimento de cirurgia bariatrica. 
+ * Possui metodos que realizam tal operacao em um paciente, bonificando seu cartao fidelidade e somando 
+ * gastos.
  * 
- * @author dantaselton
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
  *
  */
+
 public class CirurgiaBariatrica implements Procedimento {
 	
 	private final double PRECO = 7600.00;
@@ -16,8 +24,11 @@ public class CirurgiaBariatrica implements Procedimento {
 	public CirurgiaBariatrica() {}
 	
 	/**
-	 * A cirurgia bariatrica reduz o peso do paciente em 15%.
-	 */
+	 * RealizaProcedimento
+     * Metodo que realiza  o procedimentos de uma cirurgia bariatrica
+     *  a qual reduz o peso do paciente em 15%.
+     */
+	
 	@Override
 	public void realizaProcedimento(Prontuario prontuario) throws Exception {
 		double novoPeso = prontuario.getPeso() - prontuario.getPeso()*PERCENT;

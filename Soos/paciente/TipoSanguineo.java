@@ -1,9 +1,13 @@
 package paciente;
 
 /**
+ * Enum implementado para diferenciar os diferentes tipos sanguineos.
  * 
- * @author Elton Dantas
- *
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
+ * 
  */
 public enum TipoSanguineo {
 	

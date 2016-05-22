@@ -5,14 +5,18 @@ import exceptions.VerificaExcecao;
 import paciente.TipoSanguineo;
 
 /**
- * Classe utilizada para criar orgaos.
+ * Orgao
+ * Classe que representa um orgao qual pode ser utilizado
+ * em um procedimento de transplante.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
+
 public class Orgao {
+	
 	private String nome;
 	private TipoSanguineo tipoSanguineo;
 
@@ -29,13 +33,15 @@ public class Orgao {
 	}
 
 	/**
-	 * Metodo utilizado para verificar se o tipo sanguineo eh valido.
+	 * VerificaTipoSanguineo
+	 * Metodo que verifica se um tipo sanguineo eh valido.
 	 * 
 	 * @param tipoSanguineo
 	 *            - tipo sanguineo que sera verificado
 	 * @throws Exception
 	 *             - excecao lancada caso o login nao seja valido
 	 */
+	
 	public void verificaTipoSanguineo(TipoSanguineo tipoSanguineo) throws Exception {
 		if (tipoSanguineo == null) {
 			throw new Exception("Tipo sanguineo invalido.");
@@ -54,6 +60,7 @@ public class Orgao {
 	 * Hashcode implementado considerando que dois orgaos se iguais se possuem o
 	 * mesmo nome e o mesmo tipo sanguineo.
 	 */
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -67,6 +74,7 @@ public class Orgao {
 	 * Equals implementado considerando que dois orgaos se iguais se possuem o
 	 * mesmo nome e o mesmo tipo sanguineo.
 	 */
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Orgao) {
