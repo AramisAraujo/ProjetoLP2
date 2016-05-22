@@ -134,7 +134,7 @@ public class Paciente implements Comparable<Paciente> {
 	 */
 	public void somaGastos(double valor) {
 
-		valor = this.carteirinhaSoos.aplicarDisconto(valor);
+		valor = this.carteirinhaSoos.aplicarDesconto(valor);
 
 		this.gastoTotal += valor;
 	}

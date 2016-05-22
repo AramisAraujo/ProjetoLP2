@@ -3,8 +3,10 @@ package procedimento;
 import paciente.Prontuario;
 
 /**
- * Classe utilizada para implementar os procedimentos relacionados ao
- * Transplante de Orgaos.
+ * TransplanteDeOrgaos
+ * Classe que representa um procedimento de um Transplante de Orgaos. 
+ * Possui metodos que realizam tal operacao em um paciente, bonificando seu cartao fidelidade e somando 
+ * gastos.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -12,6 +14,7 @@ import paciente.Prontuario;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 public class TransplanteDeOrgaos implements Procedimento {
 	
 	private final double PRECO = 12500.00;

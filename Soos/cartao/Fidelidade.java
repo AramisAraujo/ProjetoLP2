@@ -1,7 +1,8 @@
 package cartao;
 
 /**
- * Interface criada para definir os metodos que os niveis de fidelidade irao
+ * Fidelidade
+ * Interface que define os metodos que um nivel de fidelidade deve
  * implementar.
  * 
  * @author Aramis Sales Araujo
@@ -13,7 +14,9 @@ package cartao;
 public interface Fidelidade {
 
 	/**
-	 * Metodo utilizado para calcular os pontos que serao adicionados ao cartao.
+	 * CalcularPontos
+	 * Metodo que calcula os pontos que serao adicionados ao cartao
+	 * podendo ser aplicado um bonus a essa pontuacao.
 	 * 
 	 * @param pontos
 	 *            - pontos que serao adicionados de acordo com o calculo
@@ -22,6 +25,7 @@ public interface Fidelidade {
 	public int calcularPontos(int pontos);
 
 	/**
+	 * AplicarDesconto
 	 * Metodo utilizado para aplicar o desconto em um valor de acordo com o
 	 * nivel de fidelidade do cartao.
 	 * 
@@ -29,6 +33,6 @@ public interface Fidelidade {
 	 *            - valor que sera descontado
 	 * @return - valor com desconto
 	 */
-	public double aplicarDisconto(double valor);
+	public double aplicarDesconto(double valor);
 
 }

@@ -3,7 +3,8 @@ package procedimento;
 import paciente.Prontuario;
 
 /**
- * Interface criada para definir os metodos de procedimentos.
+ * Procedimento
+ * Interface criada para definir comportamentos essenciais a um procedimento.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -15,13 +16,15 @@ public interface Procedimento {
 	
 
     /**
-     * Metodo utilizado para realizar determinado procedimento.
+     * RealizaProcedimento
+     * Metodo que realiza o procedimento.
      * 
      * @param paciente
      *            - paciente que realizara o procedimento
      * @throws Exception
      *             - excecao lancada caso ocorra algum erro
      */
+	
 	public abstract void realizaProcedimento(Prontuario prontuario) throws Exception;
 	
 	public abstract double getPreco();

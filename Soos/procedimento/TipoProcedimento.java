@@ -2,7 +2,8 @@ package procedimento;
 
 
 /**
- * Enum implementado para diferenciar os diferentes tipos de procedimentos.
+ * TipoProcedimento
+ * Enumerator que representa os diferentes tipos de procedimentos disponiveis no Soos.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -10,6 +11,7 @@ package procedimento;
  * @author Mainara Cavalcanti de Farias
  * 
  */
+
 public enum TipoProcedimento {
 	
 	CIRURGIABARIATRICA("Cirurgia bariatrica"),

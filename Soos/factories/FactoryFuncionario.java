@@ -1,25 +1,24 @@
 package factories;
  
 import java.time.LocalDate;
- 
-import usuario.Diretor;
-import usuario.Medico;
-import usuario.TecnicoAdm;
-import usuario.TipoCargo;
-import usuario.Usuario;
+import funcionario.TipoCargo;
+import funcionario.Funcionario;
  
 /**
- * Classe responsavel por criar todos os usuarios.
+ * FactoryFuncionario
+ * Classe responsavel por criar objetos do tipo funcionario.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
-public class FactoryUsuario {
+
+public class FactoryFuncionario {
  
     /**
-     * Metodo utilizado para criar usuarios.
+     * CriarFuncionario
+     * Metodo responsavel pela criacao de funcionarios.
      * 
      * @param nome
      *            - nome do usuario que sera criado
@@ -34,16 +33,11 @@ public class FactoryUsuario {
      * @return - o usuario que foi criado ou null caso o cargo seja diferente se
      *         Diretor, Medico ou Tecnico administrativo
      */
-    public Usuario criarUsuario(String nome, LocalDate birthDate, String senha, String matricula, TipoCargo cargo) {
-        switch (cargo) {
-        case DIRETOR:
-            return new Diretor(nome, birthDate, senha, matricula);
-        case MEDICO:
-            return new Medico(nome, birthDate, senha, matricula);
-        case TECNICOADM:
-            return new TecnicoAdm(nome, birthDate, senha, matricula);
-        default:
-            return null;
+	
+    public Funcionario criarFuncionario(String nome, LocalDate birthDate, String senha, String matricula, TipoCargo cargo) {
+        
+    	return new Funcionario(nome, birthDate, senha, matricula,cargo);
+    
         }
-    }
+
 }

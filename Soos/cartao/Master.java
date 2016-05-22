@@ -1,8 +1,9 @@
 package cartao;
 
 /**
- * Classe criada para ser implementados os metodos do cartao fidelidade de
- * acordo com o nivel Master.
+ * Master
+ * Classe que representa um nivel intermediario de fidelidade,
+ * concedendo descontos e bonus em diversas operacoes.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -10,6 +11,7 @@ package cartao;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 public class Master implements Fidelidade {
 
 	private final double TAXA_DISCONTO = 0.85;
@@ -25,7 +27,7 @@ public class Master implements Fidelidade {
 	}
 
 	@Override
-	public double aplicarDisconto(double valor) {
+	public double aplicarDesconto(double valor) {
 
 		return valor * TAXA_DISCONTO;
 	}

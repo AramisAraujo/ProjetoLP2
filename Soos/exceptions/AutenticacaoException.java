@@ -2,8 +2,8 @@ package exceptions;
  
  
 /**
- * Classe implementada para criar Exceptions quando existe algum erro
- * relacionado a autenticacao de alguma informacao.
+ * AutenticacaoException
+ *Classe que encapsula uma situacao de excecao relacionada  a autenticacao de um funcionario.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -11,6 +11,7 @@ package exceptions;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 @SuppressWarnings("serial")
 public class AutenticacaoException extends Exception{
  

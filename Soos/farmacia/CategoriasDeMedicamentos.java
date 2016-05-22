@@ -1,7 +1,8 @@
 package farmacia;
   
 /**
- * Enum implementado para diferenciar as diferentes categorias de medicamentos.
+ * CategoriasDeMedicamentos
+ * Enumerator que representa as categorias de medicamentos disponiveis no Soos.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -9,7 +10,8 @@ package farmacia;
  * @author Mainara Cavalcanti de Farias
  * 
  */
-public enum CategoriasDeMedicamentos {//Favor manter ordem alfabetica
+
+public enum CategoriasDeMedicamentos {
     ANALGESICO ("analgesico"), 
     ANTIBIOTICO ("antibiotico"), 
     ANTIEMETICO ("antiemetico"), 

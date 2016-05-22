@@ -1,11 +1,13 @@
-package usuario;
+package funcionario;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * Classe implementada para criar um usuario e obter ou mudar informacoes do
- * mesmo.
+ * Funcionario
+ * Classe que representa um funcionario do sistema Soos.
+ * Cada funcionario possui dados como nome, data de nascimento,
+ * senha uma matricula e um cargo que ocupa.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -13,19 +15,24 @@ import java.time.LocalDate;
  * @author Mainara Cavalcanti de Farias
  *
  */
-public abstract class Usuario implements Serializable{
+
+public  class Funcionario implements Serializable{
 
 	private static final long serialVersionUID = -1015234438916494007L;
+	
 	private String nome;
 	private LocalDate dataNascimento;
 	private String senha;
 	private String matricula;
+	private final TipoCargo cargo;
 	
-	public Usuario(String nome, LocalDate birthDate, String senha, String matricula) {
+	public Funcionario(String nome, LocalDate birthDate, String senha, String matricula, TipoCargo cargo) {
+		
 		this.nome = nome;
 		this.dataNascimento = birthDate;
 		this.senha = senha;
 		this.matricula = matricula;
+		this.cargo = cargo;
 	}
 
 	public String getNome() {
@@ -44,7 +51,9 @@ public abstract class Usuario implements Serializable{
 		this.dataNascimento = dataNascimento;
 	}
 
-	public abstract TipoCargo getCargo();
+	public  TipoCargo getCargo(){
+		return this.cargo;
+	}
 
 	public String getSenha() {
 		String senha = this.senha;

@@ -1,8 +1,8 @@
 package cartao;
 
 /**
- * Classe criada para ser implementados os metodos do cartao fidelidade de
- * acordo com o nivel VIP.
+ * Classe que representa um alto nivel de fidelidade de um cartao
+ * concede descontos e bonificacoes para cada operacao realizada.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -10,6 +10,7 @@ package cartao;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 public class VIP implements Fidelidade {
 
 	private final double TAXA_DISCONTO = 0.7;
@@ -25,7 +26,7 @@ public class VIP implements Fidelidade {
 	}
 
 	@Override
-	public double aplicarDisconto(double valor) {
+	public double aplicarDesconto(double valor) {
 
 		return valor * TAXA_DISCONTO;
 	}

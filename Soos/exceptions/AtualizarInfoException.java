@@ -1,8 +1,9 @@
 package exceptions;
  
 /**
- * Classe implementada para criar Exceptions quando existe algum erro
- * relacionado a atualizacao de alguma informacao.
+ * AtualizarInfoException
+ * Classe que encapsula uma situacao de excecao relacionada  a atualizacao de 
+ * alguma informacao de um objeto.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -10,10 +11,11 @@ package exceptions;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 @SuppressWarnings("serial")
 public class AtualizarInfoException extends Exception {
- 
-    public AtualizarInfoException(String pessoa, String msg) {
+
+	public AtualizarInfoException(String pessoa, String msg) {
         super("Erro ao atualizar " + pessoa + ". " + msg);
     }
  

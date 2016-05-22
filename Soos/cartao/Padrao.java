@@ -1,8 +1,9 @@
 package cartao;
 
 /**
- * Classe criada para ser implementados os metodos do cartao fidelidade de
- * acordo com o nivel Padrao.
+ * Padrao
+ * Classe que representa um nivel basico de fidelidade de um cartao
+ * nao possui vantagens ou bonus em operacoes.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -10,6 +11,7 @@ package cartao;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 public class Padrao implements Fidelidade {
 
 	private final double TAXA_DISCONTO = 1.0;
@@ -25,7 +27,7 @@ public class Padrao implements Fidelidade {
 	}
 
 	@Override
-	public double aplicarDisconto(double valor) {
+	public double aplicarDesconto(double valor) {
 
 		return valor * TAXA_DISCONTO;
 	}

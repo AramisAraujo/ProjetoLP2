@@ -9,13 +9,16 @@ import exceptions.VerificaExcecao;
 import farmacia.CategoriasDeMedicamentos;
  
 /**
- * Classe responsavel por criar Medicamentos.
+ * Medicamento
+ * Classe que define um medicamento que possui nome, preco, um tipo pre definido e uma lista
+ * de categorias.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
+
 public class Medicamento implements Comparable<Medicamento> {
  
     private String nome;
@@ -25,11 +28,14 @@ public class Medicamento implements Comparable<Medicamento> {
     protected String tipo;
  
     public Medicamento(String nome, double preco, int quantidade, List<CategoriasDeMedicamentos> categorias) throws Exception{
-        VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");
+        
+    	VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");
         VerificaExcecao.checarValor(preco, "Preco do medicamento");
         VerificaExcecao.checarValor(quantidade, "Quantidade do medicamento");
         VerificaExcecao.checarValor(quantidade, "A quantidade do medicamento");
+        
         verificaCategorias(categorias);
+        
     	this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
@@ -38,7 +44,8 @@ public class Medicamento implements Comparable<Medicamento> {
     }
     
 	   /**
-     * Metodo utilizado para verificar se a(s) categoria(s) eh(sao) nula(s),
+	   * VerificaCategorias
+     * Metodo que verifica se a(s) categoria(s) eh(sao) nula(s),
      * caso ela(s) seja(m), uma excessao eh lancada.
      * 
      * @param categorias
@@ -46,6 +53,7 @@ public class Medicamento implements Comparable<Medicamento> {
      * @throws ValorException
      *             - excessao lancada caso a(s) categoria(s) eh(sejam) nula(s)
      */
+    
     public static void verificaCategorias(List<CategoriasDeMedicamentos> categorias) throws MedicamentoException {
         if (categorias == null) {
             throw new MedicamentoException("A categoria do medicamento nao pode ser nula.");
@@ -77,6 +85,7 @@ public class Medicamento implements Comparable<Medicamento> {
     }
  
     public String getCategorias() {
+    	
     	Collections.sort(categorias);
     	String toStringCategorias = "";
 		int cont = 0;

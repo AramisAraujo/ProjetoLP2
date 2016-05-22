@@ -1,7 +1,8 @@
-package usuario;
+package funcionario;
 
 /**
- * Enum implementado para diferenciar os diferentes tipos de cargos.
+ * TipoCargo
+ * Enumerator que representa os diferentes tipos de funcionario do Soos.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -9,7 +10,9 @@ package usuario;
  * @author Mainara Cavalcanti de Farias
  * 
  */
+
 public enum TipoCargo {
+	
 	DIRETOR("Diretor Geral"), 
 	MEDICO("Medico"), 
 	TECNICOADM("Tecnico Administrativo");

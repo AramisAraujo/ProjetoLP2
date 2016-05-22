@@ -1,8 +1,8 @@
 package exceptions;
  
 /**
- * Classe implementada para criar Exceptions quando existe algum erro
- * relacionado a exclusao de cadastros.
+ * ExcluirCadastroException
+* Classe que encapsula uma situacao de excecao relacionada  a exclusao do cadastro.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita

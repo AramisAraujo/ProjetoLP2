@@ -1,7 +1,9 @@
 package cartao;
 
 /**
- * Classe utilizada para gerenciar o cartao fidelidade.
+ * CartaoFidelidade
+ * Classe que representa um cartao fidelidade qual 
+ * estah associado a um paciente.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -9,6 +11,7 @@ package cartao;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 public class CartaoFidelidade {
 
 	private int pontos;
@@ -27,11 +30,13 @@ public class CartaoFidelidade {
 	}
 
 	/**
-	 * Metodo utilizado para adicionar pontos ao cartao fidelidade.
+	 * AddPontos
+	 * Metodo que adiciona pontos no cartao fidelidade.
 	 * 
 	 * @param pontos
 	 *            - pontos que serao adicinados
 	 */
+	
 	public void addPontos(int pontos) {
 
 		pontos = this.nivelFidelidade.calcularPontos(pontos);
@@ -43,15 +48,17 @@ public class CartaoFidelidade {
 	}
 
 	/**
-	 * Metodo utilizado para aplicar o desconto no cartao fidelidade.
+	 * AplicarDesconto
+	 * Metodo que aplica o descontos referentes as vantagens do cartao fidelidade.
 	 * 
 	 * @param valor
 	 *            - valor que sera descontado
 	 * @return - valor com o desconto
 	 */
-	public double aplicarDisconto(double valor) {
+	
+	public double aplicarDesconto(double valor) {
 
-		valor = this.nivelFidelidade.aplicarDisconto(valor);
+		valor = this.nivelFidelidade.aplicarDesconto(valor);
 
 		return valor;
 
@@ -63,9 +70,11 @@ public class CartaoFidelidade {
 	}
 
 	/**
-	 * Metodo utilizado para veficar a quantidade de pontos do cartao fidelidade
-	 * e assim classificar o cartao de acordo com os niveis de fidelidade.
+	 * ChecarFidelidade
+	 * Metodo que verifica a quantidade de pontos do cartao fidelidade
+	 * possibilitando a troca dinâmica do nivel de fidelidade do cartao.
 	 */
+	
 	private void checarFidelidade() {
 
 		if (this.pontos < NIVEL_MASTER) {

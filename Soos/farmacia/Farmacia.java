@@ -14,13 +14,16 @@ import exceptions.MedicamentoException;
 import factories.FactoryDeMedicamentos;
 
 /**
- * Classe responsavel por gerenciar todos os medicamentos.
+ * Farmacia
+ * Classe que representa uma farmacia.
+ * Eh responsavel por armazenar e gerenciar medicamentos.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
+
 public class Farmacia {
 
 	private FactoryDeMedicamentos factoryDeMedicamentos;
@@ -32,8 +35,9 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para criar medicamentos de acordo com o seu tipo, que
-	 * pode ser "medicamento generico" ou "medicamento de referencia".
+	 * CadastraMedicamento
+	 * Metodo que delega a realizacao do cadastro de um medicamento de acordo com o seu tipo, que
+	 * pode ser "Generico" ou "De referencia".
 	 * 
 	 * @param nome
 	 *            - nome do medicamento que sera criado
@@ -50,6 +54,7 @@ public class Farmacia {
 	 * @throws Exception
 	 *             - excecao lancada caso ocorra algum erro
 	 */
+	
 	public boolean cadastraMedicamento(String nome, String tipo, double preco,
 			int quantidade, List<CategoriasDeMedicamentos> categorias)
 			throws Exception {
@@ -64,14 +69,16 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para verificar se um determinado medicamento existe
-	 * informandando seu nome.
+	 * ExisteMedicamento
+	 * Metodoque verifica  se um determinado medicamento existe dado 
+	 * um nome de medicamento.
 	 * 
 	 * @param nome
 	 *            - nome do medicamento que sera verificado
 	 * @return - true, se o medicamento existe ou false, se o medicamento nao
 	 *         existe
 	 */
+	
 	public boolean existeMedicamento(String nome) {
 		for (Medicamento medicamento : medicamentos) {
 			if (medicamento.getNome().equals(nome)) {
@@ -82,12 +89,14 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para buscar um determinado medicamento pelo nome.
+	 * BuscaMedicamento
+	 * Metodo que realiza a busca por nome de  um medicamento  na colecao da farmacia.
 	 * 
 	 * @param nome
 	 *            - nome do medicamento a ser procurado
 	 * @return - medicamento com o nome especificado ou null se tal nao existir.
 	 */
+	
 	public Medicamento buscaMedicamento(String nome) {
 		
 		for (Medicamento medicamento : medicamentos) {
@@ -101,7 +110,8 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para retornar o tipo do medicamento que tem o nome
+	 * GetTipoMedicamento
+	 * Metodo que expressa o tipo do medicamento que tem o nome
 	 * passado como parametro.
 	 * 
 	 * @param nomeMedicamento
@@ -111,6 +121,7 @@ public class Farmacia {
 	 *             - excessao lancada caso nao exista nenhum medicamento com o
 	 *             nome especificado
 	 */
+	
 	public String getTipoMedicamento(String nomeMedicamento)
 			throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
@@ -119,11 +130,13 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para retornar todos os medicamentos presentes no estoque
-	 * da farmacia.
+	 * GetMedicamentosPreco
+	 * Metodo que expressa todos os medicamentos presentes no estoque
+	 * da farmacia ordenados por preco.
 	 * 
 	 * @return - lista de medicamentos ordenada pelo menor preco
 	 */
+	
 	public List<Medicamento> getMedicamentosPreco() {
 		
 		List<Medicamento> meds = new ArrayList<Medicamento>();
@@ -135,11 +148,13 @@ public class Farmacia {
 	}
 
 	/**
+	 * GetMedicamentosNome
 	 * Metodo utilizado para retornar todos os medicamentos presentes no estoque
-	 * da farmacia.
+	 * da farmacia ordenados alfabeticamente.
 	 * 
 	 * @return - lista de medicamentos ordenada por ordem alfabetica
 	 */
+	
 	public List<Medicamento> getMedicamentosNome() {
 		
 		List<Medicamento> meds = new ArrayList<Medicamento>();
@@ -151,7 +166,8 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para retornar o preco do medicamento que tem o nome
+	 * GetPreco
+	 * Metodo que expressa o preco do medicamento que tem o nome
 	 * passado como parametro.
 	 * 
 	 * @param nomeMedicamento
@@ -161,6 +177,7 @@ public class Farmacia {
 	 *             - excessao lancada caso nao exista nenhum medicamento com o
 	 *             nome especificado
 	 */
+	
 	public double getPreco(String nomeMedicamento) throws MedicamentoException {
 		
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
@@ -175,7 +192,8 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para retornar a quantidade do medicamento que tem o nome
+	 * GetQuantidade
+	 * Metodo que expressa a quantidade de um medicamento no estoque da farmacia que tem o nome
 	 * passado como parametro.
 	 * 
 	 * @param nomeMedicamento
@@ -185,6 +203,7 @@ public class Farmacia {
 	 *             - excessao lancada caso nao exista nenhum medicamento com o
 	 *             nome especificado
 	 */
+	
 	public int getQuantidade(String nomeMedicamento)
 			throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
@@ -197,8 +216,9 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para retornar as categorias que o medicamento que tem o
-	 * nome passado como parametro pertence.
+	 * GetCategoriasMedicamento
+	 * Metodo que expressa todas as categorias que um medicamento possui
+	 * dado seu nome como parametro.
 	 * 
 	 * @param nomeMedicamento
 	 *            - nome do medicamento
@@ -207,6 +227,7 @@ public class Farmacia {
 	 *             - excessao lancada caso nao exista nenhum medicamento com o
 	 *             nome especificado
 	 */
+	
 	public String getCategoriasMedicamento(String nomeMedicamento)
 			throws MedicamentoException {
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
@@ -218,7 +239,13 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para atualizar determinado atributo de um medicamento.
+	 * AtualizaMedicamento
+	 * Metodo que atualiza determinado atributo de um medicamento.
+	 * As opcoes validas sao:
+	 * 	-Preco
+	 * 	-Quantidade
+	 * 	-Nome
+	 * 	-Tipo
 	 * 
 	 * @param nome
 	 *            - nome do medicamento que sera atualizado
@@ -272,7 +299,8 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para buscar medicamentos que pertencem a uma determinada
+	 * ConsultaMedCategoria
+	 * Metodo que realiza a busca por medicamentos que pertencem a uma determinada
 	 * categoria.
 	 * 
 	 * @param nomeCategoria
@@ -282,6 +310,7 @@ public class Farmacia {
 	 *             - excessao lancada caso ocorra algum erro
 	 * @throws ConsultaException
 	 */
+	
 	public String consultaMedCategoria(String categoria)
 			throws MedicamentoException, ConsultaException {
 		
@@ -320,7 +349,8 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para buscar um determinado medicamento pelo nome.
+	 * ConsultaMedNome
+	 * Metodo que realiza a  busca por um determinado medicamento pelo nome.
 	 * 
 	 * @param nome
 	 *            - nome do medicamento a ser procurado
@@ -329,6 +359,7 @@ public class Farmacia {
 	 *             - excessao lancada caso nao exista nenhum medicamento com
 	 *             esse nome
 	 */
+	
 	public Medicamento consultaMedNome(String nome) throws MedicamentoException {
 		for (Medicamento medicamento : medicamentos) {
 			if (medicamento.getNome().equals(nome)) {
@@ -339,8 +370,9 @@ public class Farmacia {
 	}
 
 	/**
-	 * Metodo utilizado para retornar todos os medicamentos presentes no estoque
-	 * da farmacia, podendo ser organizada pelo preco ou por ordem alfabetica.
+	 * GetEstoqueFarmacia
+	 * Metodo que expressa todos os medicamentos presentes no estoque
+	 * da farmacia, podendo ser organizados por preco ou por ordem alfabetica.
 	 * 
 	 * @param ordenacao
 	 *            - tipo de ordenacao
@@ -348,6 +380,7 @@ public class Farmacia {
 	 * @throws MedicamentoException
 	 *             - excessao lancada caso o tipo de ordenacao seja invalida
 	 */
+	
 	public String getEstoqueFarmacia(String ordenacao)
 			throws MedicamentoException {
 		

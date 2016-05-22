@@ -13,15 +13,15 @@ import java.util.regex.Pattern;
 
 import banco_de_orgaos.BancoDeOrgaos;
 import exceptions.*;
-import factories.FactoryUsuario;
+import factories.FactoryFuncionario;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Farmacia;
 import farmacia.Medicamento;
+import funcionario.TipoCargo;
+import funcionario.Funcionario;
 import paciente.Prontuario;
 import paciente.TipoSanguineo;
 import procedimento.*;
-import usuario.Usuario;
-import usuario.TipoCargo;
 
 /**
  * Classe criada para gerenciar todas as acoes do sistema.
@@ -35,12 +35,12 @@ public class Controller {
 
 	private boolean sistemaBloqueado;
 	private int cadastrosRealizados;
-	private Usuario usuarioAtual;
-	private Map<String, Usuario> bancoUsuarios;
+	private Funcionario usuarioAtual;
+	private Map<String, Funcionario> bancoUsuarios;
 	private List<Prontuario> bancoProntuarios;
 	private Farmacia farmacia;
 	private BancoDeOrgaos bancoDeOrgaos;
-	private FactoryUsuario factoryUsuarios;
+	private FactoryFuncionario factoryUsuarios;
 	private Procedimento procedimento;
 
 	private final String NOME = "NOME", PRECO = "PRECO", TIPO = "TIPO",
@@ -50,11 +50,11 @@ public class Controller {
 	public Controller() {
 		this.sistemaBloqueado = true;
 		this.cadastrosRealizados = 0;
-		this.bancoUsuarios = new HashMap<String, Usuario>();
+		this.bancoUsuarios = new HashMap<String, Funcionario>();
 		this.bancoProntuarios = new ArrayList<Prontuario>();
 		this.farmacia = new Farmacia();
 		this.bancoDeOrgaos = new BancoDeOrgaos();
-		this.factoryUsuarios = new FactoryUsuario();
+		this.factoryUsuarios = new FactoryFuncionario();
 		this.usuarioAtual = null;
 	}
 
@@ -123,7 +123,7 @@ public class Controller {
 	 */
 	public void login(String matricula, String senha) throws LoginException {
 
-		Usuario loginTarget = this.getUsuario(matricula);
+		Funcionario loginTarget = this.getUsuario(matricula);
 
 		if (loginTarget == null) {
 			throw new LoginException("Funcionario nao cadastrado.");
@@ -280,7 +280,7 @@ public class Controller {
 		}
 		senha = this.gerarSenha(birthDate, matricula);
 
-		Usuario targetUser = this.factoryUsuarios.criarUsuario(nome, birthDate,
+		Funcionario targetUser = this.factoryUsuarios.criarFuncionario(nome, birthDate,
 				senha, matricula, targetCargo);
 
 		this.bancoUsuarios.put(matricula, targetUser);
@@ -432,7 +432,7 @@ public class Controller {
 					"A matricula nao segue o padrao.");
 		}
 
-		Usuario targetUser = getUsuario(matricula);
+		Funcionario targetUser = getUsuario(matricula);
 
 		if (targetUser == null) {
 			throw new ConsultaException("funcionario",
@@ -771,14 +771,14 @@ public class Controller {
 					+ " A matricula nao segue o padrao.");
 		}
 
-		Usuario targetUser = getUsuario(matricula);
+		Funcionario targetUser = getUsuario(matricula);
 
 		if (targetUser == null) {
 			throw new ExcluirCadastroException("Erro ao excluir funcionario. "
 					+ "Funcionario nao cadastrado.");
 		}
 
-		for (Usuario funcionario : this.bancoUsuarios.values()) {
+		for (Funcionario funcionario : this.bancoUsuarios.values()) {
 			if (funcionario.getMatricula().startsWith("1")) {
 				senhaDiretor = funcionario.getSenha();
 			}
@@ -808,7 +808,7 @@ public class Controller {
 					"A matricula nao segue o padrao.");
 		}
 
-		Usuario targetUser = this.getUsuario(matricula);
+		Funcionario targetUser = this.getUsuario(matricula);
 
 		switch (atributo.toUpperCase()) {
 
@@ -936,7 +936,7 @@ public class Controller {
 
 		String matricula = this.usuarioAtual.getMatricula();
 
-		Usuario targetUser = this.getUsuario(matricula);
+		Funcionario targetUser = this.getUsuario(matricula);
 
 		targetUser.setSenha(senhaAntiga, novaSenha);
 
@@ -1020,7 +1020,7 @@ public class Controller {
 
 		case DIRETOR:
 
-			for (Usuario usuario : this.bancoUsuarios.values()) {
+			for (Funcionario usuario : this.bancoUsuarios.values()) {
 				if (usuario.getMatricula().startsWith("1")) {
 					throw new Exception(
 							"Nao eh possivel criar mais de um Diretor Geral.");
@@ -1056,9 +1056,9 @@ public class Controller {
 
 	}
 
-	private Usuario getUsuario(String matricula) {
+	private Funcionario getUsuario(String matricula) {
 
-		for (Usuario usuario : this.bancoUsuarios.values()) {
+		for (Funcionario usuario : this.bancoUsuarios.values()) {
 
 			if (usuario.getMatricula().equals(matricula)) {
 				return usuario;

@@ -3,8 +3,11 @@ package procedimento;
 import paciente.Prontuario;
 
 /**
- * Classe utilizada para implementar os procedimentos relacionados a Consulta
- * Clinica.
+ * ConsultaClinica
+ * Classe que representa uma consulta clinica. 
+ * Possui metodos que  bonificam o  cartao fidelidade do paciente  e somam
+ * gastos a seu prontuario.
+ * 
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -12,6 +15,7 @@ import paciente.Prontuario;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 public class ConsultaClinica implements Procedimento {
 	
 	private final double PRECO = 350.00;
@@ -22,9 +26,10 @@ public class ConsultaClinica implements Procedimento {
 	}
 
 	/**
-     * Metodo utilizado para realizar os procedimentos de uma consulta clinica
-     * (somar os gastos e os pontos do paciente).
+     * Metodo que realiza uma consulta clinica.
+     * (soma os gastos e os pontos do cartao fidelidade do paciente).
      */
+	
 	@Override
 	public void realizaProcedimento(Prontuario prontuario){
 		

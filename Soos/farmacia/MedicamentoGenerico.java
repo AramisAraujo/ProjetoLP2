@@ -5,7 +5,8 @@ import java.util.List;
 import farmacia.CategoriasDeMedicamentos;
  
 /**
- * Classe responsavel por criar medicamentos genericos.
+ * MedicamentoGenerico
+ * Classe que representa um medicamento do tipo Generico.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -21,6 +22,7 @@ public class MedicamentoGenerico extends Medicamento {
     }
  
     /**
+     * GetPreco
      * Metodo sobrescrito utilizado para calcular o desconto de um medicamento
      * do tipo generico, que possui 40% de desconto.
      */

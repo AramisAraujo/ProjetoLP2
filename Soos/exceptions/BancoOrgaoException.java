@@ -2,8 +2,8 @@ package exceptions;
  
  
 /**
- * Classe implementada para criar Exceptions quando existe algum erro
- * relacionado ao banco de orgaos.
+ * BancoOrgaoException
+* Classe que encapsula uma situacao de excecao relacionada  ao banco de orgaos.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -11,6 +11,7 @@ package exceptions;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 @SuppressWarnings("serial")
 public class BancoOrgaoException extends Exception{
  
