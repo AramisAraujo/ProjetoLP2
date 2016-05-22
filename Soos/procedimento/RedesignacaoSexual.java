@@ -1,5 +1,7 @@
 package procedimento;
 
+import java.time.LocalDate;
+
 import paciente.Prontuario;
 
 
@@ -21,8 +23,12 @@ public class RedesignacaoSexual implements Procedimento {
 	private final double PRECO = 9300.00;
 	private final int PONTOS = 130;
 	
-	public RedesignacaoSexual() {
-		
+	private String nomeMedico;
+	private LocalDate dataDaConsulta;
+	
+	public RedesignacaoSexual(String nomeMedico, LocalDate dataRealizacao) {
+		this.nomeMedico = nomeMedico;
+		this.dataDaConsulta = dataRealizacao;
 	}
 	
 
@@ -45,7 +51,8 @@ public class RedesignacaoSexual implements Procedimento {
 	}
 	
 	public String toString() {
-		return "Redesignacao sexual";
+		return "--> Redesignacao sexual:\n"+
+				"....... Data: "+this.dataDaConsulta.toString()+" Medico: "+this.nomeMedico;
 	}
 
 }

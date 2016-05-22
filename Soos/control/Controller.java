@@ -302,9 +302,9 @@ public class Controller {
 	 * @return - O ID do paciente.
 	 * @throws CadastroException
 	 */
-	public String cadastraPaciente(String nome, String Data, double Peso,
-			String sexoBio, String genero, String tipoSanguineo)
-			throws CadastroException {
+	
+public String cadastraPaciente(String nome, String data, double peso,
+		String sexoBio, String genero, String tipoSanguineo)throws CadastroException {
 
 		if (!this.usuarioAtual.getMatricula().startsWith("3")) {
 			throw new CadastroException(
@@ -337,7 +337,7 @@ public class Controller {
 
 		LocalDate birthDate;
 		try {
-			birthDate = this.stringToDate(Data);
+			birthDate = this.stringToDate(data);
 			VerificaExcecao.checarData(birthDate);
 		} catch (Exception e) {
 
@@ -346,8 +346,10 @@ public class Controller {
 		}
 
 		try {
-
-			VerificaExcecao.checarValor(Peso, "Peso do paciente");
+			
+		
+			VerificaExcecao.checarValor(peso,"Peso do paciente");
+			
 		} catch (Exception e) {
 			throw new CadastroException(
 					"Nao foi possivel cadastrar o paciente.", e.getMessage());
@@ -381,8 +383,7 @@ public class Controller {
 		}
 
 		try {
-			novoProntuario = new Prontuario(nome, birthDate, Peso, sexoBio,
-					genero, tipoSangue, novoID);
+			novoProntuario = new Prontuario(nome, birthDate, peso, sexoBio, genero, tipoSangue, novoID);
 		} catch (Exception e) {
 			throw new CadastroException(
 					"Nao foi possivel cadastrar o paciente.", e.getMessage());
@@ -501,8 +502,7 @@ public class Controller {
 			}
 
 		}
-		// TODO
-		// Abstrair para metodo a fim de melhorar legibilidade.
+
 		if (targetProntuario == null) {
 			throw new ConsultaException("paciente", "Paciente nao cadastrado.");
 		}
@@ -1166,7 +1166,6 @@ public class Controller {
 	public void realizaProcedimento(String nomeProcedimento, String nomePaciente,
 									String medicamentos) throws ProcedimentoException {
 		
-		
 		if (!usuarioAtual.getMatricula().startsWith("2")) {
 			
 			String errorMsg = "O funcionario " + usuarioAtual.getNome()
@@ -1232,27 +1231,34 @@ public class Controller {
 
 			throw new ProcedimentoException(e.getMessage());
 		}
+		
+		String nomeMedico = this.usuarioAtual.getNome();
+		LocalDate dataRealizacao = LocalDate.now();
+		
+		try {	
 
-		try {
 			switch (procedure) {
 
 			case CONSULTACLINICA:
+				
+				this.procedimento = new ConsultaClinica(nomeMedico, dataRealizacao);
 
-				this.procedimento = new ConsultaClinica();
 				this.procedimento.realizaProcedimento(prontuario);
 				prontuario.registraProcedimento(procedimento);
 				break;
 
 			case CIRURGIABARIATRICA:
+				
+				this.
+				procedimento = new CirurgiaBariatrica(nomeMedico, dataRealizacao);
 
-				procedimento = new CirurgiaBariatrica();
 				this.procedimento.realizaProcedimento(prontuario);
 				prontuario.registraProcedimento(procedimento);
 				break;
 
 			case REDESIGNACAOSEXUAL:
-
-				procedimento = new RedesignacaoSexual();
+				
+				procedimento = new RedesignacaoSexual(nomeMedico, dataRealizacao);
 				procedimento.realizaProcedimento(prontuario);
 				prontuario.registraProcedimento(procedimento);
 				break;
@@ -1359,12 +1365,15 @@ public class Controller {
 		} catch (Exception e) {
 			throw new ProcedimentoException(e.getMessage());
 		}
-
+		
+		String nomeMedico = this.usuarioAtual.getNome();
+		LocalDate dataRealizacao = LocalDate.now();
+		
 		try {
 			if (procedure.equals(TipoProcedimento.TRANSPLANTEDEORGAOS)) {
 
 				this.bancoDeOrgaos.removeOrgao(nomeOrgao, sangue);
-				procedimento = new TransplanteDeOrgaos();
+				procedimento = new TransplanteDeOrgaos(nomeMedico, dataRealizacao, nomeOrgao);
 				this.procedimento.realizaProcedimento(prontuario);
 				prontuario.registraProcedimento(procedimento);
 
@@ -1405,11 +1414,15 @@ public class Controller {
 		} catch (Exception e) {
 			throw new ProcedimentoException(e.getMessage());
 		}
-
+		
+		String nomeMedico = this.usuarioAtual.getNome();
+		LocalDate dataRealizacao = LocalDate.now();
+		
 		try {
 			if (procedure.equals(TipoProcedimento.CONSULTACLINICA)) {
+				
+				procedimento = new ConsultaClinica(nomeMedico, dataRealizacao);
 
-				procedimento = new ConsultaClinica();
 				this.procedimento.realizaProcedimento(prontuario);
 				prontuario.registraProcedimento(procedimento);
 
@@ -1450,6 +1463,16 @@ public class Controller {
 		String gastos = String.format(Locale.US,"%.2f", prontuario.getGastosPaciente());
 		
 		return gastos;
+	}
+	
+	public String getFichaPaciente(String ID) throws Exception {
+		
+		VerificaExcecao.checkEmptyParameter(ID, "ID");
+		
+		Prontuario prontuario = this.getProntuario(ID);
+		
+		return prontuario.getFichaPaciente();
+		
 	}
 
 }

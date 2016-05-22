@@ -58,7 +58,7 @@ public class Paciente implements Comparable<Paciente> {
 		return nome;
 	}
 
-	public void setNome(String nome) {
+	public void corrigeNome(String nome) {
 		this.nome = nome;
 	}
 
@@ -71,7 +71,7 @@ public class Paciente implements Comparable<Paciente> {
 		return String.valueOf(idade);
 	}
 
-	public void setDataNascimento(LocalDate dataNascimento) throws Exception {
+	public void corrigeDataNascimento(LocalDate dataNascimento) throws Exception {
 		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
 		this.dataNascimento = dataNascimento;
 	}
@@ -79,8 +79,9 @@ public class Paciente implements Comparable<Paciente> {
 	public double getPeso() {
 		return peso;
 	}
+	
 
-	public void setPeso(double peso) throws Exception {
+	public void corrigePeso(double peso) throws Exception {
 		VerificaExcecao.checarValor(peso, "Peso");
 		this.peso = peso;
 	}
@@ -89,7 +90,7 @@ public class Paciente implements Comparable<Paciente> {
 		return sexoBiologico;
 	}
 
-	public void setSexoBiologico(String sexoBiologico) throws Exception {
+	public void corrigeSexoBiologico(String sexoBiologico) throws Exception {
 		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 		this.sexoBiologico = sexoBiologico;
@@ -123,7 +124,7 @@ public class Paciente implements Comparable<Paciente> {
 	}
 
 	public double getGastosPaciente() {
-		return this.getGastoTotal();
+		return this.gastoTotal;
 	}
 
 	/**

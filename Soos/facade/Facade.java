@@ -15,7 +15,9 @@ import exceptions.OpenSystemException;
 import exceptions.ProcedimentoException;
 import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
+import exceptions.VerificaExcecao;
 import farmacia.Medicamento;
+import paciente.Prontuario;
 
 public class Facade {
 	
@@ -61,10 +63,10 @@ public class Facade {
 		
 	}
 	
-	public String cadastraPaciente(String nome, String Data, double Peso
-			, String sexoBio, String genero, String tipoSanguineo) throws CadastroException{
+	public String cadastraPaciente(String nome, String data, double peso, String sexoBio,
+			String genero, String tipoSanguineo) throws CadastroException{
 		
-		return this.controle.cadastraPaciente(nome, Data, Peso, sexoBio, genero, tipoSanguineo);
+		return this.controle.cadastraPaciente(nome, data, peso, sexoBio, genero, tipoSanguineo);
 	}
 	public String cadastraMedicamento(String nome, String tipo, double preco, 
 			int quantidade, String categorias) throws CadastroException{
@@ -198,6 +200,11 @@ public class Facade {
 	public String getGastosPaciente(String ID) throws Exception {
 		
 		return this.controle.getGastosPaciente(ID);
+	}
+	
+	public String getFichaPaciente(String ID) throws Exception {
+		
+		return this.controle.getFichaPaciente(ID);
 	}
 	
 	
