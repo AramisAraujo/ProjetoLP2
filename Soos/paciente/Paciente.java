@@ -8,13 +8,16 @@ import cartao.CartaoFidelidade;
 import exceptions.VerificaExcecao;
 
 /**
- * A classe Paciente possui atributos e comportamentos necessarios para a criacao de pacientes
- * e manipulacao de seus dados.
+ * A classe Paciente possui atributos e comportamentos necessarios para a
+ * criacao de pacientes e manipulacao de seus dados.
  * 
- * @author Elton Dantas
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
  */
 public class Paciente implements Comparable<Paciente> {
-	
+
 	private String nome, sexoBiologico, genero;
 	private TipoSanguineo tipoSanguineo;
 	private LocalDate dataNascimento;
@@ -22,19 +25,19 @@ public class Paciente implements Comparable<Paciente> {
 	private UUID ID;
 	private CartaoFidelidade carteirinhaSoos;
 	private double gastoTotal;
-	
-	private final String NOME = "Nome", DATA = "Data", SEXO = "Sexo", GENERO = "Genero",
-			TIPO_SANGUINEO =  "TipoSanguineo", PESO = "Peso", IDADE = "Idade",
-			GENERO_MASCULINO = "masculino", GENERO_FEMININO = "feminino";
-	
-	public Paciente(String nome, LocalDate dataNascimento, double peso, String sexoBiologico,
-					String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
-		
-		
-		
+
+	private final String NOME = "Nome", DATA = "Data", SEXO = "Sexo",
+			GENERO = "Genero", TIPO_SANGUINEO = "TipoSanguineo", PESO = "Peso",
+			IDADE = "Idade", GENERO_MASCULINO = "masculino",
+			GENERO_FEMININO = "feminino";
+
+	public Paciente(String nome, LocalDate dataNascimento, double peso,
+			String sexoBiologico, String genero, TipoSanguineo tipoSanguineo,
+			UUID ID) throws Exception {
+
 		validaParametros(nome, dataNascimento, peso, sexoBiologico, genero,
 				tipoSanguineo, ID);
-		
+
 		this.ID = ID;
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
@@ -46,11 +49,11 @@ public class Paciente implements Comparable<Paciente> {
 		this.carteirinhaSoos = new CartaoFidelidade();
 	}
 
-	public UUID getID(){
+	public UUID getID() {
 		UUID iD = this.ID;
 		return iD;
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -62,7 +65,7 @@ public class Paciente implements Comparable<Paciente> {
 	public String getDataNascimento() {
 		return dataNascimento.toString();
 	}
-	
+
 	public String getIdade() {
 		int idade = Period.between(dataNascimento, LocalDate.now()).getYears();
 		return String.valueOf(idade);
@@ -96,15 +99,14 @@ public class Paciente implements Comparable<Paciente> {
 	public String getGenero() {
 		return genero;
 	}
-	
+
 	/**
 	 * Realiza troca de genero
 	 */
 	public void trocarGenero() {
 		if (this.genero.equals(GENERO_FEMININO)) {
 			this.genero = GENERO_MASCULINO;
-		}
-		else {
+		} else {
 			this.genero = GENERO_FEMININO;
 		}
 	}
@@ -112,66 +114,85 @@ public class Paciente implements Comparable<Paciente> {
 	public String getTipoSanguineo() {
 		return this.tipoSanguineo.toString();
 	}
-	
+
 	public TipoSanguineo consultaTipoSanguineo() {
 		return this.tipoSanguineo;
 	}
-	
+
+	public double getGastoTotal() {
+		return this.gastoTotal;
+	}
+
 	public double getGastosPaciente() {
 		return this.gastoTotal;
 	}
-	
-	public void somaGastos(double valor){
-		
-		valor = this.carteirinhaSoos.aplicarDisconto(valor);
-		
+
+	/**
+	 * Metodo utilizado para somar os gastos do paciente.
+	 * 
+	 * @param valor
+	 *            - valor que sera somado
+	 */
+	public void somaGastos(double valor) {
+
+		valor = this.carteirinhaSoos.aplicarDesconto(valor);
+
 		this.gastoTotal += valor;
 	}
-	
-	public void somaPontos(int pontos){
-		
+
+	public void somaPontos(int pontos) {
+
 		this.carteirinhaSoos.addPontos(pontos);
-		
+
 	}
-	
-	public int getPontos(){
+
+	public int getPontos() {
 		return this.carteirinhaSoos.getPontos();
 	}
-	
+
+	/**
+	 * Metodo utilizado para retornar informacoes relacionadas ao paciente.
+	 * 
+	 * @param atributo
+	 *            - nome do atributo que sera retornado
+	 * @return - atributo esperado
+	 * @throws Exception
+	 *             - excecao lancada caso o atributo seja invalido.
+	 */
 	public String getInfoPaciente(String atributo) throws Exception {
 		if (atributo == null) {
 			throw new Exception("Atributo invalido.");
 		}
 		switch (atributo) {
-		
+
 		case NOME:
 			return this.getNome();
-			
+
 		case DATA:
 			return this.getDataNascimento();
 
 		case SEXO:
 			return this.getSexoBiologico();
-			
+
 		case GENERO:
 			return this.getGenero();
-			
+
 		case TIPO_SANGUINEO:
 			return this.getTipoSanguineo();
-			
+
 		case PESO:
 			String peso = String.valueOf(this.getPeso());
 			return peso;
-			
+
 		case IDADE:
 			String idade = String.valueOf(this.getIdade());
 			return idade;
-			
+
 		default:
 			throw new Exception("Atributo invalido.");
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -196,7 +217,7 @@ public class Paciente implements Comparable<Paciente> {
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * Pacientes sao comparaveis pelos seus nomes.
 	 */
@@ -205,21 +226,41 @@ public class Paciente implements Comparable<Paciente> {
 		return this.nome.compareTo(outroPaciente.getNome());
 	}
 
-	private void validaParametros(String nome, LocalDate dataNascimento, double peso,
-		String sexoBiologico, String genero, TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
-		
+	/**
+	 * Metodo utilizado para validar os dados de um paciente.
+	 * 
+	 * @param nome
+	 *            - nome que sera validado
+	 * @param dataNascimento
+	 *            - data de nascimento que sera validada
+	 * @param peso
+	 *            - peso que sera validado
+	 * @param sexoBiologico
+	 *            - sexo biologico que sera validado
+	 * @param genero
+	 *            - genero que sera validado
+	 * @param tipoSanguineo
+	 *            - tipo sanguineo que sera validado
+	 * @param ID
+	 *            - ID que sera validado
+	 * @throws Exception
+	 *             - excecao lancada caso ocorra algum erro
+	 */
+	private void validaParametros(String nome, LocalDate dataNascimento,
+			double peso, String sexoBiologico, String genero,
+			TipoSanguineo tipoSanguineo, UUID ID) throws Exception {
+
 		VerificaExcecao.checkEmptyParameter(nome, "Nome do paciente");
 		VerificaExcecao.checkEmptyParameter(dataNascimento, "Data");
 		VerificaExcecao.checkEmptyParameter(sexoBiologico, "Sexo biologico");
 		VerificaExcecao.checkEmptyParameter(genero, "Genero");
 		VerificaExcecao.checkEmptyParameter(tipoSanguineo, "Tipo sanguineo");
 		VerificaExcecao.checkEmptyParameter(ID, "ID");
-		
+
 		VerificaExcecao.checarData(dataNascimento);
 		VerificaExcecao.checarValor(peso, "Peso do paciente");
 		VerificaExcecao.checarSexoBiologico(sexoBiologico);
 		VerificaExcecao.checarGenero(genero);
 	}
-
 
 }

@@ -3,14 +3,14 @@ package banco_de_orgaos;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import exceptions.BancoOrgaoException;
 import exceptions.VerificaExcecao;
 import factories.FactoryOrgaos;
 import paciente.TipoSanguineo;
 
 /**
- * Classe utilizada para armazenar e gerenciar orgaos fornecidos por doadores.
+ * BancoDeOrgaos
+ * Classe que armazena e gerencia orgaos fornecidos por doadores.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
@@ -18,6 +18,7 @@ import paciente.TipoSanguineo;
  * @author Mainara Cavalcanti de Farias
  *
  */
+
 public class BancoDeOrgaos {
 
 	private List<Orgao> bancoDeOrgaos;
@@ -29,14 +30,15 @@ public class BancoDeOrgaos {
 	}
 
 	/**
-
-	 * Metodo utilizado para verificar se determinado orgao existe apenas
-	 * informando o nome do mesmo.
+	 * ExisteOrgao
+	 * Metodo que verifica se determinado orgao existe.
+	 * informando apenas o nome do mesmo.
 	 * 
 	 * @param nome
 	 *            - nome do orgao que sera verificado
 	 * @return - true, se o orgao existir ou false, caso nao exista
 	 */
+	
 	public boolean existeOrgao(String nome) {
 
 		for (Orgao orgao : bancoDeOrgaos) {
@@ -48,42 +50,62 @@ public class BancoDeOrgaos {
 	}
 
 	/**
-	 * Metodo utilizado para verificar se determinado orgao existe.
-	 * Checa se um orgao existe e se eh compativel com o sangue especificado
+	 * ExisteOrgao
+	 * Metodo que verifica se determinado orgao existe. Checa se um
+	 * orgao existe e se eh do tipo sanguineo especificado
 	 * 
 	 * @param nome
 	 *            - nome do orgao que sera verificado
 	 * @param tipoSanguineo
 	 *            - tipo sanguineo do orgao que sera verificado
 	 */
+	
 	public Boolean existeOrgao(String nome, TipoSanguineo tipoSanguineo) {
 
 		for (Orgao orgao : bancoDeOrgaos) {
-			if (orgao.getNome().equals(nome) && orgao.getTipoSanguineo().equals(tipoSanguineo)) {
+			
+			if (orgao.getNome().equals(nome)&& orgao.getTipoSanguineo().equals(tipoSanguineo)) {
 				return true;
 			}
 		}
 		return false;
 	}
-			
-	public boolean checarOrgaoCompativel(String nome, TipoSanguineo tipoSanguineo) throws Exception {
-		
+
+	/**
+	 * ChecarOrgaoCompativel
+	 * Metodo que verifica se existe um orgao compativel com o
+	 * paciente.
+	 * 
+	 * @param nome
+	 *            - nome do orgao que sera verificado
+	 * @param tipoSanguineo
+	 *            - tipo sanguineo do orgao que sera verificado
+	 * @return - true, se existe algum orgao compativel ou false caso nao exista
+	 * @throws Exception
+	 *             - excecao lancada caso o banco de orgaos nao possua o orgao
+	 *             especificado
+	 */
+	
+	public boolean checarOrgaoCompativel(String nome,
+			TipoSanguineo tipoSanguineo) throws Exception {
+
 		VerificaExcecao.checkEmptyParameter(nome, "Nome do orgao");
 		VerificaExcecao.checkEmptyParameter(tipoSanguineo, "TipoSanguineo");
-				
+
 		if (!existeOrgao(nome)) {
 			throw new Exception("Banco nao possui o orgao especificado.");
 		}
-		
+
 		if (!existeOrgao(nome, tipoSanguineo)) {
-			throw new Exception("Banco nao possui o orgao especificado.");	
+			throw new Exception("Banco nao possui o orgao especificado.");
 		}
-		
+
 		return true;
 	}
 
 	/**
-	 * Metodo utilizado para retornar todos os orgaos que sao de um determinado
+	 * GetOrgaoPorSang
+	 * Metodo que retorna todos os orgaos que sao de um determinado
 	 * tipo sanguineo.
 	 * 
 	 * @param tipoSanguineo
@@ -91,12 +113,13 @@ public class BancoDeOrgaos {
 	 * @return - lista com todos os orgaos que pertencem ao tipo sanguineo
 	 *         especificado
 	 */
+	
 	public List<String> getOrgaoPorSangue(TipoSanguineo tipoSanguineo) {
 
 		List<String> orgaosEncontrados = new ArrayList<String>();
 
 		for (Orgao orgao : this.bancoDeOrgaos) {
-			
+
 			if (orgao.getTipoSanguineo().equals(tipoSanguineo)) {
 
 				String nomeOrgao = orgao.getNome();
@@ -112,7 +135,8 @@ public class BancoDeOrgaos {
 	}
 
 	/**
-	 * Metodo utilizado para retornar todos os orgaos que possuem o nome igual
+	 * GetOrgaoPorNome
+	 * Metodo que retorna todos os orgaos que possuem o nome igual
 	 * ao informado como parametro.
 	 * 
 	 * @param nome
@@ -120,6 +144,7 @@ public class BancoDeOrgaos {
 	 * @return - lista com todos os orgaos que possuem o mesmo nome do informado
 	 *         como parametro
 	 */
+	
 	public List<String> getOrgaoPorNome(String nome) {
 
 		List<String> tiposDisponiveis = new ArrayList<String>();
@@ -139,7 +164,8 @@ public class BancoDeOrgaos {
 	}
 
 	/**
-	 * Metodo utilizado para criar e adicionar orgaos ao banco de orgaos.
+	 * AddOrgao
+	 * Metodo que cria e adicionar orgaos ao banco de orgaos.
 	 * 
 	 * @param nome
 	 *            - nome do orgao que sera criado e adicionado
@@ -148,16 +174,18 @@ public class BancoDeOrgaos {
 	 * @throws BancoOrgaoException
 	 *             - excecao lancada caso ocorra algum erro
 	 */
-	public boolean addOrgao(String nome, TipoSanguineo tipoSanguineo) throws BancoOrgaoException {
+	
+	public boolean addOrgao(String nome, TipoSanguineo tipoSanguineo)
+			throws BancoOrgaoException {
 
 		Orgao orgao = factoryOrgaos.criaOrgao(nome, tipoSanguineo);
-		
 
 		return bancoDeOrgaos.add(orgao);
 	}
 
 	/**
-	 * Metodo utilizado para remover determinado orgao.
+	 * RemoveOrgao
+	 * Metodo que remove determinado orgao do Banco de Orgaos.
 	 * 
 	 * @param nome
 	 *            - nome do orgao que sera removido
@@ -169,7 +197,8 @@ public class BancoDeOrgaos {
 	 *             informacoes passadas como parametro
 	 */
 
-	public boolean removeOrgao(String nome, TipoSanguineo tipoSanguineo) throws Exception {
+	public boolean removeOrgao(String nome, TipoSanguineo tipoSanguineo)
+			throws Exception {
 
 		if (!this.existeOrgao(nome, tipoSanguineo)) {
 			throw new Exception("Orgao nao cadastrado.");
@@ -179,7 +208,8 @@ public class BancoDeOrgaos {
 
 		for (Orgao orgaoAtual : bancoDeOrgaos) {
 
-			if (orgaoAtual.getNome().equals(nome) && orgaoAtual.getTipoSanguineo().equals(tipoSanguineo)) {
+			if (orgaoAtual.getNome().equals(nome)
+					&& orgaoAtual.getTipoSanguineo().equals(tipoSanguineo)) {
 
 				orgaoProcurado = orgaoAtual;
 			}
@@ -189,7 +219,9 @@ public class BancoDeOrgaos {
 	}
 
 	/**
-	 * Metodo utilizado para informar a quantidade de determinado orgao.
+	 * QntOrgao
+	 * Metodo que expressa a quantidade de determinado orgao que possui
+	 * o nome especificado.
 	 * 
 	 * @param nome
 	 *            - nome do orgao
@@ -198,6 +230,7 @@ public class BancoDeOrgaos {
 	 *             - execao lancada caso nao exista nenhum orgao com o nome
 	 *             passado como parametro cadastrado
 	 */
+	
 	public int qntOrgao(String nome) throws BancoOrgaoException {
 
 		int qntOrgao = 0;
@@ -219,11 +252,13 @@ public class BancoDeOrgaos {
 	}
 
 	/**
-	 * Metodo utilizado para informar a quantidade total de orgaos no banco de
+	 * QntTotalOrgaos
+	 * Metodo que expressa a quantidade total de orgaos no banco de
 	 * orgaos.
 	 * 
 	 * @return - quantidade total de orgao no banco de orgaos
 	 */
+	
 	public int qntTotalOrgaos() {
 		return bancoDeOrgaos.size();
 	}

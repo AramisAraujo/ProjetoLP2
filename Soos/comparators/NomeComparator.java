@@ -5,7 +5,7 @@ import java.util.Comparator;
 import farmacia.Medicamento;
  
 /**
- * Classe utilizada para comparar os medicamentos de acordo com o nome em ordem
+ * Classe que define um Comparator qual eh capaz de comparar dois medicamentos por ordem
  * alfabetica.
  * 
  * @author Aramis Sales Araujo

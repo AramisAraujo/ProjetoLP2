@@ -1,13 +1,23 @@
 package exceptions;
+ 
+ 
+/**
+ * CadastroException
+ * Classe que encapsula uma situacao de excecao relacionada  ao cadastro de um funcionario, medicamento 
+ * ou paciente.
+ * 
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
+ *
+ */
 
+@SuppressWarnings("serial")
 public class CadastroException extends Exception{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3748305381163668071L;
-
-	public CadastroException(String pessoa,String msg) {
-		super(pessoa+" "+msg);
-	}
-
+ 
+    public CadastroException(String pessoa,String msg) {
+        super(pessoa+" "+msg);
+    }
+ 
 }

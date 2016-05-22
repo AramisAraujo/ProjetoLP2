@@ -10,17 +10,20 @@ import farmacia.Medicamento;
 import farmacia.MedicamentoGenerico;
   
 /**
- * Classe responsavel por criar todos os medicamentos.
+ * FactoryDeMedicamentos
+ * Classe responsavel por criar um medicamento.
  * 
  * @author Aramis Sales Araujo
  * @author Elton Dantas de Oliveira Mesquita
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
+
 public class FactoryDeMedicamentos {
   
     /**
-     * Metodo utilizado para criar medicamentos de referencia.
+     * CriaMedicamentoDeReferencia
+     * Metodo que cria um medicamento de referencia.
      * 
      * @param nome
      *            - nome do medicamento que sera criado
@@ -33,6 +36,7 @@ public class FactoryDeMedicamentos {
      * @return - o medicamento criado
      * @throws Exception - excessao lancada caso ocorra algum erro
      */
+	
     private Medicamento criaMedicamentoDeReferencia(String nome, double preco,
             int quantidade, List<CategoriasDeMedicamentos> categorias) throws Exception {
         Medicamento medicamento = new Medicamento(nome, preco, quantidade,
@@ -41,7 +45,8 @@ public class FactoryDeMedicamentos {
     }
   
     /**
-     * Metodo utilizado para criar medicamentos genericos.
+     * CriaMedicamentoGenerico
+     * Metodo que cria um medicamento generico.
      * 
      * @param nome
      *            - nome do medicamento que sera criado
@@ -54,6 +59,7 @@ public class FactoryDeMedicamentos {
      * @return - o medicamento criado
      * @throws Exception - excessao lancada caso ocorra algum erro
      */
+    
     private Medicamento criaMedicamentoGenerico(String nome, double preco,
             int quantidade, List<CategoriasDeMedicamentos> categorias) throws Exception {
         Medicamento medicamento = new MedicamentoGenerico(nome, preco,
@@ -63,8 +69,9 @@ public class FactoryDeMedicamentos {
     }
   
     /**
+     * CriaMedicamento
      * Metodo utilizado para criar medicamentos de acordo com o seu tipo, que
-     * pode ser "medicamento generico" ou "medicamento de referencia".
+     * pode ser "Generico" ou "De referencia".
      * 
      * @param nome
      *            - nome do medicamento que sera criado
@@ -81,6 +88,7 @@ public class FactoryDeMedicamentos {
      * @throws Exception 
      * @throws EntradaException 
      */
+    
     public Medicamento criaMedicamento(String nome, double preco,
             int quantidade, List<CategoriasDeMedicamentos> categorias,
             String tipo) throws Exception {
@@ -92,4 +100,5 @@ public class FactoryDeMedicamentos {
         }
         throw new MedicamentoException("Esse tipo de medicamento nao existe!");
     }
+
 }
