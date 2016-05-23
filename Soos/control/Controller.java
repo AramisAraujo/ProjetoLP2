@@ -4,25 +4,40 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import banco_de_orgaos.BancoDeOrgaos;
 import control.filemannager.FileMannager;
-import exceptions.*;
-import factories.FactoryFuncionario;
+import exceptions.AtualizarInfoException;
+import exceptions.BancoOrgaoException;
+import exceptions.CadastroException;
+import exceptions.ConsultaException;
+import exceptions.ExcluirCadastroException;
+import exceptions.ExportacaoException;
+import exceptions.LoginException;
+import exceptions.LogoutException;
+import exceptions.MedicamentoException;
+import exceptions.OpenSystemException;
+import exceptions.ProcedimentoException;
+import exceptions.ProntuarioException;
+import exceptions.SystemCloseException;
+import exceptions.VerificaExcecao;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Farmacia;
 import farmacia.Medicamento;
-import funcionario.TipoCargo;
+import funcionario.BancoFuncionarios;
 import funcionario.Funcionario;
+import paciente.BancoProntuarios;
 import paciente.Prontuario;
 import paciente.TipoSanguineo;
-import procedimento.*;
+import procedimento.CirurgiaBariatrica;
+import procedimento.ConsultaClinica;
+import procedimento.Procedimento;
+import procedimento.RedesignacaoSexual;
+import procedimento.TipoProcedimento;
+import procedimento.TransplanteDeOrgaos;
 
 /**
  * Classe criada para gerenciar todas as acoes do sistema.
@@ -32,30 +47,26 @@ import procedimento.*;
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
+
 public class Controller {
 
 	private boolean sistemaBloqueado;
-	private int cadastrosRealizados;
 	private Funcionario usuarioAtual;
-	private Map<String, Funcionario> bancoUsuarios;
-	private List<Prontuario> bancoProntuarios;
+	private BancoFuncionarios bancoFuncionarios;
+	private BancoProntuarios bancoProntuarios;
 	private Farmacia farmacia;
 	private BancoDeOrgaos bancoDeOrgaos;
-	private FactoryFuncionario factoryUsuarios;
 	private Procedimento procedimento;
 
 	private final String NOME = "NOME", PRECO = "PRECO", TIPO = "TIPO",
-			QUANTIDADE = "QUANTIDADE", CATEGORIAS = "CATEGORIAS",
-			DATA = "DATA";
+			QUANTIDADE = "QUANTIDADE", CATEGORIAS = "CATEGORIAS";
 
 	public Controller() {
 		this.sistemaBloqueado = true;
-		this.cadastrosRealizados = 0;
-		this.bancoUsuarios = new HashMap<String, Funcionario>();
-		this.bancoProntuarios = new ArrayList<Prontuario>();
+		this.bancoFuncionarios = new BancoFuncionarios();
+		this.bancoProntuarios = new BancoProntuarios();
 		this.farmacia = new Farmacia();
 		this.bancoDeOrgaos = new BancoDeOrgaos();
-		this.factoryUsuarios = new FactoryFuncionario();
 		this.usuarioAtual = null;
 	}
 
@@ -81,6 +92,11 @@ public class Controller {
 					+ usuarioAtual.getNome() + ".";
 			throw new SystemCloseException(errorMsg);
 		}
+		
+		FileMannager.exportarFuncionarios(this.bancoFuncionarios);
+		FileMannager.exportarProntuarios(this.bancoProntuarios);
+		FileMannager.exportarFarmacia(this.farmacia);
+		FileMannager.exportarBancoOrgaos(this.bancoDeOrgaos);
 		// NYI
 	}
 
@@ -106,7 +122,7 @@ public class Controller {
 			throw new OpenSystemException("Chave invalida.");
 		}
 
-		String matriculaDiretor = this.cadastraFuncionario(nome,
+		String matriculaDiretor = this.bancoFuncionarios.cadastraFuncionario(nome,
 				"Diretor Geral", dataNascimento);
 
 		this.sistemaBloqueado = false;
@@ -124,7 +140,7 @@ public class Controller {
 	 */
 	public void login(String matricula, String senha) throws LoginException {
 
-		Funcionario loginTarget = this.getUsuario(matricula);
+		Funcionario loginTarget = this.bancoFuncionarios.getFuncionario(matricula);
 
 		if (loginTarget == null) {
 			throw new LoginException("Funcionario nao cadastrado.");
@@ -231,11 +247,6 @@ public class Controller {
 	public String cadastraFuncionario(String nome, String cargo,
 			String dataNascimento) throws CadastroException {
 
-		String matricula;
-		String senha;
-		LocalDate birthDate;
-		TipoCargo targetCargo;
-
 		if (sistemaBloqueado == false) {
 			if (usuarioAtual == null) {
 				String errorMsg = "Nenhum funcionario estah logado.";
@@ -250,45 +261,10 @@ public class Controller {
 			}
 		}
 
-		try {
-			VerificaExcecao.checkEmptyString(nome, "Nome do funcionario");
-		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de funcionario.",
-					e.getMessage());
-		}
-		try {
-			VerificaExcecao.checkEmptyString(cargo, "Nome do cargo");
-			targetCargo = this.stringToCargo(cargo);
-		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de funcionario.",
-					e.getMessage());
-		}
-		try {
-			birthDate = stringToDate(dataNascimento);
-			VerificaExcecao.checarData(birthDate);
-		} catch (Exception e) {
+		String matriculaNovoFuncionario  = this.bancoFuncionarios.cadastraFuncionario(nome,
+				cargo, dataNascimento);
 
-			throw new CadastroException("Erro no cadastro de funcionario.",
-					"Data invalida.");
-
-		}
-
-		try {
-			matricula = this.gerarMatricula(birthDate, targetCargo);
-		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de funcionario.",
-					e.getMessage());
-		}
-		senha = this.gerarSenha(birthDate, matricula);
-
-		Funcionario targetUser = this.factoryUsuarios.criarFuncionario(nome, birthDate,
-				senha, matricula, targetCargo);
-
-		this.bancoUsuarios.put(matricula, targetUser);
-
-		this.cadastrosRealizados = this.cadastrosRealizados + 1;
-
-		return matricula;
+		return matriculaNovoFuncionario;
 
 	}
 
@@ -429,57 +405,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	public String getInfoFuncionario(String matricula, String info)
 			throws ConsultaException {
 
-		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
-			throw new ConsultaException("funcionario",
-					"A matricula nao segue o padrao.");
-		}
-
-		Funcionario targetUser = getUsuario(matricula);
-
-		if (targetUser == null) {
-			throw new ConsultaException("funcionario",
-					"Funcionario nao cadastrado.");
-		}
-
-		if (info.equalsIgnoreCase("Nome")) {
-			String nome = targetUser.getNome();
-			return nome;
-
-		} else if (info.equalsIgnoreCase("Cargo")) {
-
-			String cargo;
-
-			switch (targetUser.getCargo()) {
-
-			case DIRETOR:
-				cargo = "Diretor Geral";
-				return cargo;
-
-			case TECNICOADM:
-
-				cargo = "Tecnico Administrativo";
-				return cargo;
-
-			case MEDICO:
-
-				cargo = "Medico";
-				return cargo;
-
-			default:
-				throw new ConsultaException("funcionario", "Cargo invalido");
-			}
-
-		} else if (info.equalsIgnoreCase("Data")) {
-			String data = targetUser.getDataNascimento().toString();
-			return data;
-
-		} else if (info.equalsIgnoreCase("Senha")) {
-			throw new ConsultaException("funcionario",
-					"A senha do funcionario eh protegida.");
-
-		} else {
-			throw new ConsultaException("funcionario", "Atributo desconhecido.");
-		}
+		return this.bancoFuncionarios.getInfoFuncionario(matricula, info);
 
 	}
 
@@ -756,8 +682,6 @@ public String cadastraPaciente(String nome, String data, double peso,
 	public void excluiFuncionario(String matricula, String senha)
 			throws ExcluirCadastroException {
 
-		String senhaDiretor = "";
-
 		if (!usuarioAtual.getMatricula().startsWith("1")) {
 
 			String erroMsg = " O funcionario " + usuarioAtual.getNome()
@@ -766,32 +690,8 @@ public String cadastraPaciente(String nome, String data, double peso,
 			throw new ExcluirCadastroException("Erro ao excluir funcionario."
 					+ erroMsg);
 		}
-
-		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
-			throw new ExcluirCadastroException("Erro ao excluir funcionario."
-					+ " A matricula nao segue o padrao.");
-		}
-
-		Funcionario targetUser = getUsuario(matricula);
-
-		if (targetUser == null) {
-			throw new ExcluirCadastroException("Erro ao excluir funcionario. "
-					+ "Funcionario nao cadastrado.");
-		}
-
-		for (Funcionario funcionario : this.bancoUsuarios.values()) {
-			if (funcionario.getMatricula().startsWith("1")) {
-				senhaDiretor = funcionario.getSenha();
-			}
-
-		}
-
-		if (!senha.equals(senhaDiretor)) {
-			throw new ExcluirCadastroException("Erro ao excluir funcionario. "
-					+ "Senha invalida.");
-		}
-
-		this.bancoUsuarios.remove(matricula);
+		
+		this.bancoFuncionarios.excluiFuncionario(matricula, senha);
 
 	}
 
@@ -804,144 +704,25 @@ public String cadastraPaciente(String nome, String data, double peso,
 							+ "alterar informacoes.");
 		}
 
-		if ((Pattern.matches("[a-zA-Z]+", matricula)) || matricula.length() < 7) {
-			throw new AtualizarInfoException("funcionario",
-					"A matricula nao segue o padrao.");
-		}
-
-		Funcionario targetUser = this.getUsuario(matricula);
-
-		switch (atributo.toUpperCase()) {
-
-		case NOME:
-
-			try {
-				VerificaExcecao.checkEmptyString(novoValor, "Nome");
-			} catch (Exception e) {
-				throw new AtualizarInfoException("funcionario",
-						"Nome do funcionario nao pode ser vazio.");
-			}
-
-			if ((Pattern.matches("[a-zA-Z0-9]+", novoValor))
-					|| novoValor.length() > 50) {
-				throw new AtualizarInfoException("funcionario",
-						"Nome invalido.");
-			}
-
-			targetUser.setNome(novoValor);
-
-			break;
-
-		case DATA:
-
-			LocalDate novaData;
-			try {
-
-				novaData = this.stringToDate(novoValor);
-
-			} catch (Exception e) {
-				throw new AtualizarInfoException("funcionario",
-						"Data invalida.");
-			}
-
-			try {
-				VerificaExcecao.checarData(novaData);
-			} catch (Exception e) {
-				throw new AtualizarInfoException("funcionario", e.getMessage());
-			}
-
-			targetUser.setDataNascimento(novaData);
-
-			break;
-
-		default:
-			throw new AtualizarInfoException("funcionario",
-					"Atributo invalido.");
-		}
+		this.bancoFuncionarios.atualizaInfoFuncionario(matricula, atributo, novoValor);
 
 	}
 
 	public void atualizaInfoFuncionario(String atributo, String novoValor)
 			throws AtualizarInfoException {
 
-		switch (atributo.toUpperCase()) {
-
-		case NOME:
-
-			try {
-				VerificaExcecao.checkEmptyString(novoValor, "Nome");
-			} catch (Exception e) {
-				throw new AtualizarInfoException("funcionario",
-						"Nome do funcionario nao pode ser vazio.");
-			}
-
-			if ((Pattern.matches("[a-zA-Z0-9]+", novoValor))
-					|| novoValor.length() > 50) {
-				throw new AtualizarInfoException("funcionario",
-						"Nome invalido.");
-			}
-
-			usuarioAtual.setNome(novoValor);
-
-			break;
-
-		case DATA:
-
-			LocalDate novaData;
-			try {
-
-				novaData = this.stringToDate(novoValor);
-
-			} catch (Exception e) {
-				throw new AtualizarInfoException("funcionario",
-						"Data invalida.");
-			}
-
-			try {
-				VerificaExcecao.checarData(novaData);
-			} catch (Exception e) {
-				throw new AtualizarInfoException("funcionario", e.getMessage());
-			}
-
-			usuarioAtual.setDataNascimento(novaData);
-
-			break;
-
-		default:
-			throw new AtualizarInfoException(
-					"Erro no cadastro de funcionario.", "Atributo invalido.");
-		}
+		String matricula = this.usuarioAtual.getMatricula();
+		
+		this.bancoFuncionarios.atualizaInfoFuncionario(matricula, atributo, novoValor);
 
 	}
 
 	public void atualizaSenha(String senhaAntiga, String novaSenha)
 			throws AtualizarInfoException {
 
-		if (!usuarioAtual.getSenha().equals(senhaAntiga)) {
-			throw new AtualizarInfoException("funcionario", "Senha invalida.");
-		}
-
-		try {
-			VerificaExcecao.checkEmptyString(novaSenha, "Senha");
-		} catch (Exception e) {
-			throw new AtualizarInfoException("funcionario", e.getMessage());
-		}
-
-		if ((Pattern.matches("[a-zA-Z0-9]+", novaSenha) == false)
-				|| novaSenha.length() < 8 || novaSenha.length() > 12) {
-
-			throw new AtualizarInfoException("funcionario",
-					"A nova senha deve "
-							+ "ter entre 8 - 12 caracteres alfanumericos.");
-		}
-
 		String matricula = this.usuarioAtual.getMatricula();
 
-		Funcionario targetUser = this.getUsuario(matricula);
-
-		targetUser.setSenha(senhaAntiga, novaSenha);
-
-		this.usuarioAtual = targetUser;
+		this.bancoFuncionarios.atualizaSenha(matricula, senhaAntiga, novaSenha);
 
 	}
 
@@ -997,79 +778,6 @@ public String cadastraPaciente(String nome, String data, double peso,
 		return this.bancoDeOrgaos.qntTotalOrgaos();
 	}
 
-	private String gerarSenha(LocalDate anoNascimento, String matricula) {
-
-		String senha = "";
-		int ano = anoNascimento.getYear();
-
-		senha = senha + String.valueOf(ano);
-		senha = senha + matricula.substring(0, 4);
-
-		return senha;
-
-	}
-
-	private String gerarMatricula(LocalDate dataNascimento, TipoCargo cargo)
-			throws Exception {
-
-		String matricula = "";
-		int esteAno = LocalDate.now().getYear();
-		String parteCadastros = String.format("%03d",
-				(this.cadastrosRealizados + 1));
-
-		switch (cargo) {
-
-		case DIRETOR:
-
-			for (Funcionario usuario : this.bancoUsuarios.values()) {
-				if (usuario.getMatricula().startsWith("1")) {
-					throw new Exception(
-							"Nao eh possivel criar mais de um Diretor Geral.");
-				}
-			}
-
-			matricula = matricula + "1";
-			matricula = matricula + String.valueOf(esteAno);
-			matricula = matricula + parteCadastros;
-
-			break;
-
-		case MEDICO:
-
-			matricula = matricula + "2";
-			matricula = matricula + String.valueOf(esteAno);
-			matricula = matricula + parteCadastros;
-
-			break;
-
-		case TECNICOADM:
-			matricula = matricula + "3";
-			matricula = matricula + String.valueOf(esteAno);
-			matricula = matricula + parteCadastros;
-
-			break;
-
-		default:
-			throw new Exception("Cargo invalido.");
-
-		}
-		return matricula;
-
-	}
-
-	private Funcionario getUsuario(String matricula) {
-
-		for (Funcionario usuario : this.bancoUsuarios.values()) {
-
-			if (usuario.getMatricula().equals(matricula)) {
-				return usuario;
-			}
-
-		}
-		return null;
-
-	}
-
 	private LocalDate stringToDate(String dateCandidate) {
 
 		DateTimeFormatter formatador = DateTimeFormatter
@@ -1081,24 +789,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 
 	}
 
-	private TipoCargo stringToCargo(String cargo) throws Exception {
 
-		switch (cargo.toUpperCase()) {
-
-		case "DIRETOR GERAL":
-			return TipoCargo.DIRETOR;
-
-		case "MEDICO":
-			return TipoCargo.MEDICO;
-
-		case "TECNICO ADMINISTRATIVO":
-			return TipoCargo.TECNICOADM;
-
-		default:
-			throw new Exception("Cargo invalido.");
-		}
-
-	}
 
 	private TipoSanguineo stringToSanguineo(String tipoSanguineo)
 			throws Exception {
