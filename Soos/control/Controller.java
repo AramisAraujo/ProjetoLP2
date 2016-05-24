@@ -49,14 +49,17 @@ public class Controller {
 	private Farmacia farmacia;
 	private BancoDeOrgaos bancoDeOrgaos;
 	private Procedimento procedimento;
+	private FileMannager fileMannager;
 
 	public Controller() {
+		
 		this.sistemaBloqueado = true;
 		this.bancoFuncionarios = new BancoFuncionarios();
 		this.bancoProntuarios = new BancoProntuarios();
 		this.farmacia = new Farmacia();
 		this.bancoDeOrgaos = new BancoDeOrgaos();
 		this.usuarioAtual = null;
+		this.fileMannager = new FileMannager();
 	}
 
 	/**
@@ -65,8 +68,63 @@ public class Controller {
 	 * @throws OpenSystemException
 	 */
 	public void iniciaSistema() throws OpenSystemException {
-		// NYI
+		
+		BancoFuncionarios funcionariosLoaded;
+		BancoProntuarios prontuariosLoaded;
+		BancoDeOrgaos orgaosLoaded;
+		Farmacia farmaciaLoaded;
 
+		if (this.fileMannager.existeBackup("Funcionarios")) {
+			
+			try {
+				
+				funcionariosLoaded = this.fileMannager.importarFuncionarios();
+			} catch (Exception e) {
+				throw new OpenSystemException(e.getMessage());
+			}
+			
+			this.bancoFuncionarios = funcionariosLoaded;
+			
+		}
+		
+		if (this.fileMannager.existeBackup("Prontuarios")) {
+			
+			try {
+				
+				prontuariosLoaded = this.fileMannager.importarProntuarios();
+			} catch (Exception e) {
+				throw new OpenSystemException(e.getMessage());
+			}
+			
+			this.bancoProntuarios = prontuariosLoaded;
+			
+		}
+
+		if (this.fileMannager.existeBackup("Orgaos")) {
+	
+			try {
+		
+				orgaosLoaded = this.fileMannager.importarOrgaos();
+			} catch (Exception e) {
+				throw new OpenSystemException(e.getMessage());
+			}
+	
+			this.bancoDeOrgaos = orgaosLoaded;
+	
+	}
+	
+		if (this.fileMannager.existeBackup("Farmacia")) {
+		
+			try {
+		
+				farmaciaLoaded = this.fileMannager.importarFarmacia();
+			} catch (Exception e) {
+				throw new OpenSystemException(e.getMessage());
+			}
+	
+			this.farmacia = farmaciaLoaded;
+		}
+		
 	}
 
 	/**
@@ -83,10 +141,10 @@ public class Controller {
 		}
 		
 		try {
-			FileMannager.exportarFuncionarios(this.bancoFuncionarios);
-			FileMannager.exportarProntuarios(this.bancoProntuarios);
-			FileMannager.exportarFarmacia(this.farmacia);
-			FileMannager.exportarBancoOrgaos(this.bancoDeOrgaos);
+			this.fileMannager.exportarFuncionarios(this.bancoFuncionarios);
+			this.fileMannager.exportarProntuarios(this.bancoProntuarios);
+			this.fileMannager.exportarFarmacia(this.farmacia);
+			this.fileMannager.exportarBancoOrgaos(this.bancoDeOrgaos);
 		} catch (Exception e) {
 			
 			throw new SystemCloseException(e.getMessage());
@@ -842,7 +900,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 		String dataHoje = LocalDate.now().toString();
 		
 		try {
-			FileMannager.exportarFichaPaciente(nomePaciente, fichaDoPaciente, dataHoje);
+			this.fileMannager.exportarFichaPaciente(nomePaciente, fichaDoPaciente, dataHoje);
 		} catch (Exception e) {
 			throw new ExportacaoException("Erro ao exportar ficha do paciente. " +e.getMessage());
 		}
