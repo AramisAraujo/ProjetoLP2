@@ -1,5 +1,7 @@
 package procedimento;
 
+import java.io.Serializable;
+
 import paciente.Prontuario;
 
 /**
@@ -12,7 +14,7 @@ import paciente.Prontuario;
  * @author Mainara Cavalcanti de Farias
  *
  */
-public interface Procedimento {
+public interface Procedimento extends Serializable{
 	
 
     /**

@@ -15,13 +15,9 @@ public class BancoDeOrgaosTest {
 
 	private BancoDeOrgaos bancoDeOrgaos;
 
-	@Before
-	public void inicializa() {
-		bancoDeOrgaos = new BancoDeOrgaos();
-	}
-
 	@Test
 	public void testExisteOrgaoString() {
+		bancoDeOrgaos = new BancoDeOrgaos();
 		// nao existe orgao
 		try {
 			assertFalse(bancoDeOrgaos.existeOrgao("coracao"));
@@ -31,7 +27,7 @@ public class BancoDeOrgaosTest {
 
 		// existe orgao
 		try {
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_POS);
+			bancoDeOrgaos.cadastraOrgao("coracao", "AB+");
 			assertTrue(bancoDeOrgaos.existeOrgao("coracao"));
 		} catch (Exception e) {
 			fail();
@@ -40,15 +36,16 @@ public class BancoDeOrgaosTest {
 
 	@Test
 	public void testExisteOrgaoStringTipoSanguineo() {
+		bancoDeOrgaos = new BancoDeOrgaos();
 		// nao existe orgao
 		try {
-			assertFalse(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
+			assertFalse(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.AB_NEG));
 		} catch (Exception e) {
 			fail();
 		}
 		// existe orgao
 		try {
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
+			bancoDeOrgaos.cadastraOrgao("coracao", "AB-");
 			assertTrue(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.AB_NEG));
 		} catch (Exception e) {
 			fail();
@@ -57,10 +54,11 @@ public class BancoDeOrgaosTest {
 
 	@Test
 	public void testGetOrgaoPorSangue() {
+		bancoDeOrgaos = new BancoDeOrgaos();
 		try {
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
-			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.A_NEG);
-			bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.AB_NEG);
+			bancoDeOrgaos.cadastraOrgao("coracao", "AB-");
+			bancoDeOrgaos.cadastraOrgao("rim", "AB-");
+			bancoDeOrgaos.cadastraOrgao("pulmao", "AB-");
 			List<String> orgaos = new ArrayList<String>();
 			orgaos.add("coracao");
 			orgaos.add("rim");
@@ -72,10 +70,11 @@ public class BancoDeOrgaosTest {
 
 	@Test
 	public void testGetOrgaoPorNome() {
+		bancoDeOrgaos = new BancoDeOrgaos();
 		try {
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
-			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.A_NEG);
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
+			bancoDeOrgaos.cadastraOrgao("coracao", "A-");
+			bancoDeOrgaos.cadastraOrgao("rim",  "A-");
+			bancoDeOrgaos.cadastraOrgao("coracao",  "A-");
 			List<String> tipos = new ArrayList<String>();
 			tipos.add("A-");
 			tipos.add("AB-");
@@ -86,9 +85,10 @@ public class BancoDeOrgaosTest {
 	}
 
 	@Test
-	public void testAddOrgao() {
+	public void testcadastraOrgao() {
+		bancoDeOrgaos = new BancoDeOrgaos();
 		try {
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
+			bancoDeOrgaos.cadastraOrgao("coracao",  "A-");
 			assertTrue(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
 		} catch (Exception e) {
 			fail();
@@ -96,7 +96,9 @@ public class BancoDeOrgaosTest {
 	}
 
 	@Test
-	public void testRemoveOrgao() { // nao existe orgao
+	public void testRemoveOrgao() { 
+		bancoDeOrgaos = new BancoDeOrgaos();
+		// nao existe orgao
 		try {
 			bancoDeOrgaos.removeOrgao("coracao", TipoSanguineo.A_NEG);
 			fail();
@@ -106,11 +108,11 @@ public class BancoDeOrgaosTest {
 
 		// existe orgao
 		try {
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
-			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.AB_NEG);
-			bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.B_NEG);
-			bancoDeOrgaos.removeOrgao("coracao", TipoSanguineo.A_NEG);
-			assertFalse(bancoDeOrgaos.existeOrgao("coracao", TipoSanguineo.A_NEG));
+			bancoDeOrgaos.cadastraOrgao("coracao",  "A-");
+			bancoDeOrgaos.cadastraOrgao("rim", "AB-");
+			bancoDeOrgaos.cadastraOrgao("pulmao", "B-");
+			bancoDeOrgaos.removeOrgao("coracao",  TipoSanguineo.A_NEG);
+			assertFalse(bancoDeOrgaos.existeOrgao("coracao",  TipoSanguineo.A_NEG));
 		} catch (Exception e) {
 			fail();
 		}
@@ -118,6 +120,7 @@ public class BancoDeOrgaosTest {
 
 	@Test
 	public void testQntOrgao() {
+		bancoDeOrgaos = new BancoDeOrgaos();
 		// nao existe orgao
 		try {
 			bancoDeOrgaos.qntOrgao("coracao");
@@ -128,10 +131,10 @@ public class BancoDeOrgaosTest {
 
 		// existe orgao
 		try {
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
-			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.AB_NEG);
-			bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.B_NEG);
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
+			bancoDeOrgaos.cadastraOrgao("coracao", "A-");
+			bancoDeOrgaos.cadastraOrgao("rim",  "AB-");
+			bancoDeOrgaos.cadastraOrgao("pulmao",  "B-");
+			bancoDeOrgaos.cadastraOrgao("coracao",  "AB-");
 			assertEquals(bancoDeOrgaos.qntOrgao("coracao"), 2);
 		} catch (Exception e) {
 			fail();
@@ -140,11 +143,12 @@ public class BancoDeOrgaosTest {
 
 	@Test
 	public void testQntTotalOrgaos() {
+		bancoDeOrgaos = new BancoDeOrgaos();
 		try {
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.A_NEG);
-			bancoDeOrgaos.addOrgao("rim", TipoSanguineo.AB_NEG);
-			bancoDeOrgaos.addOrgao("pulmao", TipoSanguineo.B_NEG);
-			bancoDeOrgaos.addOrgao("coracao", TipoSanguineo.AB_NEG);
+			bancoDeOrgaos.cadastraOrgao("coracao",  "A-");
+			bancoDeOrgaos.cadastraOrgao("rim",  "AB-");
+			bancoDeOrgaos.cadastraOrgao("pulmao",  "B-");
+			bancoDeOrgaos.cadastraOrgao("coracao",  "AB-");
 			assertEquals(bancoDeOrgaos.qntTotalOrgaos(), 4);
 		} catch (Exception e) {
 			fail();

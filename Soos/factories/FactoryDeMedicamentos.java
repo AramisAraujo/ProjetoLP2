@@ -1,5 +1,6 @@
 package factories;
   
+import java.io.Serializable;
 import java.util.List;
 
  
@@ -19,7 +20,7 @@ import farmacia.MedicamentoGenerico;
  * @author Mainara Cavalcanti de Farias
  */
 
-public class FactoryDeMedicamentos {
+public class FactoryDeMedicamentos implements Serializable{
   
     /**
      * CriaMedicamentoDeReferencia

@@ -1,5 +1,6 @@
 package factories;
  
+import java.io.Serializable;
 import java.time.LocalDate;
 import funcionario.TipoCargo;
 import funcionario.Funcionario;
@@ -14,7 +15,7 @@ import funcionario.Funcionario;
  * @author Mainara Cavalcanti de Farias
  */
 
-public class FactoryFuncionario {
+public class FactoryFuncionario implements Serializable{
  
     /**
      * CriarFuncionario

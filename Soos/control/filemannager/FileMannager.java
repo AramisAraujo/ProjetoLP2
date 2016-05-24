@@ -9,7 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import banco_de_orgaos.BancoDeOrgaos;
+import farmacia.Farmacia;
 import funcionario.BancoFuncionarios;
+import paciente.BancoProntuarios;
 
 public class FileMannager {
 	
@@ -49,7 +52,7 @@ public class FileMannager {
 		final String EXTENSION = ".dat";
 		
 		File systemDir = new File("system_data"+ File.separator);
-		File funcionariosBackup = new File(systemDir.getPath()+ "funcionarios" + EXTENSION);
+		File funcionariosBackup = new File(systemDir.getPath()+ File.separator+ "funcionarios" + EXTENSION);
 		
 		if(! systemDir.exists() || !systemDir.isDirectory()){
 			systemDir.mkdir();
@@ -65,23 +68,67 @@ public class FileMannager {
 		
 	}
 	
-	public static void exportarProntuarios(List prontuarios) 
+	public static void exportarProntuarios(BancoProntuarios bancoProntuarios) 
 			throws FileNotFoundException, IOException {
 		
 		final String EXTENSION = ".dat";
 		
 		File systemDir = new File("system_data"+ File.separator);
-		File funcionariosBackup = new File(systemDir.getPath()+ "funcionarios" + EXTENSION);
+		File prontuariosBackup = new File(systemDir.getPath()+ File.separator+ "prontuarios" + EXTENSION);
 		
 		if(! systemDir.exists() || !systemDir.isDirectory()){
 			systemDir.mkdir();
 		}
 
 		ObjectOutputStream objBufOut = new ObjectOutputStream(new BufferedOutputStream(
-				new FileOutputStream(funcionariosBackup)));
+				new FileOutputStream(prontuariosBackup)));
 		
 		
-		objBufOut.writeObject(bancoDeFuncionarios);
+		objBufOut.writeObject(bancoProntuarios);
+		
+		objBufOut.close();
+		
+	}
+	
+	public static void exportarFarmacia(Farmacia farmacia) 
+			throws FileNotFoundException, IOException {
+		
+		final String EXTENSION = ".dat";
+		
+		File systemDir = new File("system_data"+ File.separator);
+		File farmaciaBackup = new File(systemDir.getPath()+ File.separator+ "farmacia" + EXTENSION);
+		
+		if(! systemDir.exists() || !systemDir.isDirectory()){
+			systemDir.mkdir();
+		}
+
+		ObjectOutputStream objBufOut = new ObjectOutputStream(new BufferedOutputStream(
+				new FileOutputStream(farmaciaBackup)));
+		
+		
+		objBufOut.writeObject(farmacia);
+		
+		objBufOut.close();
+		
+	}
+	
+	public static void exportarBancoOrgaos(BancoDeOrgaos bancoOrgaos) 
+			throws FileNotFoundException, IOException {
+		
+		final String EXTENSION = ".dat";
+		
+		File systemDir = new File("system_data");
+		File bancoOrgaosBackup = new File(systemDir.getPath()+ File.separator+ "bancoOrgaos" + EXTENSION);
+		
+		if(! systemDir.exists() || !systemDir.isDirectory()){
+			systemDir.mkdir();
+		}
+
+		ObjectOutputStream objBufOut = new ObjectOutputStream(new BufferedOutputStream(
+				new FileOutputStream(bancoOrgaosBackup)));
+		
+		
+		objBufOut.writeObject(bancoOrgaosBackup);
 		
 		objBufOut.close();
 		

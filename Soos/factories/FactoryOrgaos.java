@@ -1,5 +1,7 @@
 package factories;
 
+import java.io.Serializable;
+
 import banco_de_orgaos.Orgao;
 import exceptions.BancoOrgaoException;
 import paciente.TipoSanguineo;
@@ -15,7 +17,7 @@ import paciente.TipoSanguineo;
  * @author Mainara Cavalcanti de Farias
  */
 
-public class FactoryOrgaos {
+public class FactoryOrgaos implements Serializable{
 
 	/**
 	 * CriaOrgao

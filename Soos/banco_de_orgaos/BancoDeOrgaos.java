@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import exceptions.BancoOrgaoException;
+import exceptions.ExcluirCadastroException;
 import exceptions.VerificaExcecao;
 import factories.FactoryOrgaos;
 import paciente.TipoSanguineo;
@@ -107,7 +108,7 @@ public class BancoDeOrgaos implements Serializable{
 	/**
 	 * GetOrgaoPorSang
 	 * Metodo que retorna todos os orgaos que sao de um determinado
-	 * tipo sanguineo.
+	 * tipo sangsuineo.
 	 * 
 	 * @param tipoSanguineo
 	 *            - tipo sanguineo informado
@@ -176,12 +177,20 @@ public class BancoDeOrgaos implements Serializable{
 	 *             - excecao lancada caso ocorra algum erro
 	 */
 	
-	public boolean addOrgao(String nome, TipoSanguineo tipoSanguineo)
+	public void cadastraOrgao(String nome, String tipoSanguineo)
 			throws BancoOrgaoException {
 
-		Orgao orgao = factoryOrgaos.criaOrgao(nome, tipoSanguineo);
+		TipoSanguineo sanguineo;
 
-		return bancoDeOrgaos.add(orgao);
+		try {
+			sanguineo = this.stringToSanguineo(tipoSanguineo);
+		} catch (Exception e) {
+			throw new BancoOrgaoException(e.getMessage());
+		}
+
+		Orgao orgao = factoryOrgaos.criaOrgao(nome, sanguineo);
+
+		this.bancoDeOrgaos.add(orgao);
 	}
 
 	/**
@@ -262,6 +271,140 @@ public class BancoDeOrgaos implements Serializable{
 	
 	public int qntTotalOrgaos() {
 		return bancoDeOrgaos.size();
+	}
+	
+	/**
+	 * Metodo responsavel por buscar os orgaos de determinado tipo sanguineo.
+	 * @param tipoSanguineo - Tipo sanguineo dos orgaos.
+	 * @return - Nome dos orgao com o tipo sanguineo.
+	 * @throws BancoOrgaoException
+	 */
+	public String buscaOrgPorSangue(String tipoSanguineo)
+			throws BancoOrgaoException {
+
+		TipoSanguineo sanguineo;
+
+		String nomesOrgaos = "";
+
+		try {
+			sanguineo = this.stringToSanguineo(tipoSanguineo);
+
+		} catch (Exception e) {
+
+			throw new BancoOrgaoException(e.getMessage());
+		}
+
+		List<String> orgaosEncontrados = this.getOrgaoPorSangue(sanguineo);
+
+		if (orgaosEncontrados.isEmpty()) {
+			throw new BancoOrgaoException(
+					"Nao ha orgaos cadastrados para esse tipo sanguineo.");
+		}
+
+		for (String nomeOrgao : orgaosEncontrados) {
+
+			nomesOrgaos = nomesOrgaos + nomeOrgao + ",";
+
+		}
+
+		nomesOrgaos = nomesOrgaos.substring(0, nomesOrgaos.length() - 1);
+
+		return nomesOrgaos;
+
+	}
+	
+	/**
+	 * Metodo responsavel por buscar os orgaos com determinado nome.
+	 * @param nome - Nome do orgao.
+	 * @return - Orgao e tipo sanguineo do doador.
+	 * @throws BancoOrgaoException
+	 */
+	public String buscaOrgPorNome(String nome) throws BancoOrgaoException {
+
+		String sangueOrgaos = "";
+
+		if (!this.existeOrgao(nome)) {
+			throw new BancoOrgaoException("Orgao nao cadastrado.");
+		}
+
+		List<String> tiposDisp = this.getOrgaoPorNome(nome);
+
+		for (String tipoSangue : tiposDisp) {
+
+			sangueOrgaos = sangueOrgaos + tipoSangue + ",";
+
+		}
+
+		sangueOrgaos = sangueOrgaos.substring(0, sangueOrgaos.length() - 1);
+
+		return sangueOrgaos;
+
+	}
+	
+	
+	/**
+	 * Metodo responsavel por buscar orgaos com determinado nome e tipo sanguineo.
+	 * @param nome - Nome do orgao.
+	 * @param tipoSanguineo - Tipo sanguineo do doador.
+	 * @return - Se o orgao existe ou nao.
+	 * @throws BancoOrgaoException
+	 */
+	public boolean buscaOrgao(String nome, String tipoSanguineo)
+			throws BancoOrgaoException {
+
+		TipoSanguineo sangue;
+		try {
+			sangue = stringToSanguineo(tipoSanguineo);
+		} catch (Exception e) {
+			throw new BancoOrgaoException("Tipo sanguineo invalido.");
+		}
+
+		boolean orgaoExiste;
+
+		orgaoExiste = this.existeOrgao(nome, sangue);
+
+		return orgaoExiste;
+	}
+	
+	/**
+	 * Metodo responsavel por retirar um orgao do banco de orgaos.
+	 * @param nome - Nome do orgao.
+	 * @param tipoSanguineo - Tipo sanguineo do doador.
+	 * @throws ExcluirCadastroException
+	 */
+	public void retiraOrgao(String nome, String tipoSanguineo)
+			throws ExcluirCadastroException {
+
+		TipoSanguineo sangue;
+
+		try {
+			sangue = stringToSanguineo(tipoSanguineo);
+		} catch (Exception e) {
+			throw new ExcluirCadastroException("Erro na retirada de orgaos. "
+					+ e.getMessage());
+		}
+
+		try {
+			this.removeOrgao(nome, sangue);
+		} catch (Exception e) {
+			throw new ExcluirCadastroException("Erro na retirada de orgaos. "
+					+ e.getMessage());
+		}
+
+	}
+	
+	
+	private TipoSanguineo stringToSanguineo(String tipoSanguineo)
+			throws Exception {
+
+		for (TipoSanguineo sangue : TipoSanguineo.values()) {
+			if (sangue.toString().equalsIgnoreCase(tipoSanguineo)) {
+				return sangue;
+			}
+
+		}
+		throw new Exception("Tipo sanguineo invalido.");
+
 	}
 
 }

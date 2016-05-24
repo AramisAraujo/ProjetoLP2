@@ -10,6 +10,7 @@ import java.util.Set;
 import comparators.NomeComparator;
 import farmacia.CategoriasDeMedicamentos;
 import farmacia.Medicamento;
+import exceptions.CadastroException;
 import exceptions.ConsultaException;
 import exceptions.MedicamentoException;
 import factories.FactoryDeMedicamentos;
@@ -56,17 +57,60 @@ public class Farmacia implements Serializable{
 	 *             - excecao lancada caso ocorra algum erro
 	 */
 	
-	public boolean cadastraMedicamento(String nome, String tipo, double preco,
-			int quantidade, List<CategoriasDeMedicamentos> categorias)
-			throws Exception {
+	public String cadastraMedicamento(String nome, String tipo, double preco,
+			int quantidade, String categorias) throws CadastroException {
+		
 		if (existeMedicamento(nome)) {
-			throw new MedicamentoException(
+			throw new CadastroException("Erro no cadastro de medicamento.",
 					"Esse medicamento ja foi cadastrado.");
 		}
-		Medicamento medicamento = factoryDeMedicamentos.criaMedicamento(nome,
-				preco, quantidade, categorias, tipo);
-		medicamentos.add(medicamento);
-		return true;
+		
+		
+		String[] categoriasSplit;
+		List<CategoriasDeMedicamentos> categoriasMed = new ArrayList<CategoriasDeMedicamentos>();
+		
+		if (categorias.contains(",")) {
+
+			categoriasSplit = categorias.split(",");
+
+			for (String categoria : categoriasSplit) {
+				try {
+					categoriasMed.add(CategoriasDeMedicamentos
+							.valueOf(categoria.toUpperCase()));
+
+				} catch (Exception e) {
+					throw new CadastroException(
+							"Erro no cadastro do medicamento.",
+							"Categoria invalida.");
+				}
+
+			}
+		} else {
+			try {
+				CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos
+						.valueOf(categorias.toUpperCase());
+				categoriasMed.add(tipoMed);
+			} catch (Exception e) {
+				throw new CadastroException("Erro no cadastro do medicamento.",
+						"Categoria invalida.");
+			}
+		}
+		
+		Medicamento medicamento;
+		
+		try {
+			medicamento = factoryDeMedicamentos.criaMedicamento(nome,
+					preco, quantidade, categoriasMed, tipo);
+			
+			medicamentos.add(medicamento);
+
+		} catch (Exception e) {
+			throw new CadastroException("Erro no cadastro de medicamento.",
+					e.getMessage());
+		}
+		
+		return medicamento.getNome();
+		
 	}
 
 	/**
@@ -231,7 +275,9 @@ public class Farmacia implements Serializable{
 	
 	public String getCategoriasMedicamento(String nomeMedicamento)
 			throws MedicamentoException {
+		
 		Medicamento medicamento = buscaMedicamento(nomeMedicamento);
+		
 		if (medicamento == null) {
 			throw new MedicamentoException(
 					"Erro na consulta de medicamentos. Medicamento inexistente.");
@@ -316,6 +362,7 @@ public class Farmacia implements Serializable{
 			throws MedicamentoException, ConsultaException {
 		
 		ArrayList<Medicamento> medicamentosBusca = new ArrayList<Medicamento>();
+		
 		CategoriasDeMedicamentos category;
 		
 		try {
@@ -421,6 +468,79 @@ public class Farmacia implements Serializable{
 			return estoque;
 		}
 		throw new MedicamentoException("Tipo de ordenacao invalida.");
+	}
+	
+	/**
+	 * Metodo responsavel por pegar uma informacao especifica do medicamento.
+	 * @param atributo - Atributo do medicamento que se deseja.
+	 * @param medicamento - Medicamento que se deseja obter a informacao.
+	 * @return - Atributo do funcionario que se deseja.
+	 * @throws ConsultaException
+	 * @throws MedicamentoException
+	 */
+	
+	public String getInfoMedicamento(String atributo, String medicamento)
+			throws ConsultaException, MedicamentoException {
+
+		if (this.buscaMedicamento(medicamento) == null) {
+			throw new ConsultaException("medicamento",
+					"Medicamento nao cadastrado.");
+
+		}
+
+		switch (atributo.toUpperCase()) {
+
+		case "NOME":
+	
+			if(this.existeMedicamento(medicamento)){
+				
+				return medicamento;
+			}
+			
+			throw new ConsultaException("medicamento","Medicamento nao existe.");
+
+		case "PRECO":
+
+			String preco;
+			try {
+				preco = String.valueOf(this.getPreco(medicamento));
+			} catch (Exception e) {
+				throw new ConsultaException("medicamento", e.getMessage());
+			}
+			return preco;
+
+		case "QUANTIDADE":
+
+			String quantidade;
+			try {
+				
+				quantidade = String.valueOf(this.getQuantidade(medicamento));
+				
+			} catch (Exception e) {
+				
+				throw new ConsultaException("medicamento", e.getMessage());
+			}
+			return quantidade;
+
+		case "CATEGORIAS":
+
+			String categorias = this.getCategoriasMedicamento(medicamento);
+			return categorias;
+
+		case "TIPO":
+
+			String tipo;
+			try {
+				tipo = this.getTipoMedicamento(medicamento);
+			} catch (Exception e) {
+				throw new ConsultaException("medicamento", e.getMessage());
+			}
+			return tipo;
+
+		default:
+			throw new ConsultaException("medicamento", "Atributo invalido.");
+		}
+
 	}
 
 }

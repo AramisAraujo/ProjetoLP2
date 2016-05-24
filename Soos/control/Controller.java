@@ -1,13 +1,6 @@
 package control;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-
 import banco_de_orgaos.BancoDeOrgaos;
 import control.filemannager.FileMannager;
 import exceptions.AtualizarInfoException;
@@ -24,7 +17,6 @@ import exceptions.ProcedimentoException;
 import exceptions.ProntuarioException;
 import exceptions.SystemCloseException;
 import exceptions.VerificaExcecao;
-import farmacia.CategoriasDeMedicamentos;
 import farmacia.Farmacia;
 import farmacia.Medicamento;
 import funcionario.BancoFuncionarios;
@@ -58,9 +50,6 @@ public class Controller {
 	private BancoDeOrgaos bancoDeOrgaos;
 	private Procedimento procedimento;
 
-	private final String NOME = "NOME", PRECO = "PRECO", TIPO = "TIPO",
-			QUANTIDADE = "QUANTIDADE", CATEGORIAS = "CATEGORIAS";
-
 	public Controller() {
 		this.sistemaBloqueado = true;
 		this.bancoFuncionarios = new BancoFuncionarios();
@@ -93,11 +82,16 @@ public class Controller {
 			throw new SystemCloseException(errorMsg);
 		}
 		
-		FileMannager.exportarFuncionarios(this.bancoFuncionarios);
-		FileMannager.exportarProntuarios(this.bancoProntuarios);
-		FileMannager.exportarFarmacia(this.farmacia);
-		FileMannager.exportarBancoOrgaos(this.bancoDeOrgaos);
-		// NYI
+		try {
+			FileMannager.exportarFuncionarios(this.bancoFuncionarios);
+			FileMannager.exportarProntuarios(this.bancoProntuarios);
+			FileMannager.exportarFarmacia(this.farmacia);
+			FileMannager.exportarBancoOrgaos(this.bancoDeOrgaos);
+		} catch (Exception e) {
+			
+			throw new SystemCloseException(e.getMessage());
+		}
+		
 	}
 
 	/**
@@ -185,9 +179,6 @@ public class Controller {
 	public String cadastraMedicamento(String nome, String tipo, double preco,
 			int quantidade, String categorias) throws CadastroException {
 
-		String[] categoriasSplit;
-		List<CategoriasDeMedicamentos> categoriasMed = new ArrayList<CategoriasDeMedicamentos>();
-
 		if (!usuarioAtual.getMatricula().startsWith("3")) {
 
 			String errorMsg = "O funcionario " + usuarioAtual.getNome()
@@ -197,42 +188,7 @@ public class Controller {
 					errorMsg);
 		}
 
-		if (categorias.contains(",")) {
-
-			categoriasSplit = categorias.split(",");
-
-			for (String categoria : categoriasSplit) {
-				try {
-					categoriasMed.add(CategoriasDeMedicamentos
-							.valueOf(categoria.toUpperCase()));
-
-				} catch (Exception e) {
-					throw new CadastroException(
-							"Erro no cadastro do medicamento.",
-							"Categoria invalida.");
-				}
-
-			}
-		} else {
-			try {
-				CategoriasDeMedicamentos tipoMed = CategoriasDeMedicamentos
-						.valueOf(categorias.toUpperCase());
-				categoriasMed.add(tipoMed);
-			} catch (Exception e) {
-				throw new CadastroException("Erro no cadastro do medicamento.",
-						"Categoria invalida.");
-			}
-		}
-		try {
-			this.farmacia.cadastraMedicamento(nome, tipo, preco, quantidade,
-					categoriasMed);
-
-		} catch (Exception e) {
-			throw new CadastroException("Erro no cadastro de medicamento.",
-					e.getMessage());
-		}
-
-		return nome;
+		return this.farmacia.cadastraMedicamento(nome, tipo, preco, quantidade, categorias);
 
 	}
 
@@ -290,87 +246,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 							+ " nao tem permissao para cadastrar pacientes.");
 		}
 
-		for (Prontuario prontuario : this.bancoProntuarios) {
-
-			try {
-				if (prontuario.getInfoPaciente("Nome").equals(nome)) {
-					throw new Exception("Paciente ja cadastrado.");
-				}
-			} catch (Exception e) {
-				throw new CadastroException(
-						"Nao foi possivel cadastrar o paciente.",
-						e.getMessage());
-			}
-
-		}
-
-		try {
-			VerificaExcecao.checkEmptyString(nome, "Nome do paciente");
-		} catch (Exception e) {
-
-			throw new CadastroException(
-					"Nao foi possivel cadastrar o paciente.", e.getMessage());
-		}
-
-		LocalDate birthDate;
-		try {
-			birthDate = this.stringToDate(data);
-			VerificaExcecao.checarData(birthDate);
-		} catch (Exception e) {
-
-			throw new CadastroException(
-					"Nao foi possivel cadastrar o paciente.", "Data invalida.");
-		}
-
-		try {
-			
-		
-			VerificaExcecao.checarValor(peso,"Peso do paciente");
-			
-		} catch (Exception e) {
-			throw new CadastroException(
-					"Nao foi possivel cadastrar o paciente.", e.getMessage());
-
-		}
-
-		try {
-			VerificaExcecao.checarSexoBiologico(sexoBio);
-
-		} catch (Exception e) {
-			throw new CadastroException(
-					"Nao foi possivel cadastrar o paciente.", e.getMessage());
-		}
-
-		try {
-			VerificaExcecao.checkEmptyString(genero, "Genero");
-		} catch (Exception e) {
-			throw new CadastroException(
-					"Nao foi possivel cadastrar o paciente.", e.getMessage());
-		}
-
-		UUID novoID = UUID.randomUUID();
-		TipoSanguineo tipoSangue;
-		Prontuario novoProntuario;
-
-		try {
-			tipoSangue = this.stringToSanguineo(tipoSanguineo);
-		} catch (Exception e) {
-			throw new CadastroException(
-					"Nao foi possivel cadastrar o paciente.", e.getMessage());
-		}
-
-		try {
-			novoProntuario = new Prontuario(nome, birthDate, peso, sexoBio, genero, tipoSangue, novoID);
-		} catch (Exception e) {
-			throw new CadastroException(
-					"Nao foi possivel cadastrar o paciente.", e.getMessage());
-		}
-
-		this.bancoProntuarios.add(novoProntuario);
-
-		Collections.sort(this.bancoProntuarios);
-
-		return novoID.toString();
+		return this.bancoProntuarios.cadastraPaciente(nome, data, peso, sexoBio, genero, tipoSanguineo);
 
 	}
 
@@ -383,15 +259,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	public void cadastraOrgao(String nome, String tipoSanguineo)
 			throws BancoOrgaoException {
 
-		TipoSanguineo sanguineo;
-
-		try {
-			sanguineo = this.stringToSanguineo(tipoSanguineo);
-		} catch (Exception e) {
-			throw new BancoOrgaoException(e.getMessage());
-		}
-
-		this.bancoDeOrgaos.addOrgao(nome, sanguineo);
+		this.bancoDeOrgaos.cadastraOrgao(nome, tipoSanguineo);
 
 	}
 
@@ -420,25 +288,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	public String getInfoPaciente(String pacienteID, String atributo)
 			throws ConsultaException {
 
-		Prontuario targetProntuario = null;
-
-		for (Prontuario prontuario : this.bancoProntuarios) {
-
-			if (prontuario.getID().equals(pacienteID)) {
-				targetProntuario = prontuario;
-			}
-
-		}
-
-		if (targetProntuario == null) {
-			throw new ConsultaException("paciente", "Paciente nao cadastrado.");
-		}
-
-		try {
-			return targetProntuario.getInfoPaciente(atributo);
-		} catch (Exception e) {
-			throw new ConsultaException("paciente", e.getMessage());
-		}
+		return this.bancoProntuarios.getInfoPaciente(pacienteID, atributo);
 
 	}
 
@@ -453,58 +303,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	public String getInfoMedicamento(String atributo, String medicamento)
 			throws ConsultaException, MedicamentoException {
 
-		if (this.farmacia.buscaMedicamento(medicamento) == null) {
-			throw new ConsultaException("medicamento",
-					"Medicamento nao existe.");
-
-		}
-
-		switch (atributo.toUpperCase()) {
-
-		case NOME:
-			farmacia.existeMedicamento(medicamento);
-			return medicamento;
-
-		case PRECO:
-
-			String preco;
-			try {
-				preco = String.valueOf(this.farmacia.getPreco(medicamento));
-			} catch (Exception e) {
-				throw new ConsultaException("medicamento", e.getMessage());
-			}
-			return preco;
-
-		case QUANTIDADE:
-
-			String quantidade;
-			try {
-				quantidade = String.valueOf(this.farmacia
-						.getQuantidade(medicamento));
-			} catch (Exception e) {
-				throw new ConsultaException("medicamento", e.getMessage());
-			}
-			return quantidade;
-
-		case CATEGORIAS:
-
-			String categorias = this.farmacia
-					.getCategoriasMedicamento(medicamento);
-			return categorias;
-
-		case TIPO:
-
-			String tipo;
-			try {
-				tipo = this.farmacia.getTipoMedicamento(medicamento);
-			} catch (Exception e) {
-				throw new ConsultaException("medicamento", e.getMessage());
-			}
-			return tipo;
-
-		default:
-			throw new ConsultaException("medicamento", "Atributo invalido.");
-		}
+		return this.farmacia.getInfoMedicamento(atributo, medicamento);
 
 	}
 
@@ -517,19 +316,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	 */
 	public String getProntuario(int posicao) throws ProntuarioException {
 
-		if (posicao < 0) {
-			throw new ProntuarioException(
-					"Erro ao consultar prontuario. Indice do prontuario nao pode"
-							+ " ser negativo.");
-		}
-		if (posicao > this.bancoProntuarios.size()) {
-
-			throw new ProntuarioException("Erro ao consultar prontuario. "
-					+ "Nao ha prontuarios suficientes (max = "
-					+ this.bancoProntuarios.size() + ").");
-		}
-
-		return this.bancoProntuarios.get(posicao).getID();
+		return this.bancoProntuarios.getProntuario(posicao);
 
 	}
 
@@ -542,35 +329,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	public String buscaOrgPorSangue(String tipoSanguineo)
 			throws BancoOrgaoException {
 
-		TipoSanguineo sanguineo;
-
-		String nomesOrgaos = "";
-
-		try {
-			sanguineo = this.stringToSanguineo(tipoSanguineo);
-
-		} catch (Exception e) {
-
-			throw new BancoOrgaoException(e.getMessage());
-		}
-
-		List<String> orgaosEncontrados = this.bancoDeOrgaos
-				.getOrgaoPorSangue(sanguineo);
-
-		if (orgaosEncontrados.isEmpty()) {
-			throw new BancoOrgaoException(
-					"Nao ha orgaos cadastrados para esse tipo sanguineo.");
-		}
-
-		for (String nomeOrgao : orgaosEncontrados) {
-
-			nomesOrgaos = nomesOrgaos + nomeOrgao + ",";
-
-		}
-
-		nomesOrgaos = nomesOrgaos.substring(0, nomesOrgaos.length() - 1);
-
-		return nomesOrgaos;
+		return this.bancoDeOrgaos.buscaOrgPorSangue(tipoSanguineo);
 
 	}
 
@@ -582,23 +341,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	 */
 	public String buscaOrgPorNome(String nome) throws BancoOrgaoException {
 
-		String sangueOrgaos = "";
-
-		if (!this.bancoDeOrgaos.existeOrgao(nome)) {
-			throw new BancoOrgaoException("Orgao nao cadastrado.");
-		}
-
-		List<String> tiposDisp = this.bancoDeOrgaos.getOrgaoPorNome(nome);
-
-		for (String tipoSangue : tiposDisp) {
-
-			sangueOrgaos = sangueOrgaos + tipoSangue + ",";
-
-		}
-
-		sangueOrgaos = sangueOrgaos.substring(0, sangueOrgaos.length() - 1);
-
-		return sangueOrgaos;
+		return this.bancoDeOrgaos.buscaOrgPorNome(nome);
 
 	}
 
@@ -612,18 +355,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	public boolean buscaOrgao(String nome, String tipoSanguineo)
 			throws BancoOrgaoException {
 
-		TipoSanguineo sangue;
-		try {
-			sangue = stringToSanguineo(tipoSanguineo);
-		} catch (Exception e) {
-			throw new BancoOrgaoException("Tipo sanguineo invalido.");
-		}
-
-		boolean orgaoExiste;
-
-		orgaoExiste = this.bancoDeOrgaos.existeOrgao(nome, sangue);
-
-		return orgaoExiste;
+		return this.bancoDeOrgaos.buscaOrgao(nome, tipoSanguineo);
 	}
 
 	/**
@@ -635,21 +367,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	public void retiraOrgao(String nome, String tipoSanguineo)
 			throws ExcluirCadastroException {
 
-		TipoSanguineo sangue;
-
-		try {
-			sangue = stringToSanguineo(tipoSanguineo);
-		} catch (Exception e) {
-			throw new ExcluirCadastroException("Erro na retirada de orgaos. "
-					+ e.getMessage());
-		}
-
-		try {
-			this.bancoDeOrgaos.removeOrgao(nome, sangue);
-		} catch (Exception e) {
-			throw new ExcluirCadastroException("Erro na retirada de orgaos. "
-					+ e.getMessage());
-		}
+		this.bancoDeOrgaos.retiraOrgao(nome, tipoSanguineo);
 
 	}
 
@@ -662,15 +380,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	 */
 	public Prontuario getProntuario(String ID) throws Exception {
 
-		Prontuario prontuarioProcurado = null;
-		for (Prontuario prontuario : this.bancoProntuarios) {
-			if (prontuario.getID().equals(ID)) {
-				prontuarioProcurado = prontuario;
-				return prontuarioProcurado;
-			}
-		}
-
-		throw new Exception("Prontuario nao cadastrado.");
+		return this.bancoProntuarios.getProntuario(ID);
 	}
 
 	/**
@@ -778,31 +488,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 		return this.bancoDeOrgaos.qntTotalOrgaos();
 	}
 
-	private LocalDate stringToDate(String dateCandidate) {
-
-		DateTimeFormatter formatador = DateTimeFormatter
-				.ofPattern("dd/MM/yyyy");
-
-		LocalDate data = LocalDate.parse(dateCandidate, formatador);
-
-		return data;
-
-	}
-
-
-
-	private TipoSanguineo stringToSanguineo(String tipoSanguineo)
-			throws Exception {
-
-		for (TipoSanguineo sangue : TipoSanguineo.values()) {
-			if (sangue.toString().equalsIgnoreCase(tipoSanguineo)) {
-				return sangue;
-			}
-
-		}
-		throw new Exception("Tipo sanguineo invalido.");
-
-	}
+	
 
 	private TipoProcedimento stringToProcedure(String procedimento)
 			throws Exception {
@@ -825,25 +511,9 @@ public String cadastraPaciente(String nome, String data, double peso,
 	 * @throws Exception
 	 */
 	public String getPacienteID(String nomePaciente) throws ProntuarioException {
-		try {
-			VerificaExcecao.checkEmptyParameter(nomePaciente,
-					"Nome do paciente");
-		} catch (Exception e) {
-			throw new ProntuarioException(e.getMessage());
-		}
-
-		try {
-			String idProcurado = null;
-			for (Prontuario prontuario : this.bancoProntuarios) {
-				if (prontuario.getInfoPaciente("Nome").equals(nomePaciente)) {
-					idProcurado = prontuario.getID();
-					return idProcurado;
-				}
-			}
-			throw new ProntuarioException("Paciente nao encontrado.");
-		} catch (Exception e) {
-			throw new ProntuarioException(e.getMessage());
-		}
+			
+			return this.bancoProntuarios.getPacienteID(nomePaciente);
+			
 	}
 
 	/**
@@ -1037,7 +707,6 @@ public String cadastraPaciente(String nome, String data, double peso,
 			throw new ProcedimentoException(e.getMessage());
 		}
 
-		// registra o custo com medicamentos, somando aos gastos do paciente
 		try {
 
 			double custoMedicamentos = 0;
@@ -1148,22 +817,13 @@ public String cadastraPaciente(String nome, String data, double peso,
 	
 	public String getGastosPaciente(String ID) throws Exception {
 		
-		VerificaExcecao.checkEmptyParameter(ID, "ID");
-
-		Prontuario prontuario = this.getProntuario(ID);
+		return this.bancoProntuarios.getGastosPaciente(ID);
 		
-		String gastos = String.format(Locale.US,"%.2f", prontuario.getGastosPaciente());
-		
-		return gastos;
 	}
 	
 	public String getFichaPaciente(String ID) throws Exception {
 		
-		VerificaExcecao.checkEmptyParameter(ID, "ID");
-		
-		Prontuario prontuario = this.getProntuario(ID);
-		
-		return prontuario.getFichaPaciente();
+		return this.bancoProntuarios.getFichaPaciente(ID);
 		
 	}
 	
