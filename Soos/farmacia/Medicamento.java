@@ -33,7 +33,8 @@ public class Medicamento implements Comparable<Medicamento>,Serializable {
     	VerificaExcecao.checkEmptyString(nome, "Nome do medicamento");
         VerificaExcecao.checarValor(preco, "Preco do medicamento");
         VerificaExcecao.checarValor(quantidade, "Quantidade do medicamento");
-        VerificaExcecao.checarValor(quantidade, "A quantidade do medicamento");
+        VerificaExcecao.checkEmptyParameter(quantidade, "A quantidade do medicamento");
+
         
         verificaCategorias(categorias);
         

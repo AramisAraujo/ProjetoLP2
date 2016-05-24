@@ -56,8 +56,8 @@ public class BancoDeOrgaosTest {
 	public void testGetOrgaoPorSangue() {
 		bancoDeOrgaos = new BancoDeOrgaos();
 		try {
-			bancoDeOrgaos.cadastraOrgao("coracao", "AB-");
-			bancoDeOrgaos.cadastraOrgao("rim", "AB-");
+			bancoDeOrgaos.cadastraOrgao("coracao", "A-");
+			bancoDeOrgaos.cadastraOrgao("rim", "A-");
 			bancoDeOrgaos.cadastraOrgao("pulmao", "AB-");
 			List<String> orgaos = new ArrayList<String>();
 			orgaos.add("coracao");
@@ -70,11 +70,13 @@ public class BancoDeOrgaosTest {
 
 	@Test
 	public void testGetOrgaoPorNome() {
+		
 		bancoDeOrgaos = new BancoDeOrgaos();
+		
 		try {
 			bancoDeOrgaos.cadastraOrgao("coracao", "A-");
 			bancoDeOrgaos.cadastraOrgao("rim",  "A-");
-			bancoDeOrgaos.cadastraOrgao("coracao",  "A-");
+			bancoDeOrgaos.cadastraOrgao("coracao",  "AB-");
 			List<String> tipos = new ArrayList<String>();
 			tipos.add("A-");
 			tipos.add("AB-");

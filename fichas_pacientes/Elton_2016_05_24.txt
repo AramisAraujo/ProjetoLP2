@@ -1,0 +1,5 @@
+Paciente: Elton
+Peso: 60,00 kg Tipo Sanguíneo: O-
+Sexo: masculino Genero: masculino
+Gasto total: R$ 0,00 Pontos acumulados: 0
+Resumo de Procedimentos: 0 procedimento(s)
