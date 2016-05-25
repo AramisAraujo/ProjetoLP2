@@ -294,7 +294,7 @@ public class Controller {
 	 * @throws CadastroException
 	 */
 	
-public String cadastraPaciente(String nome, String data, double peso,
+	public String cadastraPaciente(String nome, String data, double peso,
 		String sexoBio, String genero, String tipoSanguineo)throws CadastroException {
 
 		if (!this.usuarioAtual.getMatricula().startsWith("3")) {
@@ -442,7 +442,7 @@ public String cadastraPaciente(String nome, String data, double peso,
 	}
 
 	/**
-	 * 
+	 * Exclui um funcionario do banco de funcionarios
 	 * @param matricula
 	 * @param senha
 	 * @throws ExcluirCadastroException
@@ -463,6 +463,13 @@ public String cadastraPaciente(String nome, String data, double peso,
 
 	}
 
+	/**
+	 * Atualiza uma informacao de um funcionario a partir de seu numero de matricula
+	 * @param matricula
+	 * @param atributo
+	 * @param novoValor
+	 * @throws AtualizarInfoException
+	 */
 	public void atualizaInfoFuncionario(String matricula, String atributo,
 			String novoValor) throws AtualizarInfoException {
 
@@ -476,6 +483,12 @@ public String cadastraPaciente(String nome, String data, double peso,
 
 	}
 
+	/**
+	 * Atualiza uma informacao do usuario logado
+	 * @param atributo
+	 * @param novoValor
+	 * @throws AtualizarInfoException
+	 */
 	public void atualizaInfoFuncionario(String atributo, String novoValor)
 			throws AtualizarInfoException {
 
@@ -485,6 +498,12 @@ public String cadastraPaciente(String nome, String data, double peso,
 
 	}
 
+	/**
+	 * Atualiza a senha de um funcionario
+	 * @param senhaAntiga
+	 * @param novaSenha
+	 * @throws AtualizarInfoException
+	 */
 	public void atualizaSenha(String senhaAntiga, String novaSenha)
 			throws AtualizarInfoException {
 
@@ -494,6 +513,13 @@ public String cadastraPaciente(String nome, String data, double peso,
 
 	}
 
+	/**
+	 * Atualiza uma informacao de um medicamento
+	 * @param nome
+	 * @param atributo
+	 * @param novoValor
+	 * @throws AtualizarInfoException
+	 */
 	public void atualizaMedicamento(String nome, String atributo,
 			String novoValor) throws AtualizarInfoException {
 
@@ -505,6 +531,12 @@ public String cadastraPaciente(String nome, String data, double peso,
 
 	}
 
+	/**
+	 * Retorna todos os medicamentos pertencentes a uma categoria
+	 * @param categoria
+	 * @return
+	 * @throws ConsultaException
+	 */
 	public String consultaMedCategoria(String categoria)
 			throws ConsultaException {
 
@@ -516,6 +548,12 @@ public String cadastraPaciente(String nome, String data, double peso,
 
 	}
 
+	/**
+	 * Acessa um medicamento a partir de seu nome
+	 * @param nome
+	 * @return
+	 * @throws ConsultaException
+	 */
 	public Medicamento consultaMedNome(String nome) throws ConsultaException {
 
 		try {
@@ -525,6 +563,13 @@ public String cadastraPaciente(String nome, String data, double peso,
 		}
 	}
 
+	/**
+	 * Acessa o estoque da farmacia
+	 * @param ordenacao
+	 * @return
+	 * @throws MedicamentoException
+	 * @throws ConsultaException
+	 */
 	public String getEstoqueFarmacia(String ordenacao)
 			throws MedicamentoException, ConsultaException {
 		try {
@@ -535,19 +580,34 @@ public String cadastraPaciente(String nome, String data, double peso,
 
 	}
 
+	/**
+	 * Acessa a quantidade de um orgao no banco de orgaos
+	 * @param nome
+	 * @return
+	 * @throws BancoOrgaoException
+	 */
 	public int qtdOrgaos(String nome) throws BancoOrgaoException {
 
 		return this.bancoDeOrgaos.qntOrgao(nome);
 
 	}
-
+	
+	/**
+	 * Acessa o total de orgaos disponivel no banco de orgaos
+	 * @return
+	 */
 	public int totalOrgaosDisponiveis() {
 
 		return this.bancoDeOrgaos.qntTotalOrgaos();
 	}
 
 	
-
+	/**
+	 * Converte de String para Procedimento
+	 * @param procedimento
+	 * @return
+	 * @throws Exception
+	 */
 	private TipoProcedimento stringToProcedure(String procedimento)
 			throws Exception {
 
@@ -582,7 +642,6 @@ public String cadastraPaciente(String nome, String data, double peso,
 	 * @param medicamentos
 	 * @throws Exception
 	 */
-
 	public void realizaProcedimento(String nomeProcedimento, String nomePaciente,
 									String medicamentos) throws ProcedimentoException {
 		
@@ -701,7 +760,6 @@ public String cadastraPaciente(String nome, String data, double peso,
 	 * @param medicamentos
 	 * @throws Exception
 	 */
-
 	public void realizaProcedimento(String nomeProcedimento, String nomePaciente,
 			String nomeOrgao, String medicamentos) throws ProcedimentoException {
 		
@@ -805,6 +863,12 @@ public String cadastraPaciente(String nome, String data, double peso,
 		}
 	}
 	
+	/**
+	 * Realiza o procedimento apenas por nome do procediemnto e id do paciente
+	 * @param nomeProcedimento
+	 * @param ID
+	 * @throws Exception
+	 */
 	public void realizaProcedimento(String nomeProcedimento, String ID) throws Exception {
 		
 		if (!usuarioAtual.getMatricula().startsWith("2")) {
@@ -853,7 +917,13 @@ public String cadastraPaciente(String nome, String data, double peso,
 			throw new ProcedimentoException(e.getMessage());
 		}
 	}
-
+	
+	/**
+	 * Acessa o numero de procedimentos feitos por um paciente.
+	 * @param ID
+	 * @return
+	 * @throws Exception
+	 */
 	public int getTotalProcedimento(String ID) throws Exception {
 
 		VerificaExcecao.checkEmptyParameter(ID, "ID");
@@ -863,7 +933,13 @@ public String cadastraPaciente(String nome, String data, double peso,
 		return prontuario.getTotalProcedimento();
 
 	}
-
+	
+	/**
+	 * Acessa os pontos do cartao fidelidade de um paciente
+	 * @param ID
+	 * @return
+	 * @throws Exception
+	 */
 	public int getPontosFidelidade(String ID) throws Exception {
 
 		VerificaExcecao.checkEmptyParameter(ID, "ID");
@@ -873,18 +949,35 @@ public String cadastraPaciente(String nome, String data, double peso,
 		return prontuario.getPontos();
 	}
 	
+	/**
+	 * Acessa os gastos do paciente com servicos.
+	 * @param ID
+	 * @return
+	 * @throws Exception
+	 */
 	public String getGastosPaciente(String ID) throws Exception {
 		
 		return this.bancoProntuarios.getGastosPaciente(ID);
 		
 	}
 	
+	/**
+	 * Acessa a ficha de um paciente
+	 * @param ID
+	 * @return
+	 * @throws Exception
+	 */
 	public String getFichaPaciente(String ID) throws Exception {
 		
 		return this.bancoProntuarios.getFichaPaciente(ID);
 		
 	}
 	
+	/**
+	 * Exporta a ficha de um paciente a partir de seu ID
+	 * @param idPaciente
+	 * @throws ExportacaoException
+	 */
 	public void exportaFichaPaciente(String idPaciente) throws ExportacaoException{
 		
 		Prontuario prontuarioDoPaciente;
