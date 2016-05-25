@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import bancoorgaos.Orgao;
 import paciente.TipoSanguineo;
 
 public class OrgaoTest {

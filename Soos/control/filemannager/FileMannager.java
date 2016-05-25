@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import banco_de_orgaos.BancoDeOrgaos;
+import bancoorgaos.BancoDeOrgaos;
 import farmacia.Farmacia;
 import funcionario.BancoFuncionarios;
 import paciente.BancoProntuarios;
@@ -28,6 +28,7 @@ import paciente.BancoProntuarios;
  * @author Gabriel de Araujo Coutinho
  * @author Mainara Cavalcanti de Farias
  */
+
 public class FileMannager {
 	
 	

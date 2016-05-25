@@ -1,4 +1,4 @@
-package banco_de_orgaos;
+package bancoorgaos;
 
 import java.io.Serializable;
 

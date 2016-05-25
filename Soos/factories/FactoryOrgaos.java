@@ -2,7 +2,7 @@ package factories;
 
 import java.io.Serializable;
 
-import banco_de_orgaos.Orgao;
+import bancoorgaos.Orgao;
 import exceptions.BancoOrgaoException;
 import paciente.TipoSanguineo;
 

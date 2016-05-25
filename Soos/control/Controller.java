@@ -1,7 +1,8 @@
 package control;
 
 import java.time.LocalDate;
-import banco_de_orgaos.BancoDeOrgaos;
+
+import bancoorgaos.BancoDeOrgaos;
 import control.filemannager.FileMannager;
 import exceptions.AtualizarInfoException;
 import exceptions.BancoOrgaoException;
