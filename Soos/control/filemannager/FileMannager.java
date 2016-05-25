@@ -17,6 +17,17 @@ import farmacia.Farmacia;
 import funcionario.BancoFuncionarios;
 import paciente.BancoProntuarios;
 
+/**
+ * FileMannager
+ * Classe que representa um gerenciador de arquivos do sistema.
+ * Eh responsavel por todas as operacoes de salvar e carregar
+ * de arquivos.
+ * 
+ * @author Aramis Sales Araujo
+ * @author Elton Dantas de Oliveira Mesquita
+ * @author Gabriel de Araujo Coutinho
+ * @author Mainara Cavalcanti de Farias
+ */
 public class FileMannager {
 	
 	
@@ -54,6 +65,18 @@ public class FileMannager {
 		
 	}
 	
+	/**
+	 * ExportarFichaPaciente
+	 * Metodo responsavel por escrever em um arquivo de texto
+	 * uma string que representa a ficha de um paciente do sistema
+	 * Soos.
+	 * 
+	 * @param nomePaciente
+	 * @param fichaPaciente
+	 * @param dataHoje
+	 * @throws IOException
+	 */
+	
 	public void exportarFichaPaciente(String nomePaciente, String fichaPaciente
 			, String dataHoje) throws IOException{
 		
@@ -80,6 +103,17 @@ public class FileMannager {
 		
 	}
 	
+	/**
+	 * ExportarFuncionarios
+	 * Metodo responsavel por exportar o
+	 * Banco de Funcionarios do sistema para ser 
+	 * recarregado posteriormente.
+	 * 
+	 * @param bancoDeFuncionarios
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	
 	public void exportarFuncionarios(BancoFuncionarios bancoDeFuncionarios) 
 			throws FileNotFoundException, IOException {
 				
@@ -96,6 +130,17 @@ public class FileMannager {
 		objBufOut.close();
 		
 	}
+	
+	/**
+	 * ExportarProntuarios
+	 * Metodo responsavel por exportar o
+	 * Banco de Prontuarios do sistema para ser 
+	 * recarregado posteriormente.
+	 * 
+	 * @param bancoDeFuncionarios
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	
 	public void exportarProntuarios(BancoProntuarios bancoProntuarios) 
 			throws FileNotFoundException, IOException {		
@@ -114,6 +159,17 @@ public class FileMannager {
 		
 	}
 	
+	/**
+	 * ExportarFarmacia
+	 * Metodo responsavel por exportar a
+	 * Farmacia do sistema para ser 
+	 * recarregado posteriormente.
+	 * 
+	 * @param bancoDeFuncionarios
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	
 	public void exportarFarmacia(Farmacia farmacia) 
 			throws FileNotFoundException, IOException {
 		
@@ -130,6 +186,17 @@ public class FileMannager {
 		objBufOut.close();
 		
 	}
+	
+	/**
+	 * ExportarBancoOrgaos
+	 * Metodo responsavel por exportar o
+	 * Banco de orgaos do sistema para ser 
+	 * recarregado posteriormente.
+	 * 
+	 * @param bancoDeFuncionarios
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	
 	public void exportarBancoOrgaos(BancoDeOrgaos bancoOrgaos) 
 			throws FileNotFoundException, IOException {
@@ -148,6 +215,16 @@ public class FileMannager {
 		
 	}
 	
+	/**
+	 * ImportarFuncionarios
+	 * Metodo responsavel por importar o
+	 * Banco de Funcionarios do sistema a
+	 * partir de um arquivo.
+	 * 
+	 * @param bancoDeFuncionarios
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	
 	public BancoFuncionarios importarFuncionarios() throws Exception{
 
@@ -175,6 +252,17 @@ public class FileMannager {
 	}
 	
 	
+	/**
+	 * ImportarProntuarios
+	 * Metodo responsavel por importar o
+	 * Banco de Prontuarios do sistema a
+	 * partir de um arquivo.
+	 * 
+	 * @param bancoDeFuncionarios
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	
 	public BancoProntuarios importarProntuarios() throws Exception{
 
 		if(! systemDir.exists() || !systemDir.isDirectory()){
@@ -200,6 +288,16 @@ public class FileMannager {
 		
 	}
 	
+	/**
+	 * ImportarOrgaos
+	 * Metodo responsavel por importar o
+	 * Banco de Orgaos do sistema a
+	 * partir de um arquivo.
+	 * 
+	 * @param bancoDeFuncionarios
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	
 	public BancoDeOrgaos importarOrgaos() throws Exception{
 
@@ -227,6 +325,17 @@ public class FileMannager {
 	}
 	
 	
+	/**
+	 * ImportarFarmacia
+	 * Metodo responsavel por importar a
+	 * Farmacia do sistema a
+	 * partir de um arquivo.
+	 * 
+	 * @param bancoDeFuncionarios
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	
 	public Farmacia importarFarmacia() throws Exception{
 
 		if(! systemDir.exists() || !systemDir.isDirectory()){
@@ -251,6 +360,16 @@ public class FileMannager {
 		return doArquivo;
 		
 	}
+	
+	/**
+	 * ExisteBackup
+	 * Metodo que verifica se existe um arquivo
+	 * de backup do sistema que deve ser carregado
+	 * em sua inicializacao.
+	 * 
+	 * @param atributo
+	 * @return
+	 */
 	
 	public boolean existeBackup(String atributo){
 		
